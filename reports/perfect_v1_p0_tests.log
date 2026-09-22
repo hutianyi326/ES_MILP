@@ -1,0 +1,23 @@
+test_e01_dst_day_budget_is_one_day (test_es_perfect_adapter.AdapterTests.test_e01_dst_day_budget_is_one_day) ... ok
+test_e03_cross_year_budget_source_numeric_and_missing_rejected (test_es_perfect_adapter.AdapterTests.test_e03_cross_year_budget_source_numeric_and_missing_rejected) ... ok
+test_first_day_closed_prices_not_required (test_es_perfect_adapter.AdapterTests.test_first_day_closed_prices_not_required) ... ok
+test_null_tail_preserved_and_budget_not_inflated (test_es_perfect_adapter.AdapterTests.test_null_tail_preserved_and_budget_not_inflated) ... ok
+test_same_year_input_tail_does_not_increase_budget (test_es_perfect_adapter.AdapterTests.test_same_year_input_tail_does_not_increase_budget) ... ok
+test_dst_grids (test_es_perfect_v1.PerfectTests.test_dst_grids) ... ok
+test_e02_same_year_tail_competes_for_budget (test_es_perfect_v1.PerfectTests.test_e02_same_year_tail_competes_for_budget) ... ok
+test_e04_reserve_is_availability_not_consumption (test_es_perfect_v1.PerfectTests.test_e04_reserve_is_availability_not_consumption) ... ok
+test_f01_initial_zero_ledger (test_es_perfect_v1.PerfectTests.test_f01_initial_zero_ledger) ... ok
+test_f04_objective_constant_tampering_rejected (test_es_perfect_v1.PerfectTests.test_f04_objective_constant_tampering_rejected) ... ok
+test_g01_today_missing_still_freezes_tomorrow_and_restart (test_es_perfect_v1.PerfectTests.test_g01_today_missing_still_freezes_tomorrow_and_restart) ... ok
+test_g02_all_missing_has_null_cash_and_no_free_soc (test_es_perfect_v1.PerfectTests.test_g02_all_missing_has_null_cash_and_no_free_soc) ... ok
+test_g02_gap_terminal_conflict (test_es_perfect_v1.PerfectTests.test_g02_gap_terminal_conflict) ... ok
+test_g03_frozen_conflict_no_clearing (test_es_perfect_v1.PerfectTests.test_g03_frozen_conflict_no_clearing) ... ok
+test_g03_hour_contract_disabled_whole (test_es_perfect_v1.PerfectTests.test_g03_hour_contract_disabled_whole) ... ok
+test_h01_gct_binds_before_release (test_es_perfect_v1.PerfectTests.test_h01_gct_binds_before_release) ... ok
+test_review_soc_noise_clamps_before_validation_without_state_write (test_es_perfect_v1.PerfectTests.test_review_soc_noise_clamps_before_validation_without_state_write) ... ok
+test_t01_internal_terminal_even_with_high_tail_prices (test_es_perfect_v1.PerfectTests.test_t01_internal_terminal_even_with_high_tail_prices) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 22.432s
+
+OK

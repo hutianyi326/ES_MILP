@@ -391,6 +391,7 @@ class SyntheticMarketResult:
     objective_eur: float | None = None
     data_scope: str = "synthetic"
     research_provenance: str = ""
+    solver_mapping: Mapping[str, object] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -419,6 +420,7 @@ class SyntheticMarketResult:
             "objective_eur": self.objective_eur,
             "data_scope": self.data_scope,
             "research_provenance": self.research_provenance,
+            "solver_mapping": dict(self.solver_mapping),
         }
 
 
@@ -478,6 +480,8 @@ def solve_joint(
     fixed_spot_mw: Mapping[str, tuple[float, float]] | None = None,
     fixed_reserve_mw: Mapping[str, tuple[float, float]] | None = None,
     remaining_annual_efc: Mapping[int, float] | None = None,
+    reserve_headroom_from_gct: bool = False,
+    terminal_soc_at: Mapping[str, float] | None = None,
 ) -> SyntheticMarketResult:
     """Solve one full-joint synthetic order path with SciPy/HiGHS.
 
@@ -499,6 +503,11 @@ def solve_joint(
     terminal_reference = inp.e_terminal_mwh if terminal_reference_mwh is None else float(terminal_reference_mwh)
     if not inp.e_min_mwh <= terminal_reference <= inp.e_max_mwh:
         raise ValueError("terminal_reference_mwh must be within energy bounds")
+    terminal_soc_at = dict(terminal_soc_at or {})
+    if set(terminal_soc_at) - set(inp.qh_by_id):
+        raise ValueError("terminal boundary outside window")
+    if any(not isfinite(v) or not inp.e_min_mwh <= v <= inp.e_max_mwh for v in terminal_soc_at.values()):
+        raise ValueError("invalid terminal boundary SOC")
     steps = _build_steps(inp, order_mode)
     qhs = inp.qhs
     contracts = inp.contracts
@@ -696,6 +705,21 @@ def solve_joint(
                 cumulative_terms.append((int(net_index[j]), float(net_fixed[j]), weight))
             add_logical(cumulative_terms, -100.0 - fixed_base, 100.0 - fixed_base)
 
+    # Full-fill modelling assumption: reserve is frozen and checked at GCT.
+    if reserve_headroom_from_gct:
+        for i, qh in enumerate(qhs):
+            fc = fixed_for_qh[qh.qh_id]
+            events = contract_events_by_qh[qh.qh_id]
+            nodes = sorted({qh.afrr_gate_close_utc} | {e for e in events if e >= qh.afrr_gate_close_utc})
+            for node in nodes:
+                terms = [(int(net_index[j]), float(net_fixed[j]), w)
+                         for e, entries in events.items() if e <= node for j, w in entries]
+                add_logical(terms + [(int(reserve_up_index[i]), float(reserve_up_fixed[i]), 1.)],
+                            -np.inf, inp.grid_export_mw-fc.baseline_mw-fc.reserve_up_mw)
+                add_logical([(idx, val, -w) for idx,val,w in terms]
+                            + [(int(reserve_down_index[i]), float(reserve_down_fixed[i]), 1.)],
+                            -np.inf, inp.grid_import_mw+fc.baseline_mw-fc.reserve_down_mw)
+
     # Baseline, QH reserve headroom, and per-step physical power equations.
     for i, qh in enumerate(qhs):
         fc = fixed_for_qh[qh.qh_id]
@@ -764,6 +788,10 @@ def solve_joint(
         for last_step in terminal_steps:
             add({int(soc_index[last_step]): 1.0}, inp.e_terminal_mwh, inp.e_terminal_mwh)
 
+    for qid, target in terminal_soc_at.items():
+        last = max(i for i, step in enumerate(steps) if step.qh_id == qid)
+        add({int(soc_index[last]): 1.0}, target, target)
+
     # Annual DC-throughput budget shared across all segments in a year.  The
     # effective limit is additionally capped by the fraction of the local
     # Madrid year actually covered by the synthetic input.
@@ -783,6 +811,8 @@ def solve_joint(
         for column, value in entries.items():
             matrix[r, column] = value
         row_lb[r] = lo; row_ub[r] = hi
+    from time import perf_counter
+    solver_started = perf_counter()
     result = milp(
         c=objective,
         integrality=integrality,
@@ -794,6 +824,7 @@ def solve_joint(
             "mip_rel_gap": float(mip_rel_gap),
         },
     )
+    solver_seconds = perf_counter()-solver_started
     fixed_cash = _fixed_cash_total(inp)
     if result.x is None:
         return SyntheticMarketResult(
@@ -812,11 +843,11 @@ def solve_joint(
     trade_bound_adjustment = 0.0
     for idx in net_index[net_index >= 0]:
         old = float(x[idx])
-        x[idx] = _canonical_net_trade_mw(old)
+        x[idx] = _canonical_net_trade_mw(min(100.,max(-100.,old)) if reserve_headroom_from_gct and -100.-1e-5 <= old <= 100.+1e-5 else old)
         trade_bound_adjustment = max(trade_bound_adjustment, abs(old-x[idx]))
     for idx in np.concatenate((reserve_up_index[reserve_up_index >= 0], reserve_down_index[reserve_down_index >= 0])):
         old = float(x[idx])
-        x[idx] = _canonical_trade_mw(old)
+        x[idx] = _canonical_trade_mw(float(round(old)) if reserve_headroom_from_gct and abs(old-round(old)) <= 1e-5 else old)
         trade_bound_adjustment = max(trade_bound_adjustment, abs(old-x[idx]))
 
     def logical_values(indices: np.ndarray, fixed_values: np.ndarray) -> np.ndarray:
@@ -905,6 +936,29 @@ def solve_joint(
     residuals["trade_bound_canonicalization_max_mw"] = trade_bound_adjustment
     if max(residuals[k] for k in ("all_variable_bounds_max", "all_linear_rows_max", "all_integer_variables_max")) > 1e-5:
         raise AssertionError("synthetic solver vector fails complete algebraic feasibility audit")
+    if reserve_headroom_from_gct or terminal_soc_at:
+        # Reconstruct from public contracts and solved quantities, not matrix rows.
+        trade_net = {c.contract_id: float(net_values[j]) for j,c in enumerate(contracts)}
+        event_residual = 0.
+        for q in qhs:
+            fc = fixed_for_qh[q.qh_id]
+            nodes = {q.afrr_gate_close_utc} | {c.result_release_utc for c in contracts
+                    if c.qh_weights.get(q.qh_id, 0)>0 and c.result_release_utc >= q.afrr_gate_close_utc}
+            for node in nodes:
+                b = fc.baseline_mw + sum(c.qh_weights.get(q.qh_id,0)*trade_net[c.contract_id]
+                    for c in contracts if c.result_release_utc <= node)
+                if reserve_headroom_from_gct:
+                    event_residual=max(event_residual,b+up_out[q.qh_id]-inp.grid_export_mw,
+                                       -b+down_out[q.qh_id]-inp.grid_import_mw)
+        terminal_residual=max((abs(float(x[soc_index[max(i for i,st in enumerate(steps) if st.qh_id==qid)]])-target)
+                               for qid,target in terminal_soc_at.items()),default=0.)
+        if max(event_residual,terminal_residual)>1e-5:
+            raise AssertionError("P0 independent event/terminal audit failed")
+        residuals.update(p0_event_headroom_max=event_residual,p0_terminal_max=terminal_residual)
+    residuals.update(solver_seconds=solver_seconds,model_columns=nvar,model_rows=len(rows),
+                     model_nonzeros=matrix.nnz,model_integers=int(np.count_nonzero(integrality)),
+                     eliminated_objective_constant_min=objective_offset,
+                     solver_variable_objective_min=float(np.dot(objective,x))-objective_offset)
     # HiGHS reports a minimization-side mip gap.  Convert only the numeric bounds if available.
     raw_gap = float(getattr(result, "mip_gap", 0.0)) if getattr(result, "mip_gap", None) is not None else None
     dual = getattr(result, "mip_dual_bound", None)
@@ -966,6 +1020,11 @@ def solve_joint(
             "buy_mwh": float(buy_values[j]) * (c.delivery_end_utc-c.delivery_start_utc).total_seconds()/3600,
             "cash_eur": c.price_eur_per_mwh * net_values[j] * (c.delivery_end_utc-c.delivery_start_utc).total_seconds()/3600,
         } for j, c in enumerate(contracts)),
+        solver_mapping=(dict(
+            contracts={c.contract_id:dict(column=int(net_index[j]),constant=float(net_fixed[j])) for j,c in enumerate(contracts)},
+            reserve_up={q.qh_id:dict(column=int(reserve_up_index[i]),constant=float(reserve_up_fixed[i])) for i,q in enumerate(qhs)},
+            reserve_down={q.qh_id:dict(column=int(reserve_down_index[i]),constant=float(reserve_down_fixed[i])) for i,q in enumerate(qhs)},
+            objective_constant_min=objective_offset) if reserve_headroom_from_gct else {}),
         salvage_eur=salvage,
         objective_eur=objective_value,
         data_scope=inp.data_scope,

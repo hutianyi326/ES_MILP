@@ -104,6 +104,9 @@ def run_four_combinations(inp, *, run_id="ES_SYNTHETIC_C", time_limit_seconds=60
     config = dict(time_limit_seconds=time_limit_seconds, mip_rel_gap=mip_rel_gap,
                   design_version="2026-09-20-draft-4", tzdata=version("tzdata"))
     design = Path(__file__).resolve().parents[2] / "model" / "es_perfect_information_design_20260920.md"
+    if not design.exists():
+        # Packaged MILP repository keeps human-readable research beside code/.
+        design = Path(__file__).resolve().parents[3] / "research" / design.name
     # src/es_synthetic_market -> repository is parents[2].
     metadata = dict(run_id=run_id, input_hash=input_hash, configuration_hash=fingerprint(config),
                     design_hash=sha256(design.read_bytes()).hexdigest(), **config,

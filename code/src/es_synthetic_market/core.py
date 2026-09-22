@@ -444,6 +444,7 @@ class SyntheticMarketResult:
     objective_eur: float | None = None
     data_scope: str = "synthetic"
     research_provenance: str = ""
+    solver_mapping: Mapping[str, object] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -472,6 +473,7 @@ class SyntheticMarketResult:
             "objective_eur": self.objective_eur,
             "data_scope": self.data_scope,
             "research_provenance": self.research_provenance,
+            "solver_mapping": dict(self.solver_mapping),
         }
 
 
@@ -1423,6 +1425,8 @@ def solve_joint(
     fixed_reserve_mw: Mapping[str, tuple[float, float]] | None = None,
     remaining_annual_efc: Mapping[int, float] | None = None,
     experimental_a1_a3: bool = False,
+    reserve_headroom_from_gct: bool = False,
+    terminal_soc_at: Mapping[str, float] | None = None,
 ) -> SyntheticMarketResult:
     """Solve the joint model, with A1--A3 available as an opt-in experiment.
 
@@ -1447,12 +1451,15 @@ def solve_joint(
         fixed_reserve_mw=fixed_reserve_mw,
         remaining_annual_efc=remaining_annual_efc,
     )
+    if experimental_a1_a3 and (reserve_headroom_from_gct or terminal_soc_at):
+        raise ValueError("P0 requires baseline net-contract core")
     if experimental_a1_a3:
         return _solve_joint_experimental(inp, order_mode, **options)
 
     from . import _baseline_core
 
-    baseline_result = _baseline_core.solve_joint(inp, order_mode, **options)
+    baseline_result = _baseline_core.solve_joint(inp, order_mode, **options,
+        reserve_headroom_from_gct=reserve_headroom_from_gct, terminal_soc_at=terminal_soc_at)
     payload = {
         name: getattr(baseline_result, name)
         for name in SyntheticMarketResult.__dataclass_fields__

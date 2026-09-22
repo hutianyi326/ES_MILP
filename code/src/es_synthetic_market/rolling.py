@@ -4,7 +4,7 @@ Only committed execution enters cash/EFC. Failed windows change no state.
 Checkpoints are JSON serializable; no historical reader/API is provided.
 """
 from __future__ import annotations
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict, dataclass, replace, field
 from datetime import datetime, timedelta, timezone
 from copy import deepcopy
 from hashlib import sha256
@@ -73,6 +73,7 @@ class RollingWindowResult:
     snapshot_mode: str = "full"
     ledger_delta: tuple[dict,...] = ()
     previous_ledger_digest: str = ""
+    audit: dict = field(default_factory=dict)
 
     def as_dict(self): return asdict(self)
 
@@ -179,7 +180,7 @@ class RollingEngine:
         self._orders={};self._reserves={};self._ledger=SettlementLedger();self._windows=[]
         self.failure=None
 
-    def _window_input(self, qhs, start, end):
+    def _window_input(self, qhs, start, end, *, soc_override=None):
         ids={q.qh_id for q in qhs};contracts=[];frozen={}
         candidates=sorted({j for q in qhs for j in self._qh_contract_indices[q.qh_id]})
         for j in candidates:
@@ -201,7 +202,7 @@ class RollingEngine:
         years={q.madrid_year for q in qhs}
         remaining={y:max(0.,self._budget[y]-self._used[y]) for y in years}
         win=replace(self.inp,qhs=tuple(qhs),contracts=tuple(contracts),fixed_commitments=(),
-            annual_efc_budget={y:self._budget[y] for y in years},e_initial_mwh=self._soc,input_id=self.inp.input_id+"_WINDOW")
+            annual_efc_budget={y:self._budget[y] for y in years},e_initial_mwh=self._soc if soc_override is None else soc_override,input_id=self.inp.input_id+"_WINDOW")
         fr={q.qh_id:(self._reserves[q.qh_id].up_mw,self._reserves[q.qh_id].down_mw) for q in qhs if q.qh_id in self._reserves}
         return win,frozen,fr,remaining
 
@@ -232,14 +233,18 @@ class RollingEngine:
         start=q0.start_utc
         end=min((_midnight(start)+timedelta(days=self.planning_days)).astimezone(UTC),segment[-1].end_utc)
         execute_end=min((_midnight(start)+timedelta(days=1)).astimezone(UTC),segment[-1].end_utc)
+        if hasattr(self, "execution_end"):
+            execute_end=min(execute_end,self.execution_end)
         qhs=[q for q in segment if q.end_utc<=end];executed=[q for q in qhs if q.end_utc<=execute_end]
         win,frozen,frozen_reserve,remaining=self._window_input(qhs,start,end)
-        final=end==segment[-1].end_utc;coefficient=self._salvage_coefficient(win,final)
-        result=solve_joint(win,self.order_mode,time_limit_seconds=self.time_limit_seconds,mip_rel_gap=self.mip_rel_gap,
+        final=end==segment[-1].end_utc and not hasattr(self,"execution_end")
+        coefficient=self._salvage_coefficient(win,final)
+        solver=getattr(self,"_solve_window",solve_joint)
+        result=solver(win,self.order_mode,time_limit_seconds=self.time_limit_seconds,mip_rel_gap=self.mip_rel_gap,
             presolve=self.presolve,
             terminal_hard=final,salvage_price_eur_per_mwh=coefficient,terminal_reference_mwh=10,
             fixed_spot_mw=frozen,fixed_reserve_mw=frozen_reserve,remaining_annual_efc=remaining,
-            experimental_a1_a3=False)
+            experimental_a1_a3=False, **(self._p0_solver_options(win) if hasattr(self,"_p0_solver_options") else {}))
         if not result.feasible: raise ValueError("window has no audited feasible solution: "+result.message)
         orders=dict(self._orders);reserves=dict(self._reserves);ledger=self._ledger.fork();used=dict(self._used)
         changed_spot=set();changed_reserve=set()
@@ -266,6 +271,16 @@ class RollingEngine:
                 reserves[key]=replace(o,status="awarded");changed_reserve.add(key)
         e=self._soc;operation=[];trace_index=0;before=ledger.total_cash_eur;expected_cash=0.
         for q in executed:
+            if q.qh_id in getattr(self, "inactive", set()):
+                if max(abs(result.qh_baseline_mw[q.qh_id]),abs(result.reserve_up_mw[q.qh_id]),
+                       abs(result.reserve_down_mw[q.qh_id]))>TOL:
+                    raise AssertionError("gap contains nonzero commitment")
+                if abs(e-result.soc_trace_mwh[q.segment_id][trace_index])>TOL:
+                    raise AssertionError("gap SOC bridge failed")
+                trace_index+=1  # sanitized gap has exactly one idle phase
+                operation.append(dict(qh_id=q.qh_id,phase="assumed_idle",hours=.25,power_mw=0.,
+                    start_soc_mwh=e,end_soc_mwh=e,efc=0.,madrid_year=q.madrid_year))
+                continue
             day=q.start_utc.astimezone(_required_madrid_timezone()).date().isoformat();baseline=0.
             for j in self._qh_contract_indices[q.qh_id]:
                 c=self.inp.contracts[j]
@@ -303,7 +318,7 @@ class RollingEngine:
         if any(used[y]>self._budget[y]+TOL for y in used): raise AssertionError("executed annual EFC budget exceeded")
         cash=ledger.total_cash_eur-before
         if abs(cash-expected_cash)>TOL: raise AssertionError("independent executed cash audit failed")
-        if execute_end==segment[-1].end_utc and abs(e-10)>TOL: raise AssertionError("segment terminal SOC is not 10")
+        if not hasattr(self,"execution_end") and execute_end==segment[-1].end_utc and abs(e-10)>TOL: raise AssertionError("segment terminal SOC is not 10")
         if self.history_mode=="delta":
             snapshot=dict(previous_snapshot_hash=self._windows[-1].order_snapshot_hash if self._windows else "",
                 spot=[asdict(orders[k]) for k in sorted(changed_spot)],
@@ -320,13 +335,16 @@ class RollingEngine:
             cash,dict(used),snapshot,_hash(snapshot),ledger_digest,tuple(operation),
             float(result.residuals.get("trade_bound_canonicalization_max_mw",0.0)),
             self.history_mode,ledger_delta,previous_ledger)
+        if hasattr(self, "_audit_candidate"):
+            window=replace(window,audit=self._audit_candidate(win,result,window,orders,reserves,frozen,frozen_reserve,remaining))
         self._ledger.commit(ledger)
         self._orders,self._reserves,self._used=orders,reserves,used
-        self._soc=10. if execute_end==segment[-1].end_utc else e
+        self._soc=10. if not hasattr(self,"execution_end") and execute_end==segment[-1].end_utc else e
         self._index+=len(executed);self._windows.append(window)
 
     def step(self):
         if self.failure is not None or self._index==len(self.inp.qhs): return False
+        if hasattr(self,"execution_end") and self.inp.qhs[self._index].start_utc>=self.execution_end: return False
         try: self._step()
         except (ValueError,AssertionError) as exc:
             self.failure=str(exc);return False

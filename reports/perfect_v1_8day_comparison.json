@@ -1,0 +1,54 @@
+{
+  "label": "same_formal_input_budget_different_boundary_and_GCT_policy",
+  "formal_qh": 768,
+  "legacy": {
+    "success": true,
+    "failure": null,
+    "cash_eur": 2243662.764873674,
+    "solver_seconds": 1.5036331999872345,
+    "wall_seconds": 2.106118700001389
+  },
+  "perfect": {
+    "mode": "perfect_history_v1",
+    "success": true,
+    "failure": null,
+    "annual_budget": {
+      "2025": 13.150684931506847
+    },
+    "annual_used": {
+      "2025": 10.977037831039697
+    },
+    "coverage": 1.0,
+    "solver_seconds": 2.666275500014308,
+    "execution_wall_seconds": 8.791767800008529,
+    "total_wall_seconds": 10.644731799999136,
+    "months": {
+      "2025-01": {
+        "total_qh": 768,
+        "valid_qh": 768,
+        "cash_eur": {
+          "DA": -38162.14000000007,
+          "ID": 138825.2042600559,
+          "cap_up": 1078372.3999999997,
+          "cap_down": 775636.0200000001,
+          "act_up": 183974.5694277747,
+          "act_down": -37032.87468797741
+        },
+        "coverage": 1.0,
+        "cash_keur_per_mw": {
+          "DA": -0.3816214000000007,
+          "ID": 1.3882520426005591,
+          "cap_up": 10.783723999999996,
+          "cap_down": 7.756360200000001,
+          "act_up": 1.839745694277747,
+          "act_down": -0.37032874687977413
+        }
+      }
+    }
+  },
+  "limitations": [
+    "single run, not repeated performance distribution",
+    "P0 has extra tail, GCT headroom and T terminal; legacy truncates final planning window",
+    "same prepared initial closed markets and formal budget; not archived full-range result"
+  ]
+}
