@@ -440,3 +440,342 @@ $M,P^{settle},J$均为同一计量/结算边界上的MWh；$J$为实际被认可
 输出：各事件报价和成交、各方向容量申报/中标、能量支持量、最终计划、实际充放/SOC、场景现金流分项、最坏压力路径、压力交易许可校验、终端状态及恢复需求、使用假设、资格情景、版本、数据缺口和后续求解状态/最优间隙。能量支持结果须带 `quantity_only_not_full_compliance=true`；不得称已实现全部可用备用申报。完整字段schema留下一阶段审核。
 
 本规格通过仅意味着所声明假设下的数学结构可交接；真实PTR斜坡、快速响应、故障处罚和实际连续交易执行仍有明确边界。所有未决事项与模型假设一起出现在结果封面，不能以总利润一个数字掩盖。
+
+
+---
+
+<a id="milp-v2"></a>
+
+# 第二版 v2.0｜完美预测P0实施版（2026-09-22）
+
+**版本说明：上方第一版v1.2及其M01—M21公式、假设和审核记录完整保留。以下是新增版本，当前分支运行口径以本节为准，不能将两版互相冲突的约束叠加。**
+
+- 对应代码提交：`1396643`；分支：`完美预测模型优化V1`；运行模式：`perfect_history_v1`。
+- 依据：已批准P0方案、已实现代码、18项新增测试＋76项回归测试和8日样本。实施审核PASS的范围见[review记录](../reports/完美预测模型优化V1_review.md)。本次数学汇编没有新增官方规则核验。
+- 新版本涵盖从v1.2至当前实施的累计变化；完美信息、净合同、毛收益、两日滚动是此前已形成的演进，本次P0重点补强GCT余量、正式终点、缺口、预算和审计。
+- 第一版原始内容SHA256：`3F6C091F2C0D94A00EBAE7CD10A7020F336B23DC32B9E60D3B5364173FF538DD`。本次采用文件末尾追加方式保存。
+
+## V2-0. 颜色及版本对照
+
+<span style="color:#1565C0"><strong>🟦 蓝色【修改】</strong></span>：相对第一版调整的表达或口径。<span style="color:#2E7D32"><strong>🟩 绿色【新增】</strong></span>：第一版未明确给出的当前实现约束/机制。<span style="color:#C62828"><strong>🟥 红色【本版不启用】</strong></span>：第一版内容保留，但未进入当前模型。未标颜色的基础物理关系沿用。颜色是版本标记，不是变量含义。
+
+变更标题使用HTML颜色，关键公式同时使用数学颜色。部分Markdown阅读器会过滤HTML样式或不渲染数学颜色；此时仍可用彩色方块和【修改/新增/本版不启用】文字识别，推荐在支持MathJax或KaTeX的预览器中阅读。
+
+| 主题 | 第一版v1.2 | 第二版v2.0及代码位置 | 变化归属 |
+|---|---|---|---|
+| 信息与目标 | M01场景非预知；M19/M20期望净收益、可选CVaR | <span style="color:#1565C0">🟦 完美价格/激活、确定性毛收益＋规划末端价值</span>；`_baseline_core.solve_joint` | 此前演进，当前保留 |
+| 市场范围 | DA、IDA及受许可限制的IDC | <span style="color:#C62828">🟥 当前不启用IDC</span>，只优化DA、IDA及aFRR | 此前演进 |
+| 现货变量 | M02买/卖量与方向二元变量 | <span style="color:#1565C0">🟦 单个有符号净合同变量</span>；固定量消元 | 此前优化保留，不撤销 |
+| 成交、供应商层 | M03/M06/M07成交比例、供应商块及本站份额、支持量 | <span style="color:#1565C0">🟦 全额成交，直接使用本站整数MW备用</span>；不展开供应商份额模型 | 当前条件假设，不是资格结论 |
+| 压力与风险 | M01、§7压力分支，M20 CVaR | <span style="color:#C62828">🟥 不进入本版优化器</span>；不得据此声称压力路径均可履约 | 此前演进 |
+| 时间与执行 | 按事件更新，首版未给当前两日实施细则 | <span style="color:#1565C0">🟦 两日规划、首日执行、额外一天输入</span>；`PerfectEngine` | 两日既有；P0补齐边界 |
+| 备用余量 | M05中间现货边界，M09功率余量 | <span style="color:#2E7D32">🟩 GCT及其后每个交易结果节点联合检查B与R</span> | 本次P0 |
+| SOC终点 | M13经济场景目标、压力场景安全区间 | <span style="color:#1565C0">🟦 仅正式终点T固定10 MWh；普通窗口无硬终态；缺口不重置</span> | 本次P0边界明确 |
+| 循环资源 | M18吞吐退化现金成本，未给当前年度EFC预算 | <span style="color:#2E7D32">🟩 显式年度DC吞吐预算、观察日预算和终端预留</span> | v5规则继承，P0明确区间与扣减 |
+| 缺失输入 | §12缺必填输入拒绝正式运行 | <span style="color:#1565C0">🟦 nullable证据＋禁用/空闲桥接＋冲突隔离</span> | 本次P0；不是价格插值 |
+| 输出与审计 | M21偏差结算审计及场景报告 | <span style="color:#2E7D32">🟩 冻结账本、消元还原、执行现金、质量摘要、检查点</span> | 本次P0补强；不增加偏差收入 |
+
+## V2-1. 整体求解函数与时间集合
+
+定义正式执行区间为 $[S,T)$，时间存UTC、交付日按Europe/Madrid日历。$s_d$ 是第d轮当地午夜，$s_{d+1}$和$s_{d+2}$按当地日历推进，不能统一加24/48个UTC小时。每个QH长 $\Delta_q=0.25\ \mathrm h$。
+
+**V2-M01｜🟦 两日规划、首日执行及正式区间**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+H_d&=\{q:[t_q,t_q+\Delta_q)\subseteq[s_d,s_{d+2})\},\\
+X_d&=\{q:[t_q,t_q+\Delta_q)\subseteq[s_d,s_{d+1})\},\\
+Q_F&=\{q:[t_q,t_q+\Delta_q)\subseteq[S,T)\},\\
+Q_d^{\mathrm{settle}}&=X_d\cap Q_F.
+\end{aligned}
+$$
+
+规划考虑两日，正式记账仅考虑当前执行日。两日可能是188、192或196个QH。输入时间轴延伸到T之后一个完整当地日；正式末日为8月31日时，输入应覆盖9月1日结束。缺字段仍保留该时间轴并标记不完整，不能称为完整前瞻。
+
+**V2-M02｜🟦 日步优化映射**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+\mathcal S_d&=(E_{s_d},\{U_{y,d}\}_y,\mathcal L_d),\\
+\theta_d^*&\in\arg\max_{\theta_d\in\mathcal F_d(\mathcal S_d,\mathcal D_{H_d})}
+\left[\Pi_{H_d}(\theta_d)+V_d(E_{s_{d+2}})\right],\\
+\mathcal S_{d+1}&=\mathrm{Commit}\!\left(\mathcal S_d,\theta_d^*|_{X_d},\mathcal C_d\right).
+\end{aligned}
+$$
+
+其中：$\mathcal D$是外生数据，$\mathcal L_d$是冻结账本，U是已执行EFC，$\mathcal F_d$由下列V2-M06—V2-M17约束定义，$\mathcal C_d$包括今天关闸、可能明天交付的订单。Commit须通过独立验收；失败不提交订单、SOC、EFC或现金。数值求解允许已审可行的限时解并报告gap，不把每次argmax记号误解成已证明精确全局最优。
+
+## V2-2. 输入、参数及单位
+
+| 输入组 | 数学符号/数据 | 当前实施口径 |
+|---|---|---|
+| 网格与产品 | $t_q,\Delta_q,J_d,a_{jq}$ | QH网格；DA/IDA产品及其映射；标准平坦产品$a_{jq}=0/1$ |
+| 日历 | $g_j,r_j,g^R_q,r^R_q$ | 合同及容量的GCT和结果时刻；统一cap_old名义时表；原始时表历史切换仍待核实 |
+| 现货价格 | $\pi_j$ | EUR/MWh，外生完美历史价格；当前买卖同价 |
+| 容量价格 | $\pi^{C,u}_q,\pi^{C,d}_q$ | EUR/MW/period，已归一到一个QH容量时段，不能再次乘0.25 |
+| 激活价格 | $\kappa^u_q,\kappa^d_q$ | EUR/MWh，已带收入方向符号；适配器对下调原始价格取负一次 |
+| 激活比例 | $\alpha^u_q,\alpha^d_q$ | 有效QH满足非负、合计不超过1；由历史系统容量/激活电量代理计算，不是优化变量 |
+| 电站 | $P_C,P_D,P_I,P_O$ | 充电、放电、进口、出口限额默认均100 MW |
+| 电量及效率 | $E_{\min},E_{\max},E_S,E_T,\eta_c,\eta_d$ | 10、190、10、10 MWh；充/放效率各0.92 |
+| 冻结状态 | $\bar x_j,\bar R^u_q,\bar R^d_q,\mathcal L_d$ | 首轮空账本；后续从已提交检查点继承，包括零订单 |
+| <span style="color:#2E7D32">🟩 预算</span> | $L_y,U_{y,d},W_{y,d},\varepsilon$ | 固定年度额度、已执行消耗、可用额度预留；$\varepsilon=10^{-6}$ EFC |
+| <span style="color:#2E7D32">🟩 有效性</span> | $m_{q,f},z_q,v_j$ | 字段有效性、QH及完整合同可用性，均为输入常数，不是新增二元决策 |
+| 运行配置 | D顺序、2日、presolve=False、gap=$10^{-4}$ | 当前入口单窗30秒；时间/限制属于数值配置，不是市场规则 |
+
+<span style="color:#C62828">🟥 第一版的经济场景概率、接受比例分支、CVaR参数、交易/聚合/退化费用、IDC深度和供应商份额并未进入当前求解器；毛收益不能解释为项目净利润。</span>
+
+## V2-3. 变量和固定量消元
+
+| 变量/表达式 | 定义域及作用 | 相对第一版 |
+|---|---|---|
+| $x_j$ | $[-100,100]$ MW；卖正买负 | <span style="color:#1565C0">🟦 替代$x^s,x^b,z$现货三元组</span> |
+| $R_q^u,R_q^d$ | 非负整数MW，分别不超过100 | <span style="color:#1565C0">🟦 全额成交下的本站容量；整数MW为实现假设</span> |
+| $c_{qk},p_{qk}$ | 非负连续变量，MW | 充放电物理量沿用 |
+| $b_{qk}$ | 0/1；1允许放电，0允许充电 | 物理互斥沿用，不是现货交易方向变量 |
+| $E_{qk}^{\mathrm{end}}$ | $[10,190]$ MWh | 逐相位电量状态沿用 |
+| $B_{q,e},B_q$ | 由合同构成的线性表达式 | 不新增求解列 |
+| $e_{qk},e_q,\Pi_q$ | 吞吐和现金的线性表达式 | 不必新增求解列 |
+
+<span style="color:#1565C0">🟦 已冻结合同与合法整数备用优先直接替换为常数，不重新建立固定变量。审计输出逻辑ID、列索引（−1表示消元）、固定值和权重。</span>如果固定量带来非零目标常数，现有内核保留一个取值恒为1的目标锚点列，以维持HiGHS目标和gap口径；这不是为审计新增变量，也不是交易变量。
+
+## V2-4. 目标函数及收益
+
+**V2-M03｜🟦 完整规划窗口的确定性毛收益**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+\Pi_{H_d}^{\mathrm{spot}}&=\sum_{j\in J_d}\pi_jx_j\sum_{q\in H_d}a_{jq}\Delta_q,\\
+\Pi_{H_d}^{\mathrm{cap}}&=\sum_{q\in H_d}\left(\pi^{C,u}_qR_q^u+\pi^{C,d}_qR_q^d\right),\\
+\Pi_{H_d}^{\mathrm{act}}&=\sum_{q\in H_d}\Delta_q\left(\kappa^u_q\alpha_q^uR_q^u+\kappa^d_q\alpha_q^dR_q^d\right),\\
+\Pi_{H_d}&=\Pi_{H_d}^{\mathrm{spot}}+\Pi_{H_d}^{\mathrm{cap}}+\Pi_{H_d}^{\mathrm{act}}.
+\end{aligned}
+$$
+
+求和中的x/R既含自由量也含已冻结常数；固定现金只出现一次，不再另加同一笔常数。DA、IDA按各笔增量合同计价，不能再将最终B按某个现货价格重复结算。下调激活系数已经带符号，公式不再额外加负号。
+
+**V2-M04｜🟦 普通规划末端价值（非正式现金）**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+v_d&=0.92\max(\bar\pi_{\mathrm{DA,last}},0),\\
+V_d(E_{s_{d+2}})&=v_d\left(E_{s_{d+2}}-10\right),\\
+\max\quad Z_d&=\Pi_{H_d}+V_d(E_{s_{d+2}}).
+\end{aligned}
+$$
+
+DA均价按规划末日有效QH且具有唯一DA参考报价的记录计算；没有可用参考时报系数0。该价值只是两日截断模型的代理。最后一窗依然可对观察日末端设置该代理，但T处SOC另由V2-M13固定，不能自由带电穿过T。
+
+**V2-M05｜🟩 正式报告收益与单位**
+
+$$
+\color{#2E7D32}
+\Pi_F=\sum_{q\in Q_F^{\mathrm{valid}}}
+\left(\Pi_q^{DA}+\Pi_q^{ID}+\Pi_q^{C,u}+\Pi_q^{C,d}+\Pi_q^{A,u}+\Pi_q^{A,d}\right),
+\qquad \Pi_F^{\mathrm{kEUR/MW}}=\frac{\Pi_F}{1000P_{\mathrm{nom}}}.
+$$
+
+只对有效且已执行的QH入账。缺失收益为null，不是假定零收益；整月没有有效QH时月合计为null。观察日现金和V均不进入正式报告。若存在缺口，名称为“有效覆盖区间条件毛收益”，不自动年化。
+
+## V2-5. 交易、冻结和事件约束
+
+**V2-M06｜🟦 产品一致性、合同边界与首日零承诺**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+&g_j\le r_j\le t_j^{\mathrm{delivery}},\qquad
+\sum_q a_{jq}\Delta_q=d_j,\\
+&-100\le x_j\le100,\\
+&g_j<S\ \text{and no prior commitment}\quad\Longrightarrow\quad x_j=0,\\
+&g^R_q<S\ \text{and no prior commitment}\quad\Longrightarrow\quad R_q^u=R_q^d=0.
+\end{aligned}
+$$
+
+小时合同仍只有一个x，映射四个QH；不能切出三个有效QH重新定义产品。首日不要求昨日数据，不补报过去关闸的订单。若某价格仅被已经禁用的市场使用，不因其缺失关闭其他仍开放的市场。
+
+**V2-M07｜🟩 滚动冻结和今日未来承诺**
+
+$$
+\color{#2E7D32}
+\begin{aligned}
+&j\in\mathcal L_d\quad\Longrightarrow\quad x_j=\bar x_j,\\
+&q\in\mathcal L_d^R\quad\Longrightarrow\quad(R_q^u,R_q^d)=(\bar R_q^u,\bar R_q^d),\\
+&\mathcal C_d=\{j:s_d\le g_j<s_{d+1}\},\\
+&\mathcal C_d^R=\{q:s_d\le g^R_q<s_{d+1}\}.
+\end{aligned}
+$$
+
+求解验收后冻结这些集合中的订单，包括0及明日交付订单。GCT等于当轮起点时按关闸前决策处理，等于次日起点时由下一轮处理。发布时间只更新pending/awarded状态，不允许改写冻结量。冻结市场头寸而非未来c/p；未来物理调度仍可重新优化。今日需提交的未来订单必须纳入当前完整规划范围，不能因为未建模就默默置零。
+
+**V2-M08｜累计现货头寸**
+
+$$
+\begin{aligned}
+B_{q,e}&=B_{q,e}^{\mathrm{fixed}}+\sum_{\substack{j\in J_d^{\mathrm{free}}\\r_j\le e}}a_{jq}x_j,\\
+B_q&=\sum_{j\in J_d}a_{jq}x_j,\\
+-100&\le B_{q,e}\le100.
+\end{aligned}
+$$
+
+第一式固定部分只包括截至e已生效的冻结合同，不与自由集合重复。最后一式在现货结果节点成立，是当前内核的中间头寸边界；最终交付另受并网方向限额约束。同刻结果成组计算，不按合同ID人为排列。
+
+**V2-M09｜🟩 从aFRR GCT开始的双向备用余量**
+
+$$
+\color{#2E7D32}
+\begin{aligned}
+\mathcal N_q&=\{g^R_q\}\cup\{r_j:r_j\ge g^R_q,\ a_{jq}>0\},\\
+B_{q,e}+R_q^u&\le P_O,\qquad e\in\mathcal N_q,\\
+-B_{q,e}+R_q^d&\le P_I,\qquad e\in\mathcal N_q,\\
+B_q+R_q^u&\le P_O,\qquad -B_q+R_q^d\le P_I,\\
+R_q^u,R_q^d&\in\{0,1,\ldots,100\}.
+\end{aligned}
+$$
+
+**该检查起点是“第一阶段全额成交条件下的建模假设”，不是已经核验的西班牙强制规则。** 在GCT节点使用已公布的现货结果构成B，并使用刚冻结的R。GCT之后的现货调整仍须保留备用空间，不得靠后续交易掩盖先前超限。没有额外加入 $R_q^u+R_q^d\le100$；两个方向分别受功率与SOC约束。
+
+## V2-6. 激活、物理功率和SOC
+
+**V2-M10｜🟦 等效激活三相位及固定D顺序**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+&0\le\alpha_q^u,\quad0\le\alpha_q^d,\quad\alpha_q^u+\alpha_q^d\le1,\\
+h_q^d&=\Delta_q\alpha_q^d,\qquad h_q^u=\Delta_q\alpha_q^u,\\
+h_q^0&=\Delta_q(1-\alpha_q^u-\alpha_q^d),\\
+&d\longrightarrow u\longrightarrow0.
+\end{aligned}
+$$
+
+有正时长的相位才建立变量；零时长相位省略。上/下激活比例外生，以满备用功率持续相应等效时长代替真实AGC路径。该近似不证明所有秒级激活顺序具有相同SOC或损耗。
+
+**V2-M11｜净功率及充放互斥**
+
+$$
+\begin{aligned}
+p_q^d-c_q^d&=B_q-R_q^d,\\
+p_q^u-c_q^u&=B_q+R_q^u,\\
+p_q^0-c_q^0&=B_q,\\
+0\le c_{qk}&\le\min(P_C,P_I)(1-b_{qk}),\\
+0\le p_{qk}&\le\min(P_D,P_O)b_{qk},\qquad b_{qk}\in\{0,1\}.
+\end{aligned}
+$$
+
+这允许下调将净放电切换为充电、上调将净充电切换为放电，同时禁止同相位物理充放并行。现货反向平仓不按绝对成交量占用物理功率。
+
+**V2-M12｜逐相位能量守恒**
+
+$$
+\begin{aligned}
+E_{qk}^{\mathrm{end}}&=E_{qk}^{\mathrm{start}}+\eta_c c_{qk}h_{qk}-\frac{p_{qk}h_{qk}}{\eta_d},\\
+E_{\min}&\le E_{qk}^{\mathrm{start}},E_{qk}^{\mathrm{end}}\le E_{\max},\\
+E_{\mathrm{next\ phase}}^{\mathrm{start}}&=E_{\mathrm{previous\ phase}}^{\mathrm{end}}.
+\end{aligned}
+$$
+
+相邻QH也按相同关系衔接。电量流使用电池侧效率，不能以交流侧净电量直接代替SOC变化。
+
+**V2-M13｜🟦 初态、跨窗执行态及正式终态**
+
+$$
+\color{#1565C0}
+\begin{aligned}
+E_S&=10\ \mathrm{MWh},\\
+E_{s_{d+1}}^{\mathrm{next}}&=E_{s_{d+1}}^{\mathrm{executed}},\\
+E_T&=10\ \mathrm{MWh}.
+\end{aligned}
+$$
+
+普通两日规划末端不强制回到10；只要窗口覆盖T，就在T对应QH的末相位施加目标。T后的高价不能促使模型将额外库存带过T；观察日仍可通过EFC或冻结承诺影响决策。缺口不构成新的免费SOC起点。求解容差内的边界噪声仅在构造下一窗局部输入前归一，不提前修改已提交状态。
+
+## V2-7. 年度EFC、观察日和终端预留
+
+**V2-M14｜🟩 DC吞吐的等效循环**
+
+$$
+\color{#2E7D32}
+\begin{aligned}
+C_{\mathrm{EFC}}&=2(E_{\max}-E_{\min})=360\ \mathrm{MWh},\\
+e_{qk}&=\frac{\eta_c c_{qk}h_{qk}+p_{qk}h_{qk}/\eta_d}{C_{\mathrm{EFC}}},\\
+e_q&=\sum_k e_{qk}.
+\end{aligned}
+$$
+
+这是资源预算约束，不是第一版M18的退化现金费用；本版未把e乘某个价格扣除收益。
+
+**V2-M15｜🟩 年度额度生成**
+
+$$
+\color{#2E7D32}
+L_y=\frac{600}{D_y}\sum_{a\in\mathcal D_y^{\mathrm{formal}}}\frac{0.25\,n_a^{\mathrm{valid}}}{h_a},
+\qquad D_y\in\{365,366\},\quad h_a\in\{23,24,25\}.
+$$
+
+600为建模年度基准。a是当地日，n为冻结的预算口径有效QH数，h为实际当地日时长。正式额度只生成一次，空行或额外观察日不得增加额度。
+
+| 已成功v5基线 | 年度额度EFC | 适用的正式当地日期（右端不含） |
+|---|---:|---|
+| 2025共同有效32,045 QH | 548.7661703394889 | 2025-01-01至2026-01-01 |
+| 2026共同有效20,202 QH | 345.99166170339595 | 2026-01-01至2026-09-01 |
+
+全量同日期对照默认从归档读取以上额度；缺归档必须显式提供，不能改用单场景较多有效QH生成更大额度。其他正式范围按本式生成；8日完整样本为 $600\times8/365=13.150684931506847$ EFC。
+
+同年观察日与正式期共用L。观察日跨入没有正式预算的新年时，按新年有效观察日生成单独`lookahead_only`额度；完整2027-01-01为1.643835616438356 EFC。若该年已有正式预算，不叠加观察预算；不复制上一年余额、不允许无预算规划。没有有效观察QH时可明确生成0额度并禁用这些QH，不解释为无限额度。
+
+**V2-M16｜🟩 每窗可用额度及执行更新**
+
+$$
+\color{#2E7D32}
+\begin{aligned}
+A_{y,d}&=\max(0,L_y-U_{y,d}),\\
+R_{\mathrm{terminal}}&=\frac{190-10}{0.92\times360}=0.5434782608695652,\\
+W_{y,d}&=\min(A_{y,d},I_{y,d}R_{\mathrm{terminal}}),\\
+\widetilde A_{y,d}&=\max(0,A_{y,d}-W_{y,d}-10^{-6}),\\
+\sum_{q\in H_d\cap Q_y}e_q^{\mathrm{planned}}&\le\widetilde A_{y,d},\\
+U_{y,d+1}&=U_{y,d}+\sum_{q\in X_d\cap Q_y}e_q^{\mathrm{executed}}.
+\end{aligned}
+$$
+
+I仅在“y为T前最后交付QH的当地年份且本窗尚未覆盖T”时为1；覆盖T时释放预留。W和数值余量只限制可用额度，不计实际消耗、不累计跨窗扣除、不记成本。已冻结合同的计划耗能已在左端中，不再扣第二次。上窗未执行计划也不加入U。
+
+预留沿用v5数值，但释放边界从“数据段尾”改为“正式终点T”。单纯SOC从190降到10的DC吞吐下界仅0.5 EFC，0.543478更保守；仍不能保证任意未来冻结承诺下的递归可行。
+
+## V2-8. 空值、断点与跳过条件
+
+**V2-M17｜🟩 常数掩码及完整产品禁用**
+
+$$
+\color{#2E7D32}
+\begin{aligned}
+z_q&=\prod_{f\in\mathcal F_q^{\mathrm{required}}}m_{qf},\qquad m_{qf}\in\{0,1\},\\
+v_j&=\prod_{q:a_{jq}>0}z_q,\\
+v_j=0&\Longrightarrow x_j=0\quad\text{for a new contract},\\
+z_q=0&\Longrightarrow R_q^u=R_q^d=c_{qk}=p_{qk}=e_q=0,\\
+z_q=0&\Longrightarrow E_{q,\mathrm{end}}=E_{q,\mathrm{start}}.
+\end{aligned}
+$$
+
+缺失字段在证据中仍是null；有限数值求解输入中仅在强制禁用之后使用占位系数。缺失α不创建虚构激活，而以一个固定零运行相位桥接。该方式假设零自放电，属于条件仿真，不是恢复缺失历史。
+
+如果已有非零冻结订单覆盖缺口，不能套用x=0清除承诺，必须输出冲突、保持未知状态链、令依赖结果null。今日全缺但明日有效时仍规划两日，并在今天冻结明天交付、今天关闸的订单。只有整窗无可优化部分、无需形成非平凡未来承诺、固定路径和终态已验证可行时，才可免MILP执行确定性零路径；不能仅检查今天的有效QH数。
+
+输入字段存在但不合法与真正缺失分别登记。全部未来缺口已知并据此避开交易是事后有效数据掩码假设；本版不是as-of可执行回测。
+
+## V2-9. 约束之外的验收、输出与求解顺序
+
+1. 生成完整网格和名义事件日历，保存原始nullable字段、原因与source hash；固定正式预算及独立跨年观察预算。
+2. 从可信执行状态与冻结账本构造两日窗口；首日过去关闸头寸为零，后续不得清零已有承诺。
+3. 用常数替换冻结x/R，生成目标、事件余量、物理相位、SOC和EFC行；未知值不得直接送入MILP。
+4. 求解后独立重建合同净量、事件B/R、SOC/EFC、现金、消元目标常数及salvage；校验通过才提交今日运行和今日关闸的未来订单。
+5. 按执行QH计账，更新SOC和U；观察日不结算。失败窗保存诊断且不污染旧检查点，后续未知状态不产生正常收益。
+6. 输出合同/QH/方向的唯一冻结键、0订单、GCT和发布时间、冻结原因、创建窗口、列索引和消元常数、冻结前后哈希、checkpoint ID；重放同键同值幂等，同键异值拒绝覆盖。
+7. 正式六项收益按k€/MW报告，同时输出原始字段、启用依赖和可结算覆盖率、桥接小时、禁用合同数及范围、阻塞QH和不完整规划窗口数。
+
+**实现定位：** 数学内核为`code/src/es_synthetic_market/_baseline_core.py::solve_joint`；P0滚动为`code/src/es_synthetic_market/perfect.py::PerfectEngine`；输入为`code/src/es_historical_conditional/perfect.py::prepare`；运行入口为`code/project/run_es_perfect_v1.py`。原v5入口保留，不因新增文档版本自动切换。
+
+**验证定位：** [实施与验收](../reports/完美预测模型优化V1_实施与验收.md)、[18项P0测试](../reports/perfect_v1_p0_tests.log)、[76项回归](../reports/perfect_v1_legacy_tests.log)、[8日摘要](../reports/perfect_v1_release8d_summary.json)。8日正式区间为2025-01-01至01-08，1月9日只观察；条件毛收益21.016132 k€/MW，求解器累计2.586919秒。该结果不证明全年收益上界或全年求解时间，本次版本汇编不改变既有代码、数据和测算结果。

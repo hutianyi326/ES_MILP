@@ -67,7 +67,8 @@ $esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
 
 ## 常用成果
 
-- [完美预测模型优化V1：方案评估与P0数学实施细则](research/完美预测模型优化V1_方案评估与P0数学实施细则_20260922.md)：新分支的设计评估，尚未实施求解代码改造。
+- [MILP数学规格：第一版保留＋第二版完整公式](research/spain_milp_mathematical_spec_2026-09-16.md#milp-v2)：v2.0对应当前P0实现，变更带颜色标识。
+- [完美预测模型优化V1：方案评估与P0数学实施细则](research/完美预测模型优化V1_方案评估与P0数学实施细则_20260922.md)：批准的设计、验收规格及实施状态索引。
 - [中文结果汇总](reports/西班牙储能MILP全量测算结果汇总.md)：k€/MW、六项方向收益、收益占比和容量图表。
 - [完整结果与计时](output/full_range/)：完整JSON约1.32 GB，建议日常先看final_report.json、summary.json、solver_timing.json。
 - [市场来源索引](research/sources.md)、[模型适配与假设](research/es_conditional_adapter_spec_20260920.md)。
