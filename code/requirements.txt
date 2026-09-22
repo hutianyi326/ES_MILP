@@ -1,0 +1,5 @@
+# Observed in .venv-es-milp on 2026-09-20, Python 3.12.14.
+# Limited synthetic tooling; not a complete production dependency manifest.
+numpy==2.4.6
+scipy==1.15.3
+tzdata==2026.4

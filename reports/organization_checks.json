@@ -1,0 +1,15 @@
+{
+  "copied_files": 5699,
+  "path_adapted_files": [
+    "code\\src\\es_historical_conditional\\__main__.py",
+    "code\\src\\es_historical_conditional\\adapter.py",
+    "code\\project\\run_es_full_ts_start_cap_old_d_20260921.py",
+    "code\\project\\report_es_full_ts_start_cap_old_d_20260921.py",
+    "code\\project\\build_es_full_result_analysis_20260921.py"
+  ],
+  "python_syntax_files": 57,
+  "full_run_help": "PASS",
+  "imports_dependency_fingerprints_output_validation": "PASS",
+  "report_image_links": "PASS",
+  "economic_solve": "NOT_RUN: organization only"
+}

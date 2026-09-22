@@ -1,0 +1,26 @@
+# Local environments and Python caches
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Large source datasets and solver outputs remain on disk
+/input/
+/output/
+
+# Local credentials and machine settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+~$*

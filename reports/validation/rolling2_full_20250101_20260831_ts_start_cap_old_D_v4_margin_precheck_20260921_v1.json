@@ -1,0 +1,94 @@
+{
+  "schema": "ES_FAILED_WINDOW_MARGIN_CHECK_V1",
+  "source": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\outputs\\es_historical_conditional\\rolling2_full_20250101_20260831_ts_start_cap_old_D_20260921_v3\\ES_HISTORICAL_CONDITIONAL_ts_start__cap_old__rolling2__D.json",
+  "input_configuration_hash": "b8346733e717899909140efda4ef9907e9715c4c56cbb5ded13167d410b48e5f",
+  "failed_window_start_qh_id": "2025-12-29T23:00:00Z",
+  "annual_budget": {
+    "2025": 548.7661703394889,
+    "2026": 345.99166170339595
+  },
+  "used_before_window": {
+    "2025": 548.2442062138991,
+    "2026": 0.0
+  },
+  "remaining_before_margin": {
+    "2025": 0.5219641255897614,
+    "2026": 345.99166170339595
+  },
+  "margin_efc": 1e-06,
+  "baseline_step_ok": false,
+  "baseline_failure": "window has no audited feasible solution: The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+  "budget_trials": [
+    {
+      "extra_efc": 0.0,
+      "limit_2025": 0.5219641255896477,
+      "feasible": false,
+      "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+      "used_2025": null
+    },
+    {
+      "extra_efc": 1e-06,
+      "limit_2025": 0.5219651255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.0001,
+      "limit_2025": 0.5220641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.001,
+      "limit_2025": 0.5229641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.01,
+      "limit_2025": 0.5319641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.05,
+      "limit_2025": 0.5719641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.1,
+      "limit_2025": 0.6219641255896476,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.25,
+      "limit_2025": 0.7719641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 0.5,
+      "limit_2025": 1.0219641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    },
+    {
+      "extra_efc": 1.0,
+      "limit_2025": 1.5219641255896477,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "used_2025": 0.5219641257436675
+    }
+  ],
+  "one_micro_efc_margin_is_sufficient": true
+}
