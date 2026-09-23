@@ -1,0 +1,19 @@
+{
+  "V0_kEUR_per_MW": 796.6113536232017,
+  "V1_kEUR_per_MW": 782.2960711183534,
+  "delta_kEUR_per_MW": -14.315282504848255,
+  "change_pct": -1.7970221538694542,
+  "solver_seconds": 614.3414869999106,
+  "quality": {
+    "formal_qh": 58364,
+    "raw_field_complete_qh": 52442,
+    "raw_field_coverage": 0.8985333424713865,
+    "enabled_input_coverage": 0.8984648070728531,
+    "settlement_coverage": 0.8984648070728531,
+    "assumed_idle_hours": 1481.5,
+    "blocked_qh": 0,
+    "disabled_contract_count": 13926,
+    "disabled_contract_count_scope": "entire_input_including_lookahead",
+    "incomplete_lookahead_windows": 179
+  }
+}

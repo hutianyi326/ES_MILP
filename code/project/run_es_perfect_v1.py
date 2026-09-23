@@ -27,7 +27,9 @@ def main():
     p.add_argument('--budget-json',type=Path,help='explicit formal year:value map; not tail budgets')
     p.add_argument('--time-limit',type=float,default=30.)
     p.add_argument('--preflight-only',action='store_true')
+    p.add_argument('--checkpoint-every',type=int,default=1,help='save cumulative checkpoint every N windows')
     args=p.parse_args()
+    if args.checkpoint_every<1:p.error('checkpoint-every must be positive')
     start=datetime.fromisoformat(args.start).replace(tzinfo=MADRID)
     end=datetime.fromisoformat(args.end).replace(tzinfo=MADRID)
     if start>=end:p.error('end must follow start')
@@ -63,7 +65,12 @@ def main():
     solve_started=perf_counter()
     # Each successful commit can be resumed with PerfectEngine.restore; no failed candidate is written as a committed state.
     while engine.step():
-        save(f'checkpoint_{len(engine._windows):04d}.json',engine.checkpoint())
+        n=len(engine._windows)
+        if n%args.checkpoint_every==0:
+            save(f'checkpoint_{n:04d}.json',engine.checkpoint())
+        w=engine._windows[-1]
+        print(json.dumps(dict(window=n,start=str(w.start_utc),soc=engine._soc,
+            solver_seconds=w.audit['model']['solver_seconds'],elapsed=perf_counter()-started)),flush=True)
     report=engine.report();report['execution_wall_seconds']=perf_counter()-solve_started
     report['total_wall_seconds']=perf_counter()-started
     save('result.json',report)

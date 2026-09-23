@@ -1,0 +1,243 @@
+{
+  "retrieved_utc": "2026-09-23T01:29:48.792945+00:00",
+  "timezone": "Europe/Madrid",
+  "raw_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\input\\raw\\ES\\esios\\monthly_check_20260923T012942Z",
+  "summary": [
+    {
+      "indicator": 2130,
+      "direction": "up",
+      "qh_count": 2688,
+      "qh_sum": 9283.21,
+      "qh_average": 3.4535751488095237,
+      "month_default": 9283.21,
+      "month_sum": 9283.21,
+      "month_average": 3.45357514881,
+      "default_minus_sum": 0.0,
+      "api_sum_minus_qh_sum": 0.0,
+      "api_average_minus_qh_average": 4.765077221691172e-13
+    },
+    {
+      "indicator": 634,
+      "direction": "down",
+      "qh_count": 2688,
+      "qh_sum": 10561.45,
+      "qh_average": 3.9291108630952385,
+      "month_default": 10561.45,
+      "month_sum": 10561.45,
+      "month_average": 3.9291108631,
+      "default_minus_sum": 0.0,
+      "api_sum_minus_qh_sum": 0.0,
+      "api_average_minus_qh_average": 4.761524508012371e-12
+    }
+  ],
+  "requests": {
+    "2130_month_default": {
+      "rows": [
+        {
+          "value": 9283.21,
+          "datetime": "2026-02-01T00:00:00.000+01:00",
+          "datetime_utc": "2026-01-31T23:00:00Z",
+          "tz_time": "2026-01-31T23:00:00.000Z",
+          "geo_id": 8741,
+          "geo_name": "Península"
+        }
+      ],
+      "metadata": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-01T00%3A00%3A00%2B01%3A00&end_date=2026-02-28T23%3A59%3A59%2B01%3A00&time_trunc=month",
+        "request_params": {
+          "start_date": "2026-02-01T00:00:00+01:00",
+          "end_date": "2026-02-28T23:59:59+01:00",
+          "time_trunc": "month"
+        },
+        "retrieved_at": "2026-09-23T01:29:44.781260Z",
+        "http_status": 200,
+        "bytes": 832,
+        "sha256": "16959bfedf1eac5709e7be1fea73d5dc0fa0d72ea40d0ac287492e51747197e9",
+        "saved": true
+      },
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "updated": "2026-07-20T17:15:04.000+02:00"
+    },
+    "2130_month_sum": {
+      "rows": [
+        {
+          "value": 9283.21,
+          "datetime": "2026-02-01T00:00:00.000+01:00",
+          "datetime_utc": "2026-01-31T23:00:00Z",
+          "tz_time": "2026-01-31T23:00:00.000Z",
+          "geo_id": 8741,
+          "geo_name": "Península"
+        }
+      ],
+      "metadata": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-01T00%3A00%3A00%2B01%3A00&end_date=2026-02-28T23%3A59%3A59%2B01%3A00&time_trunc=month&time_agg=sum",
+        "request_params": {
+          "start_date": "2026-02-01T00:00:00+01:00",
+          "end_date": "2026-02-28T23:59:59+01:00",
+          "time_trunc": "month",
+          "time_agg": "sum"
+        },
+        "retrieved_at": "2026-09-23T01:29:44.762364Z",
+        "http_status": 200,
+        "bytes": 832,
+        "sha256": "16959bfedf1eac5709e7be1fea73d5dc0fa0d72ea40d0ac287492e51747197e9",
+        "saved": true
+      },
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "updated": "2026-07-20T17:15:04.000+02:00"
+    },
+    "2130_month_average": {
+      "rows": [
+        {
+          "value": 3.45357514881,
+          "datetime": "2026-02-01T00:00:00.000+01:00",
+          "datetime_utc": "2026-01-31T23:00:00Z",
+          "tz_time": "2026-01-31T23:00:00.000Z",
+          "geo_id": 8741,
+          "geo_name": "Península"
+        }
+      ],
+      "metadata": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-01T00%3A00%3A00%2B01%3A00&end_date=2026-02-28T23%3A59%3A59%2B01%3A00&time_trunc=month&time_agg=average",
+        "request_params": {
+          "start_date": "2026-02-01T00:00:00+01:00",
+          "end_date": "2026-02-28T23:59:59+01:00",
+          "time_trunc": "month",
+          "time_agg": "average"
+        },
+        "retrieved_at": "2026-09-23T01:29:44.774981Z",
+        "http_status": 200,
+        "bytes": 838,
+        "sha256": "139e4730dfaa37334f1dee6dbb71f9c8ee166877331ce9ae3e232bf18aa8b490",
+        "saved": true
+      },
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "updated": "2026-07-20T17:15:04.000+02:00"
+    },
+    "634_month_default": {
+      "rows": [
+        {
+          "value": 10561.45,
+          "datetime": "2026-02-01T00:00:00.000+01:00",
+          "datetime_utc": "2026-01-31T23:00:00Z",
+          "tz_time": "2026-01-31T23:00:00.000Z",
+          "geo_id": 8741,
+          "geo_name": "Península"
+        }
+      ],
+      "metadata": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-01T00%3A00%3A00%2B01%3A00&end_date=2026-02-28T23%3A59%3A59%2B01%3A00&time_trunc=month",
+        "request_params": {
+          "start_date": "2026-02-01T00:00:00+01:00",
+          "end_date": "2026-02-28T23:59:59+01:00",
+          "time_trunc": "month"
+        },
+        "retrieved_at": "2026-09-23T01:29:45.733345Z",
+        "http_status": 200,
+        "bytes": 836,
+        "sha256": "b00ed1f0cceccb9f6cd68487a8992a195f295c8aebb9cf650e39fdcc4a2fe1c3",
+        "saved": true
+      },
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "updated": "2026-07-20T17:15:04.000+02:00"
+    },
+    "634_month_sum": {
+      "rows": [
+        {
+          "value": 10561.45,
+          "datetime": "2026-02-01T00:00:00.000+01:00",
+          "datetime_utc": "2026-01-31T23:00:00Z",
+          "tz_time": "2026-01-31T23:00:00.000Z",
+          "geo_id": 8741,
+          "geo_name": "Península"
+        }
+      ],
+      "metadata": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-01T00%3A00%3A00%2B01%3A00&end_date=2026-02-28T23%3A59%3A59%2B01%3A00&time_trunc=month&time_agg=sum",
+        "request_params": {
+          "start_date": "2026-02-01T00:00:00+01:00",
+          "end_date": "2026-02-28T23:59:59+01:00",
+          "time_trunc": "month",
+          "time_agg": "sum"
+        },
+        "retrieved_at": "2026-09-23T01:29:45.712766Z",
+        "http_status": 200,
+        "bytes": 836,
+        "sha256": "b00ed1f0cceccb9f6cd68487a8992a195f295c8aebb9cf650e39fdcc4a2fe1c3",
+        "saved": true
+      },
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "updated": "2026-07-20T17:15:04.000+02:00"
+    },
+    "634_month_average": {
+      "rows": [
+        {
+          "value": 3.9291108631,
+          "datetime": "2026-02-01T00:00:00.000+01:00",
+          "datetime_utc": "2026-01-31T23:00:00Z",
+          "tz_time": "2026-01-31T23:00:00.000Z",
+          "geo_id": 8741,
+          "geo_name": "Península"
+        }
+      ],
+      "metadata": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-01T00%3A00%3A00%2B01%3A00&end_date=2026-02-28T23%3A59%3A59%2B01%3A00&time_trunc=month&time_agg=average",
+        "request_params": {
+          "start_date": "2026-02-01T00:00:00+01:00",
+          "end_date": "2026-02-28T23:59:59+01:00",
+          "time_trunc": "month",
+          "time_agg": "average"
+        },
+        "retrieved_at": "2026-09-23T01:29:45.757409Z",
+        "http_status": 200,
+        "bytes": 840,
+        "sha256": "1b3a7947ae3a20a51fec4a964c32e54d182e18357f968297d67f2fea4419cdca",
+        "saved": true
+      },
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "updated": "2026-07-20T17:15:04.000+02:00"
+    }
+  }
+}

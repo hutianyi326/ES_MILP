@@ -1,0 +1,238 @@
+{
+  "retrieved_utc": "2026-09-23T01:54:19.085342+00:00",
+  "region": {
+    "geo_id": 8741,
+    "geo_name": "Península"
+  },
+  "date_range_local": [
+    "2026-01-01",
+    "2026-03-31"
+  ],
+  "pooling_definition": "arithmetic mean of equal counts of Up indicator 2130 and Down indicator 634 values",
+  "hourly_definition": "API time_agg=average; mean of hourly average prices within month",
+  "raw_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\input\\raw\\ES\\esios\\price_granularity_20260923T015413Z",
+  "requests": {
+    "2130_qh": {
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-01-01T00%3A00%3A00%2B01%3A00&end_date=2026-03-31T23%3A59%3A59%2B02%3A00&time_trunc=fifteen_minutes",
+        "request_params": {
+          "start_date": "2026-01-01T00:00:00+01:00",
+          "end_date": "2026-03-31T23:59:59+02:00",
+          "time_trunc": "fifteen_minutes"
+        },
+        "retrieved_at": "2026-09-23T01:54:18.162019Z",
+        "http_status": 200,
+        "bytes": 2113696,
+        "sha256": "f0c019d345b2c9c46494f3cf3f6833fbde77db7e1ca9b296c14e4171ea83e646",
+        "saved": true
+      },
+      "indicator_name": "Precio Reserva de regulación secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:24:54.000+02:00"
+    },
+    "2130_hour_average": {
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-01-01T00%3A00%3A00%2B01%3A00&end_date=2026-03-31T23%3A59%3A59%2B02%3A00&time_trunc=hour&time_agg=average",
+        "request_params": {
+          "start_date": "2026-01-01T00:00:00+01:00",
+          "end_date": "2026-03-31T23:59:59+02:00",
+          "time_trunc": "hour",
+          "time_agg": "average"
+        },
+        "retrieved_at": "2026-09-23T01:54:15.831299Z",
+        "http_status": 200,
+        "bytes": 531438,
+        "sha256": "daf1663765ff7dcd33f00a434c4e8001e849eac7d0e33421cd1476e4cc805908",
+        "saved": true
+      },
+      "indicator_name": "Precio Reserva de regulación secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:24:54.000+02:00"
+    },
+    "634_qh": {
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-01-01T00%3A00%3A00%2B01%3A00&end_date=2026-03-31T23%3A59%3A59%2B02%3A00&time_trunc=fifteen_minutes",
+        "request_params": {
+          "start_date": "2026-01-01T00:00:00+01:00",
+          "end_date": "2026-03-31T23:59:59+02:00",
+          "time_trunc": "fifteen_minutes"
+        },
+        "retrieved_at": "2026-09-23T01:54:19.061972Z",
+        "http_status": 200,
+        "bytes": 2114605,
+        "sha256": "2b94407b533db7d0c09f39725cac38a3002f49229d4d5216a1d1d516d232289d",
+        "saved": true
+      },
+      "indicator_name": "Precio reserva de regulación secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:24:54.000+02:00"
+    },
+    "634_hour_average": {
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-01-01T00%3A00%3A00%2B01%3A00&end_date=2026-03-31T23%3A59%3A59%2B02%3A00&time_trunc=hour&time_agg=average",
+        "request_params": {
+          "start_date": "2026-01-01T00:00:00+01:00",
+          "end_date": "2026-03-31T23:59:59+02:00",
+          "time_trunc": "hour",
+          "time_agg": "average"
+        },
+        "retrieved_at": "2026-09-23T01:54:15.821184Z",
+        "http_status": 200,
+        "bytes": 531320,
+        "sha256": "78fb9e82817455c21fda9b69360b4cf4eac55aa74c3399cd05a1aa3f2e45492a",
+        "saved": true
+      },
+      "indicator_name": "Precio reserva de regulación secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:24:54.000+02:00"
+    }
+  },
+  "monthly": [
+    {
+      "month": "2026-01",
+      "qh_intervals_per_direction": 2976,
+      "hours_per_direction": 744,
+      "qh_up_average": 5.473306451612903,
+      "qh_down_average": 2.6942573924731184,
+      "qh_pooled_average": 4.083781922043011,
+      "hour_up_average": 5.473306451612903,
+      "hour_down_average": 2.6942573924731184,
+      "hour_pooled_average": 4.083781922043011,
+      "pooled_difference": 4.440892098500626e-16
+    },
+    {
+      "month": "2026-02",
+      "qh_intervals_per_direction": 2688,
+      "hours_per_direction": 672,
+      "qh_up_average": 3.4535751488095237,
+      "qh_down_average": 3.9291108630952385,
+      "qh_pooled_average": 3.691343005952381,
+      "hour_up_average": 3.4535751488095237,
+      "hour_down_average": 3.9291108630952385,
+      "hour_pooled_average": 3.691343005952381,
+      "pooled_difference": 0.0
+    },
+    {
+      "month": "2026-03",
+      "qh_intervals_per_direction": 2972,
+      "hours_per_direction": 743,
+      "qh_up_average": 3.9091823687752356,
+      "qh_down_average": 2.7269111709286675,
+      "qh_pooled_average": 3.318046769851952,
+      "hour_up_average": 3.9091823687752356,
+      "hour_down_average": 2.7269111709286675,
+      "hour_pooled_average": 3.318046769851952,
+      "pooled_difference": 2.220446049250313e-16
+    }
+  ],
+  "direction_checks": [
+    {
+      "month": "2026-01",
+      "direction": "up",
+      "indicator": 2130,
+      "qh_count": 2976,
+      "qh_average_eur_per_mw": 5.473306451612903,
+      "hour_count": 744,
+      "hour_average_eur_per_mw": 5.473306451612903,
+      "difference_hour_minus_qh": 0.0
+    },
+    {
+      "month": "2026-01",
+      "direction": "down",
+      "indicator": 634,
+      "qh_count": 2976,
+      "qh_average_eur_per_mw": 2.6942573924731184,
+      "hour_count": 744,
+      "hour_average_eur_per_mw": 2.6942573924731184,
+      "difference_hour_minus_qh": 0.0
+    },
+    {
+      "month": "2026-02",
+      "direction": "up",
+      "indicator": 2130,
+      "qh_count": 2688,
+      "qh_average_eur_per_mw": 3.4535751488095237,
+      "hour_count": 672,
+      "hour_average_eur_per_mw": 3.4535751488095237,
+      "difference_hour_minus_qh": 0.0
+    },
+    {
+      "month": "2026-02",
+      "direction": "down",
+      "indicator": 634,
+      "qh_count": 2688,
+      "qh_average_eur_per_mw": 3.9291108630952385,
+      "hour_count": 672,
+      "hour_average_eur_per_mw": 3.9291108630952385,
+      "difference_hour_minus_qh": 0.0
+    },
+    {
+      "month": "2026-03",
+      "direction": "up",
+      "indicator": 2130,
+      "qh_count": 2972,
+      "qh_average_eur_per_mw": 3.9091823687752356,
+      "hour_count": 743,
+      "hour_average_eur_per_mw": 3.9091823687752356,
+      "difference_hour_minus_qh": 0.0
+    },
+    {
+      "month": "2026-03",
+      "direction": "down",
+      "indicator": 634,
+      "qh_count": 2972,
+      "qh_average_eur_per_mw": 2.7269111709286675,
+      "hour_count": 743,
+      "hour_average_eur_per_mw": 2.7269111709286675,
+      "difference_hour_minus_qh": 0.0
+    }
+  ]
+}

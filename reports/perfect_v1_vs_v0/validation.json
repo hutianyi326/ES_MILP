@@ -1,0 +1,16 @@
+{
+  "formal_qh": 58364,
+  "windows": 608,
+  "final_soc_mwh": 10.000000000001176,
+  "annual_efc_from_operations": {
+    "2025": 548.7661693394746,
+    "2026": 345.9916607033929
+  },
+  "first_operating_efc_limit_reached_local": {
+    "2025": "2025-11-22T23:45:00+01:00",
+    "2026": "2026-07-23T23:45:00+02:00"
+  },
+  "pure_solver_seconds": 614.3414869999106,
+  "process_to_summary_saved_seconds": 2755.4375467300415,
+  "checks": "PASS: endpoint, budget, cash, monthly totals and solver timings"
+}

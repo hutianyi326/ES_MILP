@@ -16,7 +16,11 @@ $esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
 
 输出包含输入证据、正式/规划区间、配置和源码哈希、逐窗消元映射和独立验收、冻结与现金账本、检查点、六项月度收益及数据质量。Python接口`PerfectEngine.restore`可用相同输入及配置恢复检查点，校验失败不得继续复用状态。
 
-验证及边界见[本次实施与验收记录](reports/完美预测模型优化V1_实施与验收.md)，[review记录](reports/完美预测模型优化V1_review.md)。原全量结果和下列旧入口仍对应v5，不代表已按P0重跑全年。
+验证及边界见[本次实施与验收记录](reports/完美预测模型优化V1_实施与验收.md)，[review记录](reports/完美预测模型优化V1_review.md)。原全量结果和下列旧入口仍对应v5。
+
+2026-09-22已完成当前P0模型2025-01-01至2026-08-31全量测算：100 MW / 200 MWh，608个逐日窗口，条件毛收益782.296071 k€/MW；原模型成功归档（v5执行版，比较中称V0）为796.611354 k€/MW，相差−1.797%。详见[全量V1与V0对比](reports/perfect_v1_vs_v0/结果对比.md)，含月度总额、六项市场收益、图表、共同结算QH对比和用时口径。
+
+本次仅对2025-11-22窗口的数值不可行报告以presolve=True重试一次，预算与模型约束不变；正式续跑使用`code/project/resume_es_perfect_full.py`，未改核心模型。完整成果位于`output/perfect_v1_full_completed_retry/`，原始失败现场位于`output/perfect_v1_full_20260922/`。额外观察日2026-09-01全部缺失，不提供有效价格前瞻。本次没有调用agent审核。
 
 ## 文件分类
 

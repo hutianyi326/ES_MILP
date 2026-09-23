@@ -1,0 +1,1512 @@
+{
+  "generated_utc": "2026-09-23T01:45:49.352063+00:00",
+  "region": {
+    "geo_id": 8741,
+    "geo_name": "Península"
+  },
+  "indicator_definition": {
+    "632": [
+      "up",
+      "上调"
+    ],
+    "633": [
+      "down",
+      "下调"
+    ]
+  },
+  "months": [
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08"
+  ],
+  "sources": [
+    {
+      "month": "2024-07",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2024-07/20260917T031023209512Z/fetch_632.json",
+      "sha256": "fb80c384e657285c8a71f02a489b8e3f208433171f42d7449db9e864ab369bd4",
+      "request_params": {
+        "end_date": "2024-07-31T23:59:59+02:00",
+        "start_date": "2024-07-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-07-30T16:12:38.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2024-07",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2024-07/20260917T031023209512Z/fetch_633.json",
+      "sha256": "f0f967f56ad666cf8e43cafdfb05a66312cfd5e742ee538ad9fa0046ba275ab1",
+      "request_params": {
+        "end_date": "2024-07-31T23:59:59+02:00",
+        "start_date": "2024-07-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-07-30T16:12:38.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2024-08",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2024-08/20260917T030619953046Z/fetch_632.json",
+      "sha256": "17d0d6d3601e1f6271950b0f92c996f9be8751467b8ad154d046d484fe2c88d1",
+      "request_params": {
+        "end_date": "2024-08-31T23:59:59+02:00",
+        "start_date": "2024-08-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-08-30T16:12:22.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2024-08",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2024-08/20260917T030619953046Z/fetch_633.json",
+      "sha256": "f1bca1c7e5c7b385e5f5d4ee5fad4c3b768b72576a1a9edb8d8bca03457032f4",
+      "request_params": {
+        "end_date": "2024-08-31T23:59:59+02:00",
+        "start_date": "2024-08-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-08-30T16:12:22.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2024-09",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2024-09/20260917T030619953046Z/fetch_632.json",
+      "sha256": "49a02eb01786c4d2249bf923813369cbc9d00999ffce33633890bc256cfc9077",
+      "request_params": {
+        "end_date": "2024-09-30T23:59:59+02:00",
+        "start_date": "2024-09-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-09-29T16:12:19.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2024-09",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2024-09/20260917T030619953046Z/fetch_633.json",
+      "sha256": "49380581803e562905a510cfb80227818092998fd0661c84560df0d4fb62ca0a",
+      "request_params": {
+        "end_date": "2024-09-30T23:59:59+02:00",
+        "start_date": "2024-09-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-09-29T16:12:19.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2024-10",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2024-10/20260917T030619953046Z/fetch_632.json",
+      "sha256": "e81f6d504761f294f2e75a8fe547804528b1cdf0675cc5b139e354d5bb22a994",
+      "request_params": {
+        "end_date": "2024-10-31T23:59:59+01:00",
+        "start_date": "2024-10-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-10-30T16:18:48.000+01:00",
+      "unique_peninsular_qh": 2980,
+      "expected_qh": 2980
+    },
+    {
+      "month": "2024-10",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2024-10/20260917T030619953046Z/fetch_633.json",
+      "sha256": "598064f00aeaecb047675db7358e8427f7e2f0d8f384eef5005e2c6e153ff9fa",
+      "request_params": {
+        "end_date": "2024-10-31T23:59:59+01:00",
+        "start_date": "2024-10-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-10-30T16:18:48.000+01:00",
+      "unique_peninsular_qh": 2980,
+      "expected_qh": 2980
+    },
+    {
+      "month": "2024-11",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2024-11/20260917T030619953046Z/fetch_632.json",
+      "sha256": "67e84a201f4bc004dd6f2858d8113c7469f06dc62964bd65eed320929108afd9",
+      "request_params": {
+        "end_date": "2024-11-30T23:59:59+01:00",
+        "start_date": "2024-11-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-11-29T16:19:40.000+01:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2024-11",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2024-11/20260917T030619953046Z/fetch_633.json",
+      "sha256": "288c7b4f3d41386a93f2f9e7439ae1f04f58925393179859839be8d5b193c2d0",
+      "request_params": {
+        "end_date": "2024-11-30T23:59:59+01:00",
+        "start_date": "2024-11-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-11-29T16:19:40.000+01:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2024-12",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2024-12/20260917T030619953046Z/fetch_632.json",
+      "sha256": "d12997cced3a4ea85440533bb69c8fb165da9ab6109e38197e5302aa78ecb1de",
+      "request_params": {
+        "end_date": "2024-12-31T23:59:59+01:00",
+        "start_date": "2024-12-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-12-30T16:19:41.000+01:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2024-12",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2024-12/20260917T031023209512Z/fetch_633.json",
+      "sha256": "f613ba9e2f4ce87cef410b4720182601c160be2e23d35a95591ca351e60b5245",
+      "request_params": {
+        "end_date": "2024-12-31T23:59:59+01:00",
+        "start_date": "2024-12-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2024-12-30T16:19:41.000+01:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-01",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-01/20260917T030619953046Z/fetch_632.json",
+      "sha256": "57a5f77c203f0704672f12c6ef59aad814deb3da4d0fee2b5b2e98fcafdfc834",
+      "request_params": {
+        "end_date": "2025-01-31T23:59:59+01:00",
+        "start_date": "2025-01-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-02-12T13:44:37.000+01:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-01",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-01/20260917T030619953046Z/fetch_633.json",
+      "sha256": "cf94ca24e05666467d7a119e4fdbdc52e8bcc5f2863eba26f6b0529fb6c2b17b",
+      "request_params": {
+        "end_date": "2025-01-31T23:59:59+01:00",
+        "start_date": "2025-01-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-02-12T13:44:37.000+01:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-02",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-02/20260917T030619953046Z/fetch_632.json",
+      "sha256": "4f7df6024ddb5ae6c69fb98f0986625c5d138589f6e98ae07d2ead540fb112a9",
+      "request_params": {
+        "end_date": "2025-02-28T23:59:59+01:00",
+        "start_date": "2025-02-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-02-27T16:10:54.000+01:00",
+      "unique_peninsular_qh": 2688,
+      "expected_qh": 2688
+    },
+    {
+      "month": "2025-02",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-02/20260917T030619953046Z/fetch_633.json",
+      "sha256": "eebff19847db4639e74fd4454599f1296ddde7b1023805ad6e78e3a492b6855c",
+      "request_params": {
+        "end_date": "2025-02-28T23:59:59+01:00",
+        "start_date": "2025-02-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-02-27T16:10:54.000+01:00",
+      "unique_peninsular_qh": 2688,
+      "expected_qh": 2688
+    },
+    {
+      "month": "2025-03",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-03/20260917T031023209512Z/fetch_632.json",
+      "sha256": "4a46c1e0f5b710dfbf523a7603f592180f79d1bcd94932b26f06aa8dcd682e90",
+      "request_params": {
+        "end_date": "2025-03-31T23:59:59+02:00",
+        "start_date": "2025-03-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-03-30T16:11:06.000+02:00",
+      "unique_peninsular_qh": 2972,
+      "expected_qh": 2972
+    },
+    {
+      "month": "2025-03",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-03/20260917T030619953046Z/fetch_633.json",
+      "sha256": "67c18d9843a6194b1b0d0427a70231cda8d2d1cfa7bef8d85f4a3a1bab89ded0",
+      "request_params": {
+        "end_date": "2025-03-31T23:59:59+02:00",
+        "start_date": "2025-03-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-03-30T16:11:06.000+02:00",
+      "unique_peninsular_qh": 2972,
+      "expected_qh": 2972
+    },
+    {
+      "month": "2025-04",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-04/20260917T030619953046Z/fetch_632.json",
+      "sha256": "25ec0028f5b1ddcf434f54e0fdb1e15a5c840049054a67ddb399208a954aed16",
+      "request_params": {
+        "end_date": "2025-04-30T23:59:59+02:00",
+        "start_date": "2025-04-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-06-11T14:10:19.000+02:00",
+      "unique_peninsular_qh": 2784,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-04",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-04/20260917T030619953046Z/fetch_633.json",
+      "sha256": "2857582b2bf636a29a794e591d159617759235954dbae4fdc461ac703b40f67f",
+      "request_params": {
+        "end_date": "2025-04-30T23:59:59+02:00",
+        "start_date": "2025-04-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-06-11T14:10:19.000+02:00",
+      "unique_peninsular_qh": 2784,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-05",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-05/20260917T030619953046Z/fetch_632.json",
+      "sha256": "da9b9755053b8643fe13b92ee3a2cd41e19b44725c960d1f4fccb3688fc0c277",
+      "request_params": {
+        "end_date": "2025-05-31T23:59:59+02:00",
+        "start_date": "2025-05-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-06-16T11:00:37.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-05",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-05/20260917T030619953046Z/fetch_633.json",
+      "sha256": "5bff5af612f27e88e361ce6fc1d5e7b7da5ed7f3b62f9fc899054d45e8806665",
+      "request_params": {
+        "end_date": "2025-05-31T23:59:59+02:00",
+        "start_date": "2025-05-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-06-16T11:00:37.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-06",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-06/20260917T030619953046Z/fetch_632.json",
+      "sha256": "a08fe60de30a644d012bedfed467267caf14e1e71609279b1b7c048a82e6dae9",
+      "request_params": {
+        "end_date": "2025-06-30T23:59:59+02:00",
+        "start_date": "2025-06-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-06-29T16:13:18.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-06",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-06/20260917T030619953046Z/fetch_633.json",
+      "sha256": "aa225a7bc471e809570e62b93752d2591493c9017c2415187fec272fd8aad36d",
+      "request_params": {
+        "end_date": "2025-06-30T23:59:59+02:00",
+        "start_date": "2025-06-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-06-29T16:13:18.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-07",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-07/20260904T231550Z/fetch_632.json",
+      "sha256": "9e8a80a0cc558ddafc3d6ec58c8eb22dbc9f8d7911715210ab16a90c0237cfcf",
+      "request_params": {
+        "end_date": "2025-07-31T23:59:59+02:00",
+        "start_date": "2025-07-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-07-30T16:16:38.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-07",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-07/20260904T231550Z/fetch_633.json",
+      "sha256": "62d680049672898c3c87c77e40f667a577ac9ac656238111fb5090a0b132937e",
+      "request_params": {
+        "end_date": "2025-07-31T23:59:59+02:00",
+        "start_date": "2025-07-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-07-30T16:16:38.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-08",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-08/20260904T231550Z/fetch_632.json",
+      "sha256": "f1e828b91c3717cc4a03df954698220298b1ad6edbc21c5e2694f5a5625c5d4c",
+      "request_params": {
+        "end_date": "2025-08-31T23:59:59+02:00",
+        "start_date": "2025-08-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-08-30T16:09:07.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-08",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-08/20260904T231550Z/fetch_633.json",
+      "sha256": "a098b89cdf2a58f7cd17ca3a2cb75d6504eebc42255119d43bc42bf637b2471a",
+      "request_params": {
+        "end_date": "2025-08-31T23:59:59+02:00",
+        "start_date": "2025-08-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-08-30T16:09:07.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-09",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-09/20260904T231550Z/fetch_632.json",
+      "sha256": "f1cdfe3ab9bead0388dcef54634ea64d180f73fa2ece5c94782120a0004ee7d0",
+      "request_params": {
+        "end_date": "2025-09-30T23:59:59+02:00",
+        "start_date": "2025-09-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-09-29T16:18:06.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-09",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-09/20260904T231550Z/fetch_633.json",
+      "sha256": "7d3ef56d4b484a563285998d401e5ea9cec242cdecb99575c3e4a91fce093e29",
+      "request_params": {
+        "end_date": "2025-09-30T23:59:59+02:00",
+        "start_date": "2025-09-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-09-29T16:18:06.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-10",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-10/20260904T231550Z/fetch_632.json",
+      "sha256": "1468e0e10765aefe45b7631bb90563a8d2b1d0eac774b4e525bc0ed9978b832f",
+      "request_params": {
+        "end_date": "2025-10-31T23:59:59+01:00",
+        "start_date": "2025-10-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-10-30T16:11:33.000+01:00",
+      "unique_peninsular_qh": 2980,
+      "expected_qh": 2980
+    },
+    {
+      "month": "2025-10",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-10/20260904T231550Z/fetch_633.json",
+      "sha256": "94f6d6df65146e696d16bd4e137f4103dc05f191eae3de5b46b82f38f1ceaf14",
+      "request_params": {
+        "end_date": "2025-10-31T23:59:59+01:00",
+        "start_date": "2025-10-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-10-30T16:11:33.000+01:00",
+      "unique_peninsular_qh": 2980,
+      "expected_qh": 2980
+    },
+    {
+      "month": "2025-11",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-11/20260904T231550Z/fetch_632.json",
+      "sha256": "4eea8e81959f53100de2e67f81a650cf8ec897fbdc5caf2311b918da33bff2f3",
+      "request_params": {
+        "end_date": "2025-11-30T23:59:59+01:00",
+        "start_date": "2025-11-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-11-29T16:16:37.000+01:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-11",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-11/20260904T231550Z/fetch_633.json",
+      "sha256": "57f5a15ec193cfff4fb063cedc5c0ad50aef5330de93838ab05ff95408c82896",
+      "request_params": {
+        "end_date": "2025-11-30T23:59:59+01:00",
+        "start_date": "2025-11-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-11-29T16:16:37.000+01:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2025-12",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2025-12/20260904T231550Z/fetch_632.json",
+      "sha256": "f1ca87a6b48dd6c3a2233e0ee4107f6673d63411df15f6962e37793bc1bc87b1",
+      "request_params": {
+        "end_date": "2025-12-31T23:59:59+01:00",
+        "start_date": "2025-12-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-12-30T16:13:09.000+01:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2025-12",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2025-12/20260904T231550Z/fetch_633.json",
+      "sha256": "1c48f4d5f9b703b8695bcaa9e4cf8fc3c83a403f066fb582815a692d1d6d1ec8",
+      "request_params": {
+        "end_date": "2025-12-31T23:59:59+01:00",
+        "start_date": "2025-12-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2025-12-30T16:13:09.000+01:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-01",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-01/20260904T231550Z/fetch_632.json",
+      "sha256": "445d1022741f0d7aa90cf8aa67561011556522aea4b277c7a10ed2a015e7a779",
+      "request_params": {
+        "end_date": "2026-01-31T23:59:59+01:00",
+        "start_date": "2026-01-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:05:00.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-01",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-01/20260904T231550Z/fetch_633.json",
+      "sha256": "52946d4c513ee19f6f7cb319ce9ad4dbd36ed741a06de66148d661c22e7a6866",
+      "request_params": {
+        "end_date": "2026-01-31T23:59:59+01:00",
+        "start_date": "2026-01-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:05:00.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-02",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-02/20260904T231550Z/fetch_632.json",
+      "sha256": "bf625c557764e0e3f30735d35a008aabf4b5622dbcaf5d7390e37ada9e374ee2",
+      "request_params": {
+        "end_date": "2026-02-28T23:59:59+01:00",
+        "start_date": "2026-02-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:15:04.000+02:00",
+      "unique_peninsular_qh": 2688,
+      "expected_qh": 2688
+    },
+    {
+      "month": "2026-02",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-02/20260904T231550Z/fetch_633.json",
+      "sha256": "70ee16e86436de760cc6459961a658866462a0cd4a11881baa2da0c904df2719",
+      "request_params": {
+        "end_date": "2026-02-28T23:59:59+01:00",
+        "start_date": "2026-02-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:15:04.000+02:00",
+      "unique_peninsular_qh": 2688,
+      "expected_qh": 2688
+    },
+    {
+      "month": "2026-03",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-03/20260904T231550Z/fetch_632.json",
+      "sha256": "e2ea288ad782f48f0dbdce276c94f78322a9d6ea8d6f59b1ab6743ef336a4791",
+      "request_params": {
+        "end_date": "2026-03-31T23:59:59+02:00",
+        "start_date": "2026-03-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:24:54.000+02:00",
+      "unique_peninsular_qh": 2972,
+      "expected_qh": 2972
+    },
+    {
+      "month": "2026-03",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-03/20260904T231550Z/fetch_633.json",
+      "sha256": "cd01113f0655f6e0583cd529d2ae39d2028844c2d7f22259fb0d27f5cbbfc513",
+      "request_params": {
+        "end_date": "2026-03-31T23:59:59+02:00",
+        "start_date": "2026-03-01T00:00:00+01:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:24:54.000+02:00",
+      "unique_peninsular_qh": 2972,
+      "expected_qh": 2972
+    },
+    {
+      "month": "2026-04",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-04/20260904T231550Z/fetch_632.json",
+      "sha256": "ec66743b8aee8f3e51f8715011a4bd454451588073110e7a3232b6a53e70a7bd",
+      "request_params": {
+        "end_date": "2026-04-30T23:59:59+02:00",
+        "start_date": "2026-04-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:25:12.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2026-04",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-04/20260904T231550Z/fetch_633.json",
+      "sha256": "8d41ac8e990d1ccf1658602e4cda50f5f945948cda1682c325c94bdeb9885577",
+      "request_params": {
+        "end_date": "2026-04-30T23:59:59+02:00",
+        "start_date": "2026-04-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:25:12.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2026-05",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-05/20260904T231550Z/fetch_632.json",
+      "sha256": "4f34ed0d3c30ff1b433772744417eb8387284135bb6573c3f5cad5f81081a7fe",
+      "request_params": {
+        "end_date": "2026-05-31T23:59:59+02:00",
+        "start_date": "2026-05-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:35:04.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-05",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-05/20260904T231550Z/fetch_633.json",
+      "sha256": "ba457b96746be53363088f4fa40cfbf62b074bf8fdca8bc452ae457e1b1e3bee",
+      "request_params": {
+        "end_date": "2026-05-31T23:59:59+02:00",
+        "start_date": "2026-05-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:35:04.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-06",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-06/20260904T231550Z/fetch_632.json",
+      "sha256": "220ca3424ec59d2c8a0c524b30927121c51df03836f9a793ea36867f06afb7aa",
+      "request_params": {
+        "end_date": "2026-06-30T23:59:59+02:00",
+        "start_date": "2026-06-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:45:02.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2026-06",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-06/20260904T231550Z/fetch_633.json",
+      "sha256": "dee1711f9ced4349f6555641c6d206c08843e707086a46298734e9cfaac7cf89",
+      "request_params": {
+        "end_date": "2026-06-30T23:59:59+02:00",
+        "start_date": "2026-06-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-20T17:45:02.000+02:00",
+      "unique_peninsular_qh": 2880,
+      "expected_qh": 2880
+    },
+    {
+      "month": "2026-07",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-07/20260904T231550Z/fetch_632.json",
+      "sha256": "23213197f3eb00a993c8babc51aea067504ef5de0182a5e752cfa4d3011d5c9f",
+      "request_params": {
+        "end_date": "2026-07-31T23:59:59+02:00",
+        "start_date": "2026-07-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-31T15:34:42.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-07",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-07/20260904T231550Z/fetch_633.json",
+      "sha256": "b8540cdec38cda4b380d22ef834e1eb08fa3cfb30b5e9f3d572407cda08f51b1",
+      "request_params": {
+        "end_date": "2026-07-31T23:59:59+02:00",
+        "start_date": "2026-07-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-07-31T15:34:42.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-08",
+      "indicator": 632,
+      "path": "input/raw/ES/esios/2026-08/20260917T000000Z_history_probe/fetch_632.json",
+      "sha256": "5ce059b2377a0c7b219a819560e5bd30b1c2ec2bb8c015ec6f20d8301ee71526",
+      "request_params": {
+        "end_date": "2026-08-31T23:59:59+02:00",
+        "indicator_id": 632,
+        "start_date": "2026-08-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a subir",
+      "short_name": "Regulación secundaria subir",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-08-30T16:14:28.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    },
+    {
+      "month": "2026-08",
+      "indicator": 633,
+      "path": "input/raw/ES/esios/2026-08/20260917T000000Z_history_probe/fetch_633.json",
+      "sha256": "bf6536e384d7589552cd4c3a4c8a5c56afa0d762d49bf2b2beed0b17e82ed0ec",
+      "request_params": {
+        "end_date": "2026-08-31T23:59:59+02:00",
+        "indicator_id": 633,
+        "start_date": "2026-08-01T00:00:00+02:00",
+        "time_trunc": "fifteen_minutes"
+      },
+      "name": "Asignación reserva de regulación secundaria a bajar",
+      "short_name": "Regulación secundaria bajar",
+      "unit": [
+        {
+          "name": "Potencia",
+          "id": 20
+        }
+      ],
+      "resolution": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "source_updated_at": "2026-08-30T16:14:28.000+02:00",
+      "unique_peninsular_qh": 2976,
+      "expected_qh": 2976
+    }
+  ],
+  "checks": {
+    "common_months": 26,
+    "qhs_per_local_day": 96,
+    "dst_adjusted_expected_qh": true,
+    "no_values_filled": true,
+    "duplicate_source_overlap_not_summed": true
+  }
+}

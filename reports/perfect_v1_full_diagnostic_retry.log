@@ -1,0 +1,28 @@
+301 175.37075407406905 {2025: 507.3792385407128, 2026: 0.0}
+302 21.82066554599764 {2025: 508.6841861923744, 2026: 0.0}
+303 115.09433924811665 {2025: 510.49162053760415, 2026: 0.0}
+304 118.09558254317088 {2025: 512.249996565869, 2026: 0.0}
+305 42.57791482471878 {2025: 514.4863204155707, 2026: 0.0}
+306 20.5605509940104 {2025: 516.3188305171304, 2026: 0.0}
+307 109.901819926886 {2025: 517.7493034648817, 2026: 0.0}
+308 13.715177865612139 {2025: 520.0268265003273, 2026: 0.0}
+309 27.674041122023258 {2025: 522.3541872229407, 2026: 0.0}
+310 174.95484025310654 {2025: 524.0549816495604, 2026: 0.0}
+311 30.62727955731247 {2025: 525.9206762457229, 2026: 0.0}
+312 9.99999999999783 {2025: 528.1950925868987, 2026: 0.0}
+313 26.830304695649854 {2025: 530.2131811373195, 2026: 0.0}
+314 87.0301775599572 {2025: 532.1469235843815, 2026: 0.0}
+315 16.887423828315544 {2025: 533.9562219866353, 2026: 0.0}
+316 12.585763148375072 {2025: 535.9337237809465, 2026: 0.0}
+317 9.999999999999968 {2025: 537.5666445950375, 2026: 0.0}
+318 9.999999999999968 {2025: 537.5666445950375, 2026: 0.0}
+319 56.42886210255969 {2025: 539.1647651591685, 2026: 0.0}
+320 118.10593137372165 {2025: 540.8332319219227, 2026: 0.0}
+321 21.0659777285153 {2025: 542.713749902719, 2026: 0.0}
+322 18.392600790513107 {2025: 544.52978293538, 2026: 0.0}
+323 75.1452709412088 {2025: 546.0774094810029, 2026: 0.0}
+324 24.427011225295736 {2025: 547.5596645757907, 2026: 0.0}
+325 91.08953363508093 {2025: 548.6815123361944, 2026: 0.0}
+presolve True Optimization terminated successfully. (HiGHS Status 7: Optimal) {'soc_recursion_abs_max': 1.7362822291033808e-10, 'power_headroom_violation_max': 0.0, 'power_equation_abs_max': 1.6830878963843843e-12, 'charge_power_violation_max': 1.6768808563938364e-12, 'discharge_power_violation_max': 8.858776382378696e-12, 'contract_bound_violation_max': 0.0, 'contract_mode_violation_max': 0.0, 'contract_gate_violation_max': 0.0, 'contract_mode_integer_abs_max': 0.0, 'result_node_spot_position_violation_max': 0.0, 'reserve_limit_violation_max': 0.0, 'reserve_bound_violation_max': 0.0, 'reserve_integer_abs_max': 0.0, 'terminal_soc_abs_max': 0.0, 'annual_efc_violation_max': 4.853617507905028e-13, 'binary_integer_abs_max': 0.0, 'objective_cash_consistency_abs': 3.26281224261038e-11, 'independent_cash_rebuild_abs': 0.0, 'annual_efc_used_2025': 0.08465700329500658, 'annual_efc_budget_effective_2025': 0.08465700329452122, 'all_variable_bounds_max': 1.6830878963843843e-12, 'all_linear_rows_max': 1.7362822291033808e-10, 'all_integer_variables_max': 0.0, 'trade_bound_canonicalization_max_mw': np.float64(1.6768808563938364e-12), 'p0_event_headroom_max': 0.0, 'p0_terminal_max': 0.0, 'solver_seconds': 0.15600659998017363, 'model_columns': 2629, 'model_rows': 4069, 'model_nonzeros': 11008, 'model_integers': 705, 'eliminated_objective_constant_min': np.float64(-58493.21522595132), 'solver_variable_objective_min': np.float64(-25484.625492195984), 'experimental_a1_a3_enabled': 0, 'optimization_fixed_physical_steps': 0, 'optimization_charge_variables_eliminated': 0, 'optimization_discharge_variables_eliminated': 0, 'optimization_direction_binaries_eliminated': 0, 'optimization_soc_variables_eliminated': 0, 'optimization_event_rows_intermediate_interval_deleted': 0, 'optimization_net_contract_bounds_tightened': 0, 'optimization_reserve_bounds_tightened': 0, 'optimization_physical_bounds_tightened': 0, 'optimization_a3_event_node_visits': 0, 'optimization_a3_event_nodes_initially_skipped': 0}
+loose_budget True Optimization terminated successfully. (HiGHS Status 7: Optimal) {'soc_recursion_abs_max': 1.4210854715202004e-14, 'power_headroom_violation_max': 0.0, 'power_equation_abs_max': 0.0, 'charge_power_violation_max': 0.0, 'discharge_power_violation_max': 0.0, 'contract_bound_violation_max': 0.0, 'contract_mode_violation_max': 0.0, 'contract_gate_violation_max': 0.0, 'contract_mode_integer_abs_max': 0.0, 'result_node_spot_position_violation_max': 0.0, 'reserve_limit_violation_max': 0.0, 'reserve_bound_violation_max': 0.0, 'reserve_integer_abs_max': 0.0, 'terminal_soc_abs_max': 0.0, 'annual_efc_violation_max': 4.163336342344337e-16, 'binary_integer_abs_max': 0.0, 'objective_cash_consistency_abs': 1.1027623258996755e-11, 'independent_cash_rebuild_abs': 0.0, 'annual_efc_used_2025': 0.08466700329452163, 'annual_efc_budget_effective_2025': 0.08466700329452122, 'all_variable_bounds_max': 0.0, 'all_linear_rows_max': 1.4210854715202004e-14, 'all_integer_variables_max': 0.0, 'trade_bound_canonicalization_max_mw': 0.0, 'p0_event_headroom_max': 0.0, 'p0_terminal_max': 0.0, 'solver_seconds': 0.5046711000031792, 'model_columns': 2629, 'model_rows': 4069, 'model_nonzeros': 11008, 'model_integers': 705, 'eliminated_objective_constant_min': np.float64(-58493.21522595132), 'solver_variable_objective_min': np.float64(-25836.75821859875), 'experimental_a1_a3_enabled': 0, 'optimization_fixed_physical_steps': 0, 'optimization_charge_variables_eliminated': 0, 'optimization_discharge_variables_eliminated': 0, 'optimization_direction_binaries_eliminated': 0, 'optimization_soc_variables_eliminated': 0, 'optimization_event_rows_intermediate_interval_deleted': 0, 'optimization_net_contract_bounds_tightened': 0, 'optimization_reserve_bounds_tightened': 0, 'optimization_physical_bounds_tightened': 0, 'optimization_a3_event_node_visits': 0, 'optimization_a3_event_nodes_initially_skipped': 0}
+FAILED window has no audited feasible solution: The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)

@@ -1,0 +1,540 @@
+{
+  "retrieved_utc": "2026-09-22T15:51:08.819356+00:00",
+  "raw_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\input\\raw\\ES\\esios\\aggregation_check_20260922T155102Z",
+  "model_input": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\perfect_v1_full_completed_retry\\solver_input.json",
+  "model_input_sha256": "6dd14b7a6bb7c90034988d8f8c5dbd76ec536fa0f1bac5c7fd528f81c386b8a0",
+  "qh": [
+    {
+      "local_time": "2026-02-14T08:00:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 2.0,
+      "milp_qh_eur_per_mw": 2.0,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:15:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 1.68,
+      "milp_qh_eur_per_mw": 1.68,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:30:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 1.68,
+      "milp_qh_eur_per_mw": 1.68,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:45:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 1.68,
+      "milp_qh_eur_per_mw": 1.68,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:00:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.24,
+      "milp_qh_eur_per_mw": 1.24,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:15:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.24,
+      "milp_qh_eur_per_mw": 1.24,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:30:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.24,
+      "milp_qh_eur_per_mw": 1.24,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T08:45:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.24,
+      "milp_qh_eur_per_mw": 1.24,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:00:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 0.13,
+      "milp_qh_eur_per_mw": 0.13,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:15:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 0.14,
+      "milp_qh_eur_per_mw": 0.14,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:30:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 0.13,
+      "milp_qh_eur_per_mw": 0.13,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:45:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 0.14,
+      "milp_qh_eur_per_mw": 0.14,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:00:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 0.89,
+      "milp_qh_eur_per_mw": 0.89,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:15:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 0.89,
+      "milp_qh_eur_per_mw": 0.89,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:30:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 0.89,
+      "milp_qh_eur_per_mw": 0.89,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T12:45:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 0.89,
+      "milp_qh_eur_per_mw": 0.89,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:00:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 2.98,
+      "milp_qh_eur_per_mw": 2.98,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:15:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 3.54,
+      "milp_qh_eur_per_mw": 3.54,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:30:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 3.6,
+      "milp_qh_eur_per_mw": 3.6,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:45:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "api_qh_eur_per_mw": 2.88,
+      "milp_qh_eur_per_mw": 2.88,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:00:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.24,
+      "milp_qh_eur_per_mw": 1.24,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:15:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.43,
+      "milp_qh_eur_per_mw": 1.43,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:30:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.53,
+      "milp_qh_eur_per_mw": 1.53,
+      "difference": 0.0
+    },
+    {
+      "local_time": "2026-02-14T19:45:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "api_qh_eur_per_mw": 1.52,
+      "milp_qh_eur_per_mw": 1.52,
+      "difference": 0.0
+    }
+  ],
+  "hourly": [
+    {
+      "local_hour": "2026-02-14T08:00:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "hour_default": 7.04,
+      "hour_average": 1.76,
+      "hour_sum": 7.04,
+      "qh_sum": 7.04,
+      "qh_average": 1.76,
+      "milp_qh_sum": 7.04,
+      "milp_qh_average": 1.76,
+      "default_minus_qh_sum": 0.0,
+      "default_minus_qh_average": 5.28
+    },
+    {
+      "local_hour": "2026-02-14T08:00:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "hour_default": 4.96,
+      "hour_average": 1.24,
+      "hour_sum": 4.96,
+      "qh_sum": 4.96,
+      "qh_average": 1.24,
+      "milp_qh_sum": 4.96,
+      "milp_qh_average": 1.24,
+      "default_minus_qh_sum": 0.0,
+      "default_minus_qh_average": 3.7199999999999998
+    },
+    {
+      "local_hour": "2026-02-14T12:00:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "hour_default": 0.54,
+      "hour_average": 0.135,
+      "hour_sum": 0.54,
+      "qh_sum": 0.54,
+      "qh_average": 0.135,
+      "milp_qh_sum": 0.54,
+      "milp_qh_average": 0.135,
+      "default_minus_qh_sum": 0.0,
+      "default_minus_qh_average": 0.405
+    },
+    {
+      "local_hour": "2026-02-14T12:00:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "hour_default": 3.56,
+      "hour_average": 0.89,
+      "hour_sum": 3.56,
+      "qh_sum": 3.56,
+      "qh_average": 0.89,
+      "milp_qh_sum": 3.56,
+      "milp_qh_average": 0.89,
+      "default_minus_qh_sum": 0.0,
+      "default_minus_qh_average": 2.67
+    },
+    {
+      "local_hour": "2026-02-14T19:00:00+01:00",
+      "direction": "up",
+      "indicator": 2130,
+      "hour_default": 13.0,
+      "hour_average": 3.25,
+      "hour_sum": 13.0,
+      "qh_sum": 13.0,
+      "qh_average": 3.25,
+      "milp_qh_sum": 13.0,
+      "milp_qh_average": 3.25,
+      "default_minus_qh_sum": 0.0,
+      "default_minus_qh_average": 9.75
+    },
+    {
+      "local_hour": "2026-02-14T19:00:00+01:00",
+      "direction": "down",
+      "indicator": 634,
+      "hour_default": 5.72,
+      "hour_average": 1.43,
+      "hour_sum": 5.72,
+      "qh_sum": 5.72,
+      "qh_average": 1.43,
+      "milp_qh_sum": 5.72,
+      "milp_qh_average": 1.43,
+      "default_minus_qh_sum": 0.0,
+      "default_minus_qh_average": 4.29
+    }
+  ],
+  "api_metadata": {
+    "2130_qh_default": {
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "short_name": "Banda secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=fifteen_minutes",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "fifteen_minutes"
+        },
+        "retrieved_at": "2026-09-22T15:51:06.360520Z",
+        "http_status": 200,
+        "bytes": 24076,
+        "sha256": "0d2686d93944a4e0b22c0b829c2344ba55059acd3a23153d5b9a31ba71020103",
+        "saved": true
+      }
+    },
+    "2130_hour_default": {
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "short_name": "Banda secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=hour",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "hour"
+        },
+        "retrieved_at": "2026-09-22T15:51:03.463891Z",
+        "http_status": 200,
+        "bytes": 6461,
+        "sha256": "cb889b45ed989023c401234f10f385c2f4397cfc78066e124f822dc0a70cb537",
+        "saved": true
+      }
+    },
+    "2130_hour_average": {
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "short_name": "Banda secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=hour&time_agg=average",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "hour",
+          "time_agg": "average"
+        },
+        "retrieved_at": "2026-09-22T15:51:03.650620Z",
+        "http_status": 200,
+        "bytes": 6473,
+        "sha256": "0d1098f9d0a5b77afeb44d528128d8d24bdece231fe27d0cc29001bfa690c02e",
+        "saved": true
+      }
+    },
+    "2130_hour_sum": {
+      "name": "Precio Reserva de regulación secundaria a subir",
+      "short_name": "Banda secundaria a bajar",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/2130?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=hour&time_agg=sum",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "hour",
+          "time_agg": "sum"
+        },
+        "retrieved_at": "2026-09-22T15:51:03.466239Z",
+        "http_status": 200,
+        "bytes": 6461,
+        "sha256": "cb889b45ed989023c401234f10f385c2f4397cfc78066e124f822dc0a70cb537",
+        "saved": true
+      }
+    },
+    "634_qh_default": {
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "short_name": "Reserva secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=fifteen_minutes",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "fifteen_minutes"
+        },
+        "retrieved_at": "2026-09-22T15:51:05.366083Z",
+        "http_status": 200,
+        "bytes": 24102,
+        "sha256": "ef994aeef27bbefb7378aba05ea1b29305414e0e0027dbadac0e2980145f0837",
+        "saved": true
+      }
+    },
+    "634_hour_default": {
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "short_name": "Reserva secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=hour",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "hour"
+        },
+        "retrieved_at": "2026-09-22T15:51:04.608804Z",
+        "http_status": 200,
+        "bytes": 6466,
+        "sha256": "84e1e59019548d1e450d2b484ceb5100f5633f90383a78c2da368f1ea14d3fdc",
+        "saved": true
+      }
+    },
+    "634_hour_average": {
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "short_name": "Reserva secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=hour&time_agg=average",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "hour",
+          "time_agg": "average"
+        },
+        "retrieved_at": "2026-09-22T15:51:04.854830Z",
+        "http_status": 200,
+        "bytes": 6482,
+        "sha256": "2dea09a7d92be4c018af22c897f20f55b84a02b3b01c8754f7825cf230c276d6",
+        "saved": true
+      }
+    },
+    "634_hour_sum": {
+      "name": "Precio reserva de regulación secundaria a bajar",
+      "short_name": "Reserva secundaria a subir",
+      "unit": [
+        {
+          "name": "Precio €/MW",
+          "id": 239
+        }
+      ],
+      "time": [
+        {
+          "name": "Quince minutos",
+          "id": 218
+        }
+      ],
+      "values_updated_at": "2026-07-20T17:14:54.000+02:00",
+      "request": {
+        "source": "esios",
+        "url": "https://api.esios.ree.es/indicators/634?locale=es&start_date=2026-02-14T00%3A00%3A00%2B01%3A00&end_date=2026-02-14T23%3A59%3A59%2B01%3A00&time_trunc=hour&time_agg=sum",
+        "request_params": {
+          "start_date": "2026-02-14T00:00:00+01:00",
+          "end_date": "2026-02-14T23:59:59+01:00",
+          "time_trunc": "hour",
+          "time_agg": "sum"
+        },
+        "retrieved_at": "2026-09-22T15:51:07.501039Z",
+        "http_status": 200,
+        "bytes": 6466,
+        "sha256": "84e1e59019548d1e450d2b484ceb5100f5633f90383a78c2da368f1ea14d3fdc",
+        "saved": true
+      }
+    }
+  }
+}

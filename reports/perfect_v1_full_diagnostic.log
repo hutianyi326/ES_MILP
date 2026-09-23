@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "C:\Users\Tianyi\OneDrive\�ں�Ԫ������\ģ�͵������ο�����\Python\Counry_Investigation\countries\ES\MILP\code\project\diagnose_es_full_window.py", line 16, in <module>
+    engine=PerfectEngine.restore(inp,cp,execution_end=datetime.fromisoformat(manifest['formal_end']),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Tianyi\OneDrive\�ں�Ԫ������\ģ�͵������ο�����\Python\Counry_Investigation\countries\ES\MILP\code\src\es_synthetic_market\rolling.py", line 372, in restore
+    raise ValueError("checkpoint integrity/input/configuration mismatch")
+ValueError: checkpoint integrity/input/configuration mismatch

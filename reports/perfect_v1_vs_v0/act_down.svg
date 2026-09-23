@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Microsoft YaHei,Arial;fill:#263238;font-size:12px}</style>
+<text x="80" y="28" style="font-size:21px">aFRR激活下调（k€/MW）</text>
+<text x="950" y="28" fill="#64748b">V0 灰色</text><text x="1100" y="28" fill="#2563eb">V1 蓝色</text>
+<path d="M80 425.0 H1370" stroke="#e2e8f0"/>
+<text x="5" y="429.0">-1.97</text>
+<path d="M80 353.0 H1370" stroke="#e2e8f0"/>
+<text x="5" y="357.0">-1.04</text>
+<path d="M80 281.0 H1370" stroke="#e2e8f0"/>
+<text x="5" y="285.0">-0.12</text>
+<path d="M80 208.99999999999997 H1370" stroke="#e2e8f0"/>
+<text x="5" y="212.99999999999997">0.80</text>
+<path d="M80 137.0 H1370" stroke="#e2e8f0"/>
+<text x="5" y="141.0">1.73</text>
+<path d="M80 65.0 H1370" stroke="#e2e8f0"/>
+<text x="5" y="69.0">2.65</text>
+<rect x="87.74" y="271.5712007488533" width="19.349999999999998" height="118.83808168380403" fill="#64748b"><title>2025-01: -1.523967</title></rect>
+<rect x="110.315" y="271.5712007488533" width="19.349999999999998" height="130.01880772569518" fill="#2563eb"><title>2025-01: -1.667348</title></rect>
+<text transform="translate(95.74,445) rotate(45)">2025-01</text>
+<rect x="152.24" y="271.5712007488533" width="19.349999999999998" height="136.7965575403735" fill="#64748b"><title>2025-02: -1.754265</title></rect>
+<rect x="174.815" y="271.5712007488533" width="19.349999999999998" height="136.989999331381" fill="#2563eb"><title>2025-02: -1.756745</title></rect>
+<text transform="translate(160.24,445) rotate(45)">2025-02</text>
+<rect x="216.74" y="196.11573041759985" width="19.349999999999998" height="75.45547033125345" fill="#64748b"><title>2025-03: 0.967633</title></rect>
+<rect x="239.315" y="154.6638793409639" width="19.349999999999998" height="116.90732140788941" fill="#2563eb"><title>2025-03: 1.499207</title></rect>
+<text transform="translate(224.74,445) rotate(45)">2025-03</text>
+<rect x="281.24" y="159.54720376012517" width="19.349999999999998" height="112.02399698872813" fill="#64748b"><title>2025-04: 1.436584</title></rect>
+<rect x="303.815" y="134.57037597150634" width="19.349999999999998" height="137.00082477734696" fill="#2563eb"><title>2025-04: 1.756884</title></rect>
+<text transform="translate(289.24,445) rotate(45)">2025-04</text>
+<rect x="345.74" y="181.7839387208879" width="19.349999999999998" height="89.7872620279654" fill="#64748b"><title>2025-05: 1.151422</title></rect>
+<rect x="368.315" y="164.93263353395372" width="19.349999999999998" height="106.63856721489958" fill="#2563eb"><title>2025-05: 1.367522</title></rect>
+<text transform="translate(353.74,445) rotate(45)">2025-05</text>
+<rect x="410.24" y="271.5712007488533" width="19.349999999999998" height="67.70066253232477" fill="#64748b"><title>2025-06: -0.868186</title></rect>
+<rect x="432.815" y="271.5712007488533" width="19.349999999999998" height="63.60553514980273" fill="#2563eb"><title>2025-06: -0.815671</title></rect>
+<text transform="translate(418.24,445) rotate(45)">2025-06</text>
+<rect x="474.74" y="271.5712007488533" width="19.349999999999998" height="51.1893560341519" fill="#64748b"><title>2025-07: -0.656447</title></rect>
+<rect x="497.315" y="271.5712007488533" width="19.349999999999998" height="63.22368563941444" fill="#2563eb"><title>2025-07: -0.810774</title></rect>
+<text transform="translate(482.74,445) rotate(45)">2025-07</text>
+<rect x="539.24" y="271.5712007488533" width="19.349999999999998" height="74.03029990839701" fill="#64748b"><title>2025-08: -0.949357</title></rect>
+<rect x="561.815" y="271.5712007488533" width="19.349999999999998" height="71.85262406270908" fill="#2563eb"><title>2025-08: -0.921431</title></rect>
+<text transform="translate(547.24,445) rotate(45)">2025-08</text>
+<rect x="603.74" y="271.5712007488533" width="19.349999999999998" height="3.7095967610713956" fill="#64748b"><title>2025-09: -0.047571</title></rect>
+<rect x="626.315" y="264.50277055606443" width="19.349999999999998" height="7.068430192788867" fill="#2563eb"><title>2025-09: 0.090645</title></rect>
+<text transform="translate(611.74,445) rotate(45)">2025-09</text>
+<rect x="668.24" y="271.5712007488533" width="19.349999999999998" height="34.949127968671746" fill="#64748b"><title>2025-10: -0.448184</title></rect>
+<rect x="690.815" y="271.5712007488533" width="19.349999999999998" height="18.51171402803203" fill="#2563eb"><title>2025-10: -0.237392</title></rect>
+<text transform="translate(676.24,445) rotate(45)">2025-10</text>
+<rect x="732.74" y="267.5833821070919" width="19.349999999999998" height="3.9878186417614074" fill="#64748b"><title>2025-11: 0.051139</title></rect>
+<rect x="755.315" y="256.76795499629316" width="19.349999999999998" height="14.803245752560144" fill="#2563eb"><title>2025-11: 0.189835</title></rect>
+<text transform="translate(740.74,445) rotate(45)">2025-11</text>
+<rect x="797.24" y="271.5712007488533" width="19.349999999999998" height="48.42790506663334" fill="#64748b"><title>2025-12: -0.621034</title></rect>
+<rect x="819.815" y="271.5712007488533" width="19.349999999999998" height="0.1" fill="#2563eb"><title>2025-12: 0.000000</title></rect>
+<text transform="translate(805.24,445) rotate(45)">2025-12</text>
+<rect x="861.74" y="163.3762899602612" width="19.349999999999998" height="108.1949107885921" fill="#64748b"><title>2026-01: 1.387480</title></rect>
+<rect x="884.315" y="159.37617502343238" width="19.349999999999998" height="112.19502572542092" fill="#2563eb"><title>2026-01: 1.438777</title></rect>
+<text transform="translate(869.74,445) rotate(45)">2026-01</text>
+<rect x="926.24" y="129.69610538395915" width="19.349999999999998" height="141.87509536489415" fill="#64748b"><title>2026-02: 1.819391</title></rect>
+<rect x="948.815" y="87.13262865166286" width="19.349999999999998" height="184.43857209719044" fill="#2563eb"><title>2026-02: 2.365221</title></rect>
+<text transform="translate(934.24,445) rotate(45)">2026-02</text>
+<rect x="990.74" y="181.00363254545047" width="19.349999999999998" height="90.56756820340283" fill="#64748b"><title>2026-03: 1.161429</title></rect>
+<rect x="1013.315" y="134.34209552059798" width="19.349999999999998" height="137.22910522825532" fill="#2563eb"><title>2026-03: 1.759812</title></rect>
+<text transform="translate(998.74,445) rotate(45)">2026-03</text>
+<rect x="1055.24" y="271.5712007488533" width="19.349999999999998" height="0.18102478025360824" fill="#64748b"><title>2026-04: -0.002321</title></rect>
+<rect x="1077.815" y="255.4416039581991" width="19.349999999999998" height="16.129596790654205" fill="#2563eb"><title>2026-04: 0.206844</title></rect>
+<text transform="translate(1063.24,445) rotate(45)">2026-04</text>
+<rect x="1119.74" y="271.5712007488533" width="19.349999999999998" height="31.739050212646305" fill="#64748b"><title>2026-05: -0.407018</title></rect>
+<rect x="1142.315" y="271.5712007488533" width="19.349999999999998" height="45.20651902447656" fill="#2563eb"><title>2026-05: -0.579724</title></rect>
+<text transform="translate(1127.74,445) rotate(45)">2026-05</text>
+<rect x="1184.24" y="271.5712007488533" width="19.349999999999998" height="46.04622571248808" fill="#64748b"><title>2026-06: -0.590492</title></rect>
+<rect x="1206.815" y="271.5712007488533" width="19.349999999999998" height="49.28960828323653" fill="#2563eb"><title>2026-06: -0.632085</title></rect>
+<text transform="translate(1192.24,445) rotate(45)">2026-06</text>
+<rect x="1248.74" y="271.5712007488533" width="19.349999999999998" height="93.05781538886566" fill="#64748b"><title>2026-07: -1.193364</title></rect>
+<rect x="1271.315" y="271.5712007488533" width="19.349999999999998" height="67.63846022279421" fill="#2563eb"><title>2026-07: -0.867389</title></rect>
+<text transform="translate(1256.74,445) rotate(45)">2026-07</text>
+<rect x="1313.24" y="271.5712007488533" width="19.349999999999998" height="24.183072283214585" fill="#64748b"><title>2026-08: -0.310121</title></rect>
+<rect x="1335.815" y="271.5712007488533" width="19.349999999999998" height="1.8832103630271035" fill="#2563eb"><title>2026-08: -0.024150</title></rect>
+<text transform="translate(1321.24,445) rotate(45)">2026-08</text>
+</svg>
