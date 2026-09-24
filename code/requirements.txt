@@ -3,3 +3,5 @@
 numpy==2.4.6
 scipy==1.15.3
 tzdata==2026.4
+# Added for REE archive 234 legacy .xls ingestion; not part of the original venv.
+xlrd==2.0.2

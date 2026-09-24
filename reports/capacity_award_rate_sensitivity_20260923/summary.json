@@ -1,0 +1,19 @@
+{
+  "total_kEUR_per_MW": {
+    "v1": 782.2960711183536,
+    "fixed_haircut": 616.7592924646912,
+    "reoptimized": 593.0535536788572
+  },
+  "capacity_haircut_kEUR_per_MW": -165.5367786536624,
+  "reoptimization_effect_kEUR_per_MW": -23.705738785834,
+  "solver_seconds": {
+    "v1": 614.3414869999106,
+    "reoptimized": 223.6768630000879
+  },
+  "coverage": {
+    "v1": 0.8984648070728531,
+    "reoptimized": 0.8984648070728531
+  },
+  "common_executed_qh": 52438,
+  "award_rate_file": "input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz"
+}

@@ -1,6 +1,9 @@
 """Versioned nominal calendar and nullable P0 adapter (no raw-file mutation)."""
+import csv
+import gzip
 from datetime import timedelta
 from math import isfinite
+from pathlib import Path
 from .adapter import (IDS, KINDS, CANCEL, MADRID, QH, iso, nominal, budget, digest,
                       QHInput, ContractInput, SyntheticMarketInput)
 
@@ -14,7 +17,34 @@ def events(day,kind):
     gh,gm,rh,rm,prev=CALENDAR[kind]
     return nominal(day,gh,gm,prev),nominal(day,rh,rm,prev)
 
-def prepare(bundle, execution_end, *, formal_budget=None, budget_source='formal_valid_mask'):
+def load_award_rates(path):
+    """Read a QH/direction proxy table; invalid observations remain null."""
+    path = Path(path)
+    rates = {}
+    with gzip.open(path, 'rt', encoding='utf-8', newline='') as stream:
+        for row in csv.DictReader(stream):
+            direction = row['direction']
+            if direction not in ('up', 'down'):
+                raise ValueError('unknown aFRR direction')
+            key = (row['qh_start_utc'], direction)
+            if key in rates:
+                raise ValueError(f'duplicate aFRR award rate: {key}')
+            status = row['quality_status']
+            value = row['award_rate_proxy']
+            if status in ('valid', 'zero_allocated'):
+                rate = float(value)
+                if not isfinite(rate) or not 0 <= rate <= 1:
+                    raise ValueError(f'invalid aFRR award rate: {key}')
+            else:
+                if value:
+                    raise ValueError(f'non-null rate for invalid aFRR observation: {key}')
+                rate = None
+            rates[key] = dict(rate=rate, status=status,
+                              offer_mw=row['offer_mw'], allocated_mw=row['allocated_mw'])
+    return rates
+
+
+def prepare(bundle, execution_end, *, formal_budget=None, budget_source='formal_valid_mask', award_rates=None):
     """The bundle grid includes one extra local day, including null tail rows."""
     start=min(bundle.grid);rows=[];qhs=[];inactive=set();valid_points=set()
     for t in sorted(bundle.grid):
@@ -41,11 +71,18 @@ def prepare(bundle, execution_end, *, formal_budget=None, budget_source='formal_
         valid=not reasons
         if valid:valid_points.add(t)
         else:inactive.add(iso(t))
-        rows.append(dict(qh_id=iso(t),raw_values=vals,spot=spot,required=required,reasons=reasons,valid=valid))
+        rate_up = award_rates.get((iso(t), 'up')) if award_rates is not None else None
+        rate_down = award_rates.get((iso(t), 'down')) if award_rates is not None else None
+        row=dict(qh_id=iso(t),raw_values=vals,spot=spot,required=required,reasons=reasons,valid=valid)
+        if award_rates is not None:
+            row.update(award_rate_up=rate_up,award_rate_down=rate_down)
+        rows.append(row)
         def price(i):
             return float(vals[i]) if valid and gate>=start else 0.
         qhs.append(QHInput(iso(t),t,t+QH,'continuous',day.year,
-            au if valid else 0.,ad if valid else 0.,price(2130),price(634),price(682),-price(683),gate,release))
+            au if valid else 0.,ad if valid else 0.,price(2130),price(634),price(682),-price(683),gate,release,
+            afrr_award_rate_up=1.0 if award_rates is None else rate_up['rate'] if rate_up else None,
+            afrr_award_rate_down=1.0 if award_rates is None else rate_down['rate'] if rate_down else None))
     contracts=[]
     for cid,c in sorted(bundle.contracts.items()):
         if not set(c['slots'])<=bundle.grid:continue  # never truncate products

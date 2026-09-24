@@ -152,7 +152,12 @@ class RollingEngine:
         self.path=f"rolling{planning_days}-"+order_mode
         self.time_limit_seconds=time_limit_seconds;self.mip_rel_gap=mip_rel_gap
         self.presolve=presolve
-        self.input_hash=_hash(asdict(inp))
+        input_payload=asdict(inp)
+        if inp.data_scope == 'historical_conditional' and all(q.afrr_award_rate_up == 1.0 and q.afrr_award_rate_down == 1.0 for q in inp.qhs):
+            for row in input_payload['qhs']:
+                row.pop('afrr_award_rate_up',None)
+                row.pop('afrr_award_rate_down',None)
+        self.input_hash=_hash(input_payload)
         self.configuration_hash=_hash(dict(run_id=run_id,order=order_mode,time_limit=time_limit_seconds,gap=mip_rel_gap,presolve=presolve,design="draft-4",tzdata=version("tzdata")))
         # Preserve the legacy seven-day configuration hash.  The production
         # two-day strategy receives its own hash so old rolling7 checkpoints
@@ -297,7 +302,7 @@ class RollingEngine:
             r=reserves[q.qh_id]
             if abs(baseline-result.qh_baseline_mw[q.qh_id])>TOL or abs(r.up_mw-result.reserve_up_mw[q.qh_id])>TOL or abs(r.down_mw-result.reserve_down_mw[q.qh_id])>TOL:
                 raise AssertionError("executed commitments differ from optimized positions")
-            for direction,mw,alpha,cap,act in (("up",r.up_mw,q.alpha_up,q.afrr_capacity_price_up_eur_per_mw_qh,q.afrr_activation_price_up_eur_per_mwh),("down",r.down_mw,q.alpha_down,q.afrr_capacity_price_down_eur_per_mw_qh,q.afrr_activation_price_down_eur_per_mwh)):
+            for direction,mw,alpha,cap,act in (("up",r.up_mw,q.alpha_up,q.effective_capacity_price_up_eur_per_mw_qh,q.afrr_activation_price_up_eur_per_mwh),("down",r.down_mw,q.alpha_down,q.effective_capacity_price_down_eur_per_mw_qh,q.afrr_activation_price_down_eur_per_mwh)):
                 common=dict(run_id=self.run_id,path=self.path,qh_id=q.qh_id,direction=direction,execution_day=day,fixed=q.qh_id in frozen_reserve)
                 ledger.settle_capacity(**common,capacity_mw=mw,price_eur_per_mw_period=cap)
                 ledger.settle_activation(**common,activation_mwh=mw*q.duration_hours*alpha,price_eur_per_mwh=act)

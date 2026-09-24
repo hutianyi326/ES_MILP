@@ -2,7 +2,16 @@
 
 本目录是独立整理副本；原项目和桌面文件保留。整理日期：2026-09-22。
 
-## 当前分支：完美预测模型优化V1
+## 版本记录
+
+### V1.1 — aFRR 容量收益敏感性（2026-09-24）
+
+- 新增逐 QH、分方向 aFRR 容量系数整理流程，以及 `full_fill`、`optimize`、`posthoc` 三种运行模式；默认 `full_fill` 保持原 V1 口径。
+- 增加 posthoc 容量现金折减、可恢复检查点的模式识别与结果口径标记、重复折减保护，以及收益比较脚本和对应测试。
+- 36 项相关回归测试通过；真实两日输入下三种模式均成功，optimize 和 posthoc 的中途检查点恢复结果已核对。
+- 系数是系统分配容量与报价量之比形成的事后敏感性代理，不代表单站真实中标率；REE 报价曲线的地域匹配仍待确认。完整范围、假设和限制见[敏感性方案及验收记录](research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。
+
+## P0 完美预测模型 V1
 
 P0实现使用独立入口，原v5入口保留供复现。新增GCT备用检查、正式终点SOC、空值时间轴/空闲桥接、显式预算和冻结审计；这些包含可行域变化，不承诺收益或耗时不变。
 
@@ -21,6 +30,26 @@ $esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
 2026-09-22已完成当前P0模型2025-01-01至2026-08-31全量测算：100 MW / 200 MWh，608个逐日窗口，条件毛收益782.296071 k€/MW；原模型成功归档（v5执行版，比较中称V0）为796.611354 k€/MW，相差−1.797%。详见[全量V1与V0对比](reports/perfect_v1_vs_v0/结果对比.md)，含月度总额、六项市场收益、图表、共同结算QH对比和用时口径。
 
 本次仅对2025-11-22窗口的数值不可行报告以presolve=True重试一次，预算与模型约束不变；正式续跑使用`code/project/resume_es_perfect_full.py`，未改核心模型。完整成果位于`output/perfect_v1_full_completed_retry/`，原始失败现场位于`output/perfect_v1_full_20260922/`。额外观察日2026-09-01全部缺失，不提供有效价格前瞻。本次没有调用agent审核。
+
+## aFRR 容量收入敏感性
+
+此情景用每个QH、每个方向的“系统实际分配容量/总报价容量”作为容量收入系数，并以1封顶。它是事后系统比例代理，并非单个储能站的真实中标概率；本轮仅折减容量收入，激活收益及完整容量的物理承诺沿用V1。方案、缺失处理和数据来源见[容量收益中标率敏感性方案](research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。
+
+主入口`code/project/run_es_perfect_v1.py`现有`--capacity-award-mode`开关，分为`full_fill`、`optimize`和`posthoc`。`full_fill`是默认模式，保持V1的100%容量中标计价；`optimize`要求`--award-rate-file`，把QH/方向比例放入容量收入目标后重新优化；`posthoc`也要求系数文件，先按V1全额中标口径优化，再只折减容量现金流，交易决策保持不变。举例：
+
+```powershell
+# 中标率进入优化函数
+& $esPython code/project/run_es_perfect_v1.py --start 2025-01-01 --end 2025-01-09 --output output/cap_opt --capacity-award-mode optimize --award-rate-file input/processed/ES/afrr_capacity_award_rate_202501_202608.csv.gz
+
+# 对V1决策作事后容量收益折减
+& $esPython code/project/run_es_perfect_v1.py --start 2025-01-01 --end 2025-01-09 --output output/cap_posthoc --capacity-award-mode posthoc --award-rate-file input/processed/ES/afrr_capacity_award_rate_202501_202608.csv.gz
+```
+
+今后只需把REE archive 234的**原始月度ZIP**逐月放入`C:\Users\Tianyi\Desktop\西班牙数据\容量报价曲线`，保留原始文件名，一个月一个ZIP，不必解压或手工汇总。用`code/project/prepare_es_afrr_award_rates.py`形成QH压缩表与来源清单；报价ZIP的读取需要`xlrd==2.0.2`。632/633分配容量仍来自eSIOS原始数据。
+
+如 REE 对旧月份发布修订包，保留旧文件并将新 ZIP 原样放在上述目录的`revisions`子目录；清洗时以重复的`--offer-zip`参数显式指定各修订月份。每次清洗会保存实际使用的文件路径、SHA-256和逐日/QH完整性检查；不能直接覆盖既有系数表或历史运行结果。
+
+2025-01 至 2026-08 的 [容量收入敏感性结果对比](reports/capacity_award_rate_sensitivity_20260923/结果对比.md) 包含 V1、固定调度折减和重新求解的总/月度收益，以及六项市场分解、EFC 用量与求解时间。原始月度 ZIP、处理后的系数表及大型结果保存在本机，不随 Git 上传。
 
 ## 文件分类
 

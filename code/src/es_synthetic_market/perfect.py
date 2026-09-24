@@ -15,6 +15,7 @@ from .core import _required_madrid_timezone
 
 class PerfectEngine(RollingEngine):
     def __init__(self, inp, *, execution_end, inactive=(), evidence=None, budget_manifest=None,
+                 capacity_award_sensitivity=False,
                  run_id="ES_SYNTHETIC_PERFECT_V1", order_mode="D", **kwargs):
         if execution_end.tzinfo is None:
             raise ValueError("aware execution_end required")
@@ -22,6 +23,7 @@ class PerfectEngine(RollingEngine):
         self.inactive=frozenset(inactive)
         self.evidence=evidence or {}
         self.budget_manifest=budget_manifest or {}
+        self.capacity_award_sensitivity=bool(capacity_award_sensitivity)
         if kwargs.get("planning_days",2)!=2:
             raise ValueError("perfect_history_v1 requires two local days")
         qhs=inp.qhs
@@ -47,9 +49,12 @@ class PerfectEngine(RollingEngine):
         # Explicit global budgets, not the coverage cap of a sliced window.
         self._budget={int(y):float(v) for y,v in inp.annual_efc_budget.items()}
         self._used={y:0. for y in self._budget}
-        self.configuration_hash=_hash(dict(base=self.configuration_hash,mode="perfect_history_v1",
+        config=dict(base=self.configuration_hash,mode="perfect_history_v1",
             end=self.execution_end,mask=sorted(self.inactive),evidence=_hash(self.evidence),
-            budgets=self.budget_manifest,assumptions=["full_fill_gct_headroom","gap_idle_zero_self_discharge"]))
+            budgets=self.budget_manifest,assumptions=["full_fill_gct_headroom","gap_idle_zero_self_discharge"])
+        if self.capacity_award_sensitivity:
+            config['capacity_award_sensitivity']=True
+        self.configuration_hash=_hash(config)
         self._budget_audit={}
         self._last_result=None
 
@@ -157,8 +162,8 @@ class PerfectEngine(RollingEngine):
             up=result.reserve_up_mw[q.qh_id];down=result.reserve_down_mw[q.qh_id]
             if q.qh_id in fr and max(abs(up-fr[q.qh_id][0]),abs(down-fr[q.qh_id][1]))>TOL:
                 raise AssertionError("eliminated reserve restoration failed")
-            cash=up*(q.afrr_capacity_price_up_eur_per_mw_qh+q.alpha_up*.25*q.afrr_activation_price_up_eur_per_mwh)
-            cash+=down*(q.afrr_capacity_price_down_eur_per_mw_qh+q.alpha_down*.25*q.afrr_activation_price_down_eur_per_mwh)
+            cash=up*(q.effective_capacity_price_up_eur_per_mw_qh+q.alpha_up*.25*q.afrr_activation_price_up_eur_per_mwh)
+            cash+=down*(q.effective_capacity_price_down_eur_per_mw_qh+q.alpha_down*.25*q.afrr_activation_price_down_eur_per_mwh)
             gross+=cash
             if q.qh_id in fr or q.afrr_gate_close_utc<win.qhs[0].start_utc: constant_cash+=cash
             else: variable_cash+=cash
@@ -271,7 +276,8 @@ class PerfectEngine(RollingEngine):
             incomplete_lookahead_windows=sum(not w.audit['lookahead_complete'] for w in self._windows))
         return dict(mode='perfect_history_v1',success=self.failure is None,failure=self.failure,
             formal_end=self.execution_end.isoformat(),input_hash=self.input_hash,configuration_hash=self.configuration_hash,
-            assumptions=['perfect_prices_alpha_full_fill','reserve_headroom_from_gct','gap_idle_zero_self_discharge'],
+            assumptions=['perfect_prices_alpha_full_fill','reserve_headroom_from_gct','gap_idle_zero_self_discharge']
+                        + (['capacity_award_rate_proxy_revenue_only'] if self.capacity_award_sensitivity else []),
             budgets=self.budget_manifest,annual_budget=self._budget,annual_used=self._used,
             rows=rows,months=months,quality=quality,coverage=quality['settlement_coverage'],
             solver_seconds=sum(w.audit['model']['solver_seconds'] for w in self._windows),

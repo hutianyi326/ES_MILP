@@ -148,6 +148,8 @@ class QHInput:
     afrr_activation_price_down_eur_per_mwh: float = 0.0
     afrr_gate_close_utc: datetime | None = None
     afrr_result_release_utc: datetime | None = None
+    afrr_award_rate_up: float | None = 1.0
+    afrr_award_rate_down: float | None = 1.0
 
     def __post_init__(self) -> None:
         if not self.qh_id or not self.segment_id:
@@ -171,6 +173,10 @@ class QHInput:
             "afrr_activation_price_down_eur_per_mwh",
         ):
             _finite(getattr(self, name), name)
+        for name in ("afrr_award_rate_up", "afrr_award_rate_down"):
+            rate = getattr(self, name)
+            if rate is not None and (not isfinite(float(rate)) or not 0 <= float(rate) <= 1):
+                raise ValueError(f"{name} must be null or within [0,1]")
         if (self.afrr_gate_close_utc is None) != (self.afrr_result_release_utc is None):
             raise ValueError("aFRR gate and result events must be supplied together")
         if self.afrr_gate_close_utc is not None:
@@ -189,6 +195,14 @@ class QHInput:
     @property
     def duration_hours(self) -> float:
         return 0.25
+
+    @property
+    def effective_capacity_price_up_eur_per_mw_qh(self) -> float:
+        return self.afrr_capacity_price_up_eur_per_mw_qh * (self.afrr_award_rate_up or 0.0)
+
+    @property
+    def effective_capacity_price_down_eur_per_mw_qh(self) -> float:
+        return self.afrr_capacity_price_down_eur_per_mw_qh * (self.afrr_award_rate_down or 0.0)
 
 
 @dataclass(frozen=True)
@@ -513,8 +527,8 @@ def _fixed_cash_total(inp: SyntheticMarketInput) -> float:
         commitment = fixed.get(qh.qh_id)
         if commitment is None:
             continue
-        total += qh.afrr_capacity_price_up_eur_per_mw_qh * commitment.reserve_up_mw
-        total += qh.afrr_capacity_price_down_eur_per_mw_qh * commitment.reserve_down_mw
+        total += qh.effective_capacity_price_up_eur_per_mw_qh * commitment.reserve_up_mw
+        total += qh.effective_capacity_price_down_eur_per_mw_qh * commitment.reserve_down_mw
         total += qh.afrr_activation_price_up_eur_per_mwh * commitment.reserve_up_mw * 0.25 * qh.alpha_up
         total += qh.afrr_activation_price_down_eur_per_mwh * commitment.reserve_down_mw * 0.25 * qh.alpha_down
     return float(total)
@@ -640,11 +654,11 @@ def _solve_joint_experimental(
             net_index[j] = allocate(-100.0, 100.0, -contract_cash_coeff[j])
 
     reserve_up_coeff = np.array([
-        -(qh.afrr_capacity_price_up_eur_per_mw_qh + qh.afrr_activation_price_up_eur_per_mwh * 0.25 * qh.alpha_up)
+        -(qh.effective_capacity_price_up_eur_per_mw_qh + qh.afrr_activation_price_up_eur_per_mwh * 0.25 * qh.alpha_up)
         for qh in qhs
     ])
     reserve_down_coeff = np.array([
-        -(qh.afrr_capacity_price_down_eur_per_mw_qh + qh.afrr_activation_price_down_eur_per_mwh * 0.25 * qh.alpha_down)
+        -(qh.effective_capacity_price_down_eur_per_mw_qh + qh.afrr_activation_price_down_eur_per_mwh * 0.25 * qh.alpha_down)
         for qh in qhs
     ])
     reserve_up_index = np.full(n_qh, -1, dtype=int)
@@ -675,11 +689,11 @@ def _solve_joint_experimental(
         elif eligible:
             if reserve_up_limit[i] < 0.0:
                 forced_infeasible = True
-            elif reserve_up_limit[i] > 0.0:
+            elif reserve_up_limit[i] > 0.0 and qh.afrr_award_rate_up:
                 reserve_up_index[i] = allocate(0.0, reserve_up_limit[i], reserve_up_coeff[i], integer=True)
             if reserve_down_limit[i] < 0.0:
                 forced_infeasible = True
-            elif reserve_down_limit[i] > 0.0:
+            elif reserve_down_limit[i] > 0.0 and qh.afrr_award_rate_down:
                 reserve_down_index[i] = allocate(0.0, reserve_down_limit[i], reserve_down_coeff[i], integer=True)
 
     # Contract-to-QH baseline coefficient map, in logical net-MW space.
@@ -1259,7 +1273,7 @@ def _solve_joint_experimental(
         baseline_out[qh.qh_id] = float(base)
         up_out[qh.qh_id] = float(fixed_for_qh[qh.qh_id].reserve_up_mw + reserve_up_values[qh_i])
         down_out[qh.qh_id] = float(fixed_for_qh[qh.qh_id].reserve_down_mw + reserve_down_values[qh_i])
-    cap_cash = sum(qh.afrr_capacity_price_up_eur_per_mw_qh * up_out[qh.qh_id] + qh.afrr_capacity_price_down_eur_per_mw_qh * down_out[qh.qh_id] for qh in qhs)
+    cap_cash = sum(qh.effective_capacity_price_up_eur_per_mw_qh * up_out[qh.qh_id] + qh.effective_capacity_price_down_eur_per_mw_qh * down_out[qh.qh_id] for qh in qhs)
     act_cash = sum(
         qh.afrr_activation_price_up_eur_per_mwh * up_out[qh.qh_id] * 0.25 * qh.alpha_up
         + qh.afrr_activation_price_down_eur_per_mwh * down_out[qh.qh_id] * 0.25 * qh.alpha_down
@@ -1357,8 +1371,8 @@ def _solve_joint_experimental(
     fixed_energy_cash = sum(f.fixed_energy_cash_eur for f in inp.fixed_commitments)
     fixed_reserve_cash = fixed_cash - fixed_energy_cash
     cap_new_cash = cap_cash - sum(
-        qh.afrr_capacity_price_up_eur_per_mw_qh * fixed_for_qh[qh.qh_id].reserve_up_mw
-        + qh.afrr_capacity_price_down_eur_per_mw_qh * fixed_for_qh[qh.qh_id].reserve_down_mw
+        qh.effective_capacity_price_up_eur_per_mw_qh * fixed_for_qh[qh.qh_id].reserve_up_mw
+        + qh.effective_capacity_price_down_eur_per_mw_qh * fixed_for_qh[qh.qh_id].reserve_down_mw
         for qh in qhs
     )
     act_new_cash = act_cash - sum(
@@ -1634,8 +1648,8 @@ def _audit_solution(
         mapped_hours = sum(qh_map[qid].duration_hours * float(weight) for qid, weight in contract.qh_weights.items())
         independent_energy += contract.price_eur_per_mwh * (float(x[sell[contract_index]]) - float(x[buy[contract_index]])) * mapped_hours
     independent_capacity = sum(
-        qh.afrr_capacity_price_up_eur_per_mw_qh * up_out[qh.qh_id]
-        + qh.afrr_capacity_price_down_eur_per_mw_qh * down_out[qh.qh_id]
+        qh.effective_capacity_price_up_eur_per_mw_qh * up_out[qh.qh_id]
+        + qh.effective_capacity_price_down_eur_per_mw_qh * down_out[qh.qh_id]
         for qh in inp.qhs
     )
     independent_activation = sum(
@@ -1644,8 +1658,8 @@ def _audit_solution(
         for qh in inp.qhs
     )
     independent_cash = independent_energy + independent_capacity + independent_activation + _fixed_cash_total(inp) - sum(
-        qh.afrr_capacity_price_up_eur_per_mw_qh * fc.reserve_up_mw
-        + qh.afrr_capacity_price_down_eur_per_mw_qh * fc.reserve_down_mw
+        qh.effective_capacity_price_up_eur_per_mw_qh * fc.reserve_up_mw
+        + qh.effective_capacity_price_down_eur_per_mw_qh * fc.reserve_down_mw
         + qh.afrr_activation_price_up_eur_per_mwh * fc.reserve_up_mw * 0.25 * qh.alpha_up
         + qh.afrr_activation_price_down_eur_per_mwh * fc.reserve_down_mw * 0.25 * qh.alpha_down
         for qh in inp.qhs
