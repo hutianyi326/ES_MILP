@@ -1,0 +1,3 @@
+﻿year,period,DA_kEUR,ID_kEUR,cap_up_kEUR,cap_down_kEUR,act_up_kEUR,act_down_kEUR,total_kEUR,DA_kEUR_per_MW,ID_kEUR_per_MW,cap_up_kEUR_per_MW,cap_down_kEUR_per_MW,act_up_kEUR_per_MW,act_down_kEUR_per_MW,total_kEUR_per_MW,valid_qh,total_qh,settlement_coverage,complete_days,total_days,year_days,efc,efc_known_qh
+2025,2025/01/01–2025/12/31,12646.26,-406.56,13504.70,8994.84,5498.52,-102.08,40135.68,126.46,-4.07,135.05,89.95,54.99,-1.02,401.36,32175,35040,91.82%,314,365,365,548.77,35040
+2026,2026/01/01–2026/08/31,3298.65,5498.52,4062.86,2981.62,2863.26,464.76,19169.67,32.99,54.99,40.63,29.82,28.63,4.65,191.70,20263,23324,86.88%,190,243,365,345.99,23324

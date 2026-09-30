@@ -53,18 +53,22 @@ $esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
 
 ## MILP 结果展示
 
-对已完成的模型运行目录，可用 `code/project/build_es_result_presentation.py` 生成统一的 Markdown 报告、六市场月度表、自然年合计、小时表、SVG 图表和季度小时图。示例：
+结果展示按[已确认开发基线v1.0](research/西班牙MILP结果展示开发基线_v1.0.md)生成：假设概览、结果概览、月度分析、小时分析和输出溯源。每情景生成结果MD、9张SVG、7份CSV和来源清单，包含月度六市场占比、求解器及总运行时间、统计期与全年覆盖、带覆盖率的滚动12个月收益。
 
 ```powershell
 & $esPython code/project/build_es_result_presentation.py `
-  --run-dir output/capacity_award_rate_full_accelerated_20260923 `
-  --output-dir reports/result_display_capacity_award_rate_20260924_v8 `
-  --v1-monthly-csv reports/capacity_award_rate_sensitivity_20260923/monthly.csv
+  --run-dir output/capacity_4h_award_rate_20260929 `
+  --baseline-run-dir output/capacity_4h_fullfill_20260929 `
+  --output-dir reports/my_new_4h_report
 ```
 
-报告包含数据区间和完整度、电池配置与建模假设、全期/月均/自然年收益、截至最新完整月的滚动12个月年化收益和逐月滚动收益表、EFC、各市场平均执行功率和申报容量、月度收入图及自然年汇总、0–23 时收益图、月份×小时热力图和 Q1–Q4 小图。传入 `--v1-monthly-csv` 后，报告会将 V1 100%中标口径与当前系数口径按相同连续12个月窗口绘制和列示；两者均为各自优化后的调度结果。自然年收益与 EFC 标注完整有效天数/期间日数；完整天要求该当地日内所有预期 QH 均有效，夏令时切换日按 92 或 100 个 QH 计算。收益在展示表格和 CSV 中保留两位小数；图表纵轴为整数、10 等分且采用清晰步长。小时图以 0.001 kEUR/MW 为刻度并标明比例。小时均值要求四个 QH 均完整有效，再将 QH 收益合成实际小时；月度热力图只对完整有效小时求当月同一钟点的均值。季度图将不同自然年的同一季度合并。月度表列全每月数据、年度月均和自然年合计，kEUR 与 kEUR/MW 两种口径均输出，负值保留。
+省略`--baseline-run-dir`仅展示当前情景。比较基线必须是同配置、同正式区间、同主要假设及年度EFC预算的100%中标运行；参数从归档读取。旧`--v1-monthly-csv`单独输入无法证明配置一致，入口会提示改用完整基线运行目录。新输出目录必须尚不存在，历史报告保留。
 
-模型 EFC 按各 QH `|ΔSOC| / [2 × (E_max − E_min)]` 累加，是以可用能量吞吐量折算的等效循环；它可以是小数，也不必等于按完整充放电事件计数的循环数。滚动年化收益要求连续12个自然月，以统计月为窗口终点，累计当月及此前11个月。DA/ID 平均功率按全部正式 QH 保留买卖方向符号，售电为正、购电为负；空闲桥接 QH 按 0 计，另列 DA+ID 合并净执行功率，因此正负时段会相互抵消。aFRR 容量按方向展示第一阶段全额成交假设下的申报容量 MW；中标系数仅折减容量收益，并未折减表中申报 MW。激活按 MWh/时长换算为 MW。各市场分项不相加视为站点额定功率，因为交易时段及方向可能重叠。生成文件还包括便于复核的 `monthly.csv`、`annual.csv`、`hourly.csv`、`quarterly_hourly.csv`、`monthly_hourly_heatmap.csv` 和 `rolling_12m.csv`；CSV 收益也固定两位小数。
+报告按实际`full_fill`、`optimize`、`posthoc`生成文案。滚动年收益累计12个日历范围完整、每月至少有有效结算记录的自然月，另报QH覆盖率；不按缺失比例补算。全缺失月份和无样本小时保持空值，真实零收益保留0.00。所有金额显示两位小数，图表计算保留原始精度。月度图使用全部有效QH；小时图要求四个QH完整再求小时合计及同一钟点均值，夏令时重复小时分开计入。季度图合并跨年同季度，列样本月份并共用纵轴尺度。
+
+DA／ID按全期正式QH求有符号净功率均值，另列合并现货净功率；空闲桥接按0计，存在未知执行状态时全期平均功率显示空值。aFRR上下容量仍是计划申报／预留MW，中标系数只作用于容量收入；各市场功率不能相加解释为电站容量分配比例。EFC汇总模型已执行记录，不用QH起末净SOC差替代相位吞吐。
+
+最新试运行见[两小时含系数](reports/result_baseline_v1_20260930/2h_optimize/结果展示.md)、[四小时100%中标](reports/result_baseline_v1_20260930/4h_full_fill/结果展示.md)、[四小时含系数](reports/result_baseline_v1_20260930/4h_optimize/结果展示.md)。测试、与原结果的对账及审核结论见[开发验收记录](reports/result_baseline_v1_20260930/开发验收记录.md)。
 
 ## 文件分类
 

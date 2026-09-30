@@ -8,7 +8,7 @@ import math
 import mmap
 import re
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -111,55 +111,93 @@ def _formal_rows(rows: list[dict], start: datetime, end: datetime) -> list[dict]
             if start <= datetime.fromisoformat(row['time'].replace('Z', '+00:00')) < end]
 
 
-def aggregate(rows: list[dict], discharge_mw: float) -> dict:
-    monthly = defaultdict(lambda: {'cash_eur': {m: 0.0 for m in MARKETS}, 'valid_qh': 0,
-                                   'total_qh': 0, 'efc': 0.0})
+def aggregate(rows: list[dict], discharge_mw: float,
+              start: datetime | None = None, end: datetime | None = None) -> dict:
+    if not math.isfinite(discharge_mw) or discharge_mw <= 0:
+        raise ValueError('A finite positive discharge_mw is required')
+    by_time, ids = {}, set()
+    for row in rows:
+        t = datetime.fromisoformat(row['time'].replace('Z', '+00:00'))
+        if t.tzinfo is None or t.minute % 15 or t.second or t.microsecond:
+            raise ValueError('Result timestamps must be aware QH boundaries')
+        t = t.astimezone(timezone.utc)
+        if t in by_time or row['qh_id'] in ids:
+            raise ValueError('Duplicate result QH')
+        by_time[t] = row
+        ids.add(row['qh_id'])
+    missing_rows = 0
+    if start is not None and end is not None:
+        if any(t.tzinfo is None or t.minute % 15 or t.second or t.microsecond for t in (start, end)) or start >= end:
+            raise ValueError('Invalid formal QH interval')
+        grid = []
+        t = start.astimezone(timezone.utc)
+        while t < end:
+            row = by_time.get(t)
+            if row is None:
+                missing_rows += 1
+                row = dict(qh_id=t.isoformat(), time=t.isoformat(), cash=None, efc=None, status='missing_result')
+            grid.append(row)
+            t += timedelta(minutes=15)
+        rows = grid
+    monthly = defaultdict(lambda: dict(cash_eur={m: 0.0 for m in MARKETS}, valid_qh=0,
+                                       total_qh=0, efc=0.0, efc_known_qh=0, calendar_complete=True))
     total = {m: 0.0 for m in MARKETS}
     valid_rows = {}
-    daily = defaultdict(lambda: {'valid_qh': 0, 'total_qh': 0})
+    daily = defaultdict(lambda: dict(valid_qh=0, total_qh=0))
     hourly_qhs = defaultdict(dict)
     for row in rows:
         local = _madrid_time(row)
         month = local.strftime('%Y-%m')
-        month_row = monthly[month]
-        month_row['total_qh'] += 1
+        item = monthly[month]
+        item['total_qh'] += 1
         daily[local.date().isoformat()]['total_qh'] += 1
         if row.get('efc') is not None:
-            month_row['efc'] += float(row['efc'])
+            efc = float(row['efc'])
+            if not math.isfinite(efc) or efc < 0:
+                raise ValueError('Invalid executed EFC')
+            item['efc'] += efc
+            item['efc_known_qh'] += 1
         cash = row.get('cash')
         if cash is None:
             continue
-        month_row['valid_qh'] += 1
+        if any(m not in cash or cash[m] is None or not math.isfinite(float(cash[m])) for m in MARKETS):
+            raise ValueError('A settled QH must have six finite market cash values')
+        item['valid_qh'] += 1
         daily[local.date().isoformat()]['valid_qh'] += 1
         valid_rows[row['qh_id']] = row
         for market in MARKETS:
-            value = float(cash.get(market, 0.0) or 0.0)
-            month_row['cash_eur'][market] += value
+            value = float(cash[market])
+            item['cash_eur'][market] += value
             total[market] += value
         offset = int(local.utcoffset().total_seconds() // 60)
-        hour_key = (local.date().isoformat(), local.hour, offset)
-        hourly_qhs[hour_key][local.minute] = {m: float(cash.get(m, 0.0) or 0.0) for m in MARKETS}
-
+        hourly_qhs[(local.date().isoformat(), local.hour, offset)][local.minute] = cash
+    for month, item in monthly.items():
+        y, m = map(int, month.split('-'))
+        lo = datetime(y, m, 1, tzinfo=MADRID)
+        hi = datetime(y + (m == 12), m % 12 + 1, 1, tzinfo=MADRID)
+        if start is not None and end is not None:
+            item['calendar_complete'] = start <= lo and end >= hi
     complete_hours = []
     for (day, hour, _offset), qhs in hourly_qhs.items():
         if set(qhs) != {0, 15, 30, 45}:
             continue
-        month = int(day[5:7])
-        components = {m: sum(qhs[minute][m] for minute in (0, 15, 30, 45)) /
+        components = {m: sum(float(qhs[minute][m]) for minute in (0, 15, 30, 45)) /
                       (1000.0 * discharge_mw) for m in MARKETS}
-        complete_hours.append({'date': day, 'hour': hour, 'quarter': (month - 1) // 3 + 1,
-                               'components': components})
-
+        complete_hours.append(dict(date=day, hour=hour, quarter=(int(day[5:7])-1)//3+1, components=components))
     hours = _hourly_means(complete_hours, range(24))
     quarters = {f'Q{q}': _hourly_means([h for h in complete_hours if h['quarter'] == q], range(24))
                 for q in range(1, 5)}
     monthly_hours = _monthly_hourly_means(complete_hours)
-    return {'monthly': dict(monthly), 'market_eur': total, 'valid_rows': valid_rows,
-            'complete_hours': complete_hours, 'hours': hours, 'quarters': quarters,
-            'monthly_hours': monthly_hours, 'daily': dict(daily),
-            'total_eur': sum(total.values()), 'total_efc': sum(v['efc'] for v in monthly.values()),
-            'valid_qh': sum(v['valid_qh'] for v in monthly.values()),
-            'total_qh': sum(v['total_qh'] for v in monthly.values()), 'discharge_mw': discharge_mw}
+    for month in monthly:
+        monthly_hours.setdefault(month, [dict(hour=h, count=0, total_kEUR_per_MW=0.) for h in range(24)])
+    return dict(monthly=dict(monthly), market_eur=total, valid_rows=valid_rows,
+                complete_hours=complete_hours, hours=hours, quarters=quarters,
+                monthly_hours=monthly_hours, daily=dict(daily), total_eur=sum(total.values()),
+                total_efc=sum(v['efc'] for v in monthly.values()),
+                efc_known_qh=sum(v['efc_known_qh'] for v in monthly.values()),
+                valid_qh=sum(v['valid_qh'] for v in monthly.values()), total_qh=len(rows),
+                discharge_mw=discharge_mw, missing_result_qh=missing_rows,
+                unknown_execution_qh=sum(r.get('cash') is None and r.get('status') != 'assumed_idle' for r in rows))
 
 
 def _hourly_means(hours: list[dict], bins) -> list[dict]:
@@ -202,7 +240,7 @@ def _scale_series(rows: list[dict], factor: float) -> list[dict]:
 
 
 def _nice_tick_step(span: float) -> int:
-    target = max(span / 10.0, 1.0)
+    target = max(span / 10.0, 5.0)
     magnitude = 10 ** math.floor(math.log10(target))
     for multiplier in (1, 2, 5, 10):
         step = multiplier * magnitude
@@ -221,17 +259,20 @@ def _rolling_12m(months: dict, discharge_mw: float) -> list[dict]:
         for index in range(end_index - 11, end_index + 1):
             window_year, month_index = divmod(index, 12)
             window.append(f'{window_year:04d}-{month_index + 1:02d}')
-        if not all(key in available for key in window):
+        if not all(key in available and months[key].get('calendar_complete', True)
+                   and months[key].get('valid_qh', 1) > 0 for key in window):
             continue
         total_eur = sum(sum(months[key]['cash_eur'].values()) for key in window)
         results.append({'month': end_month, 'window_start': window[0], 'window_end': end_month,
                         'total_eur': total_eur, 'kEUR': total_eur / 1000,
-                        'kEUR_per_MW': total_eur / (1000 * discharge_mw)})
+                        'kEUR_per_MW': total_eur / (1000 * discharge_mw),
+                        'valid_qh': sum(months[k].get('valid_qh', 0) for k in window),
+                        'total_qh': sum(months[k].get('total_qh', 0) for k in window)})
     return results
 
 
 def _rolling_12m_svg(rows: list[dict], path: Path,
-                     v1_rows: list[dict] | None = None) -> None:
+                     v1_rows: list[dict] | None = None, current_label: str = '当前情景') -> None:
     width, height = 1480, 540
     left, right, top, bottom = 98, 30, 76, 100
     plot_w, plot_h = width - left - right, height - top - bottom
@@ -243,7 +284,7 @@ def _rolling_12m_svg(rows: list[dict], path: Path,
     step = _nice_tick_step(max(high_data - low_data, 1.0))
     low = math.floor(low_data / step) * step
     while low + 10 * step < high_data:
-        step = _nice_tick_step(step + 1)
+        step = _nice_tick_step(10 * (step + 1))
         low = math.floor(low_data / step) * step
     high = low + 10 * step
 
@@ -264,6 +305,8 @@ def _rolling_12m_svg(rows: list[dict], path: Path,
         yy = y(value)
         parts.append(f'<line x1="{left}" y1="{yy:.2f}" x2="{width-right}" y2="{yy:.2f}" stroke="#d9dfe5"/>')
         parts.append(f'<text class="tick" x="{left-10}" y="{yy+4:.2f}" text-anchor="end">{value:d}</text>')
+    if not rows:
+        parts.append(f'<text x="{width/2}" y="{height/2}" text-anchor="middle">不足12个合格连续自然月</text>')
     if coords:
         parts.append('<polyline fill="none" stroke="#2878a5" stroke-width="3" points="' +
                      ' '.join(f'{x:.2f},{yy:.2f}' for x, yy in coords) + '"/>')
@@ -272,15 +315,15 @@ def _rolling_12m_svg(rows: list[dict], path: Path,
                      ' '.join(f'{x:.2f},{yy:.2f}' for x, yy in v1_coords) + '"/>')
     for row, (x, yy) in zip(rows, coords):
         period = f'{row["window_start"].replace("-", "/")}–{row["window_end"].replace("-", "/")}'
-        parts.append(f'<circle cx="{x:.2f}" cy="{yy:.2f}" r="5" fill="#2878a5"><title>{period}: {row["kEUR_per_MW"]:.2f} kEUR/MW</title></circle>')
+        parts.append(f'<circle cx="{x:.2f}" cy="{yy:.2f}" r="5" fill="#2878a5"><title>{period}: {_fmt(row["kEUR_per_MW"])} kEUR/MW</title></circle>')
         parts.append(f'<text class="xlabel" x="{x:.2f}" y="{top+plot_h+23}" text-anchor="middle">{row["month"].replace("-", "/")}</text>')
     for row, (x, yy) in zip(aligned_v1, v1_coords):
         period = f'{row["window_start"].replace("-", "/")}–{row["window_end"].replace("-", "/")}'
-        parts.append(f'<circle cx="{x:.2f}" cy="{yy:.2f}" r="5" fill="#e87522"><title>V1 100%中标；{period}: {row["kEUR_per_MW"]:.2f} kEUR/MW</title></circle>')
+        parts.append(f'<circle cx="{x:.2f}" cy="{yy:.2f}" r="5" fill="#e87522"><title>V1 100%中标；{period}: {_fmt(row["kEUR_per_MW"])} kEUR/MW</title></circle>')
     if v1_coords:
         legend_y = height - 25
         parts.extend([f'<line x1="{left+plot_w/2-170}" y1="{legend_y-4}" x2="{left+plot_w/2-140}" y2="{legend_y-4}" stroke="#2878a5" stroke-width="3"/>',
-                      f'<text class="axis" x="{left+plot_w/2-132}" y="{legend_y}" >含供需系数（重新优化）</text>',
+                      f'<text class="axis" x="{left+plot_w/2-132}" y="{legend_y}" >{html.escape(current_label)}</text>',
                       f'<line x1="{left+plot_w/2+72}" y1="{legend_y-4}" x2="{left+plot_w/2+102}" y2="{legend_y-4}" stroke="#e87522" stroke-width="3"/>',
                       f'<text class="axis" x="{left+plot_w/2+110}" y="{legend_y}">V1（100%中标）</text>'])
     zero = y(0)
@@ -329,7 +372,7 @@ def average_capacity(ledger_path: Path, valid_qh_ids: set[str], total_qh: int) -
 
 
 def _chart_svg(title: str, unit: str, labels: list[str], values: list[dict], path: Path,
-               *, width: int = 1500, height: int = 560) -> None:
+               *, width: int = 1500, height: int = 560, bounds: tuple | None = None) -> None:
     left, right, top, bottom = 100, 28, 74, 148 if len(labels) > 24 else 122
     plot_w, plot_h = width - left - right, height - top - bottom
     lows, highs = [], []
@@ -338,13 +381,13 @@ def _chart_svg(title: str, unit: str, labels: list[str], values: list[dict], pat
         negatives = sum(min(0.0, item['components'][m]) for m in MARKETS)
         lows.append(negatives)
         highs.append(positives)
-    data_low = min(lows + [0.0])
-    data_high = max(highs + [0.0])
+    data_low = min(lows + [0.0]) if bounds is None else bounds[0]
+    data_high = max(highs + [0.0]) if bounds is None else bounds[1]
     span = max(data_high - data_low, 1.0)
     tick_step = _nice_tick_step(span)
     low = math.floor(data_low / tick_step) * tick_step
     while low + 10 * tick_step < data_high:
-        tick_step = _nice_tick_step(tick_step + 1)
+        tick_step = _nice_tick_step(10 * (tick_step + 1))
         low = math.floor(data_low / tick_step) * tick_step
     high = low + 10 * tick_step
     def y(v):
@@ -365,6 +408,8 @@ def _chart_svg(title: str, unit: str, labels: list[str], values: list[dict], pat
     bar_w = min(band * 0.72, 45 if len(labels) > 24 else 54)
     for idx, (label, item) in enumerate(zip(labels, values)):
         cx = left + band * (idx + 0.5)
+        if item.get('missing') or item.get('count') == 0:
+            parts.append(f'<text class="xlabel" x="{cx:.2f}" y="{zero-8:.2f}" text-anchor="middle">无有效数据</text>')
         positive = 0.0
         negative = 0.0
         for market in MARKETS:
@@ -417,11 +462,12 @@ def _monthly_hourly_heatmap(monthly_hours: dict[str, list[dict]], path: Path) ->
             x = left + hour * cell_w
             if item['count']:
                 value = item['total_kEUR_per_MW']
-                parts.append(f'<rect x="{x+0.5:.1f}" y="{y+0.5:.1f}" width="{cell_w-1:.1f}" height="{row_h-1:.1f}" fill="{color(value)}" stroke="white"><title>{month} {hour:02d}:00，平均 {value:.2f} kEUR/MW，完整样本 {item["count"]} 小时</title></rect>')
+                parts.append(f'<rect x="{x+0.5:.1f}" y="{y+0.5:.1f}" width="{cell_w-1:.1f}" height="{row_h-1:.1f}" fill="{color(value)}" stroke="white"><title>{month} {hour:02d}:00，平均 {_fmt(value)} kEUR/MW，完整样本 {item["count"]} 小时</title></rect>')
                 text_color = 'white' if abs(value) / scale > 0.55 else '#263238'
-                parts.append(f'<text class="cell" x="{x+cell_w/2:.1f}" y="{y+row_h*0.67:.1f}" text-anchor="middle" fill="{text_color}">{value:.2f}</text>')
+                parts.append(f'<text class="cell" x="{x+cell_w/2:.1f}" y="{y+row_h*0.67:.1f}" text-anchor="middle" style="fill:{text_color}">{_fmt(value)}</text>')
             else:
                 parts.append(f'<rect x="{x+0.5:.1f}" y="{y+0.5:.1f}" width="{cell_w-1:.1f}" height="{row_h-1:.1f}" fill="#eceff1" stroke="white"><title>{month} {hour:02d}:00，无完整有效小时</title></rect>')
+                parts.append(f'<text class="cell" x="{x+cell_w/2:.1f}" y="{y+row_h*.67:.1f}" text-anchor="middle">—</text>')
     y0 = top + len(months) * row_h + 38
     parts.extend([f'<text class="axis" x="{left}" y="{y0}">平均收益（kEUR/MW）</text>',
                   f'<rect x="{left+205}" y="{y0-15}" width="22" height="16" fill="#b43737"/>',
@@ -433,47 +479,63 @@ def _monthly_hourly_heatmap(monthly_hours: dict[str, list[dict]], path: Path) ->
     path.write_text('\n'.join(parts), encoding='utf-8')
 
 
+def _fmt(value, *, csv=False):
+    if value is None:
+        return '' if csv else '—'
+    value = float(value)
+    if not math.isfinite(value):
+        raise ValueError('Cannot format a nonfinite value')
+    value = round(value, 2)
+    if value == 0:
+        value = 0.0
+    return format(value, '.2f' if csv else ',.2f')
+
+
+def _has_cash(item):
+    return item.get('valid_qh', 1) > 0
+
+
 def _money_table(months: dict, discharge_mw: float, years: list[int], per_mw: bool) -> str:
-    unit = 'kEUR/MW' if per_mw else 'kEUR'
-    columns = ['月份'] + [LABELS_ZH[m] for m in MARKETS] + ['合计']
-    lines = ['| ' + ' | '.join(columns) + ' |', '| ' + ' | '.join(['---'] * len(columns)) + ' |']
+    divisor = 1000 * discharge_mw if per_mw else 1000
+    lines = ['| 月份 | ' + ' | '.join(LABELS_ZH[m] for m in MARKETS) + ' | 合计 |',
+             '|---|' + '---:|' * 7]
     for year in years:
-        year_rows = [m for m in sorted(months) if int(m[:4]) == year]
-        annual = {market: sum(months[m]['cash_eur'][market] for m in year_rows) for market in MARKETS}
-        for month in year_rows:
-            values = months[month]['cash_eur']
-            converted = {m: values[m] / (1000 * discharge_mw if per_mw else 1000) for m in MARKETS}
-            total = sum(converted.values())
-            lines.append('| ' + ' | '.join([month.replace('-', '/')]
-                           + [f'{converted[m]:,.2f}' for m in MARKETS] + [f'{total:,.2f}']) + ' |')
-        annual_c = {m: annual[m] / (1000 * discharge_mw if per_mw else 1000) for m in MARKETS}
-        month_count = max(len(year_rows), 1)
-        average_c = {m: annual_c[m] / month_count for m in MARKETS}
-        lines.append('| ' + ' | '.join([f'**{year}年月均（{month_count}个月）**'] +
-                   [f'**{average_c[m]:,.2f}**' for m in MARKETS] +
-                   [f'**{sum(average_c.values()):,.2f}**']) + ' |')
-        lines.append('| ' + ' | '.join([f'**{year}年合计**'] +
-                   [f'**{annual_c[m]:,.2f}**' for m in MARKETS] +
-                   [f'**{sum(annual_c.values()):,.2f}**']) + ' |')
-    return f'单位：{unit}。\n\n' + '\n'.join(lines)
+        keys = [m for m in sorted(months) if int(m[:4]) == year]
+        valid = [m for m in keys if _has_cash(months[m])]
+        annual = {m: sum(months[k]['cash_eur'][m] for k in valid) / divisor for m in MARKETS}
+        for key in keys:
+            item = months[key]
+            values = [item['cash_eur'][m] / divisor for m in MARKETS]
+            label = key.replace('-', '/') + ('' if item.get('calendar_complete', True) else '（部分月）')
+            lines.append('| ' + ' | '.join([label] + [_fmt(v if _has_cash(item) else None)
+                                       for v in values + [sum(values)]]) + ' |')
+        for label, denominator in [(f'{year}年月均（{len(valid)}个月）', len(valid)), (f'{year}年合计', 1)]:
+            values = [annual[m] / max(denominator, 1) for m in MARKETS]
+            lines.append('| **' + label + '** | ' + ' | '.join('**'+_fmt(v if valid else None)+'**'
+                               for v in values+[sum(values)]) + ' |')
+    return '单位：' + ('kEUR/MW' if per_mw else 'kEUR') + '。月均按有有效结算的月份计算；部分月不外推，覆盖见月度CSV。\n\n' + '\n'.join(lines)
 
 
-def _rolling_12m_table(rows: list[dict], v1_rows: list[dict] | None = None) -> str:
-    v1_by_month = {r['month']: r for r in (v1_rows or [])}
-    if v1_rows is None:
-        lines = ['| 统计月份 | 对应12个月窗口 | 滚动收益（kEUR/MW） |', '|---|---|---:|']
-    else:
-        lines = ['| 统计月份 | 对应12个月窗口 | 含供需系数（kEUR/MW） | V1 100%中标（kEUR/MW） | 差额：V1−含系数 |', '|---|---|---:|---:|---:|']
-    for row in rows:
-        window = f'{row["window_start"].replace("-", "/")}–{row["window_end"].replace("-", "/")}'
-        if v1_rows is None:
-            lines.append(f'| {row["month"].replace("-", "/")} | {window} | {row["kEUR_per_MW"]:,.2f} |')
-        else:
-            v1_value = v1_by_month.get(row['month'], {}).get('kEUR_per_MW')
-            v1_cell = f'{v1_value:,.2f}' if v1_value is not None else '—'
-            delta = f'{v1_value-row["kEUR_per_MW"]:,.2f}' if v1_value is not None else '—'
-            lines.append(f'| {row["month"].replace("-", "/")} | {window} | {row["kEUR_per_MW"]:,.2f} | {v1_cell} | {delta} |')
+def _rolling_12m_table(rows, v1_rows=None):
+    v1 = {r['month']: r for r in (v1_rows or [])}
+    lines = ['| 统计月份 | 对应12个月窗口 | 当前收益（kEUR/MW） | QH覆盖率 |' +
+             (' V1 100%中标（kEUR/MW） | 差额：V1−当前 | 基线QH覆盖率 |' if v1_rows is not None else ''),
+             '|---|---|---:|---:|' + ('---:|---:|---:|' if v1_rows is not None else '')]
+    for r in rows:
+        cells = [r['month'].replace('-', '/'), r['window_start']+'–'+r['window_end'], _fmt(r['kEUR_per_MW']), _coverage(r)]
+        if v1_rows is not None:
+            ref = v1.get(r['month'])
+            cells += [_fmt(ref['kEUR_per_MW'] if ref else None),
+                      _fmt(ref['kEUR_per_MW']-r['kEUR_per_MW'] if ref else None), _coverage(ref or {})]
+        lines.append('| '+' | '.join(cells)+' |')
+    if not rows:
+        lines.append('')
+        lines.append('不足12个合格连续自然月；需要覆盖完整自然月，且每月至少有有效结算记录。')
     return '\n'.join(lines)
+
+
+def _coverage(item):
+    return f"{100*item.get('valid_qh', 0)/item['total_qh']:.2f}%" if item.get('total_qh') else '—'
 
 
 def _rolling_v1_from_monthly_csv(path: Path) -> list[dict]:
@@ -496,311 +558,317 @@ def _rolling_v1_from_monthly_csv(path: Path) -> list[dict]:
     return results
 
 
-def build(run_dir: Path, output_dir: Path, v1_monthly_csv: Path | None = None) -> Path:
+CONFIG_FIELDS = {'charge_mw', 'discharge_mw', 'e_min_mwh', 'e_max_mwh', 'e_initial_mwh',
+                 'e_terminal_mwh', 'eta_charge', 'eta_discharge', 'reserve_limit_up_mw',
+                 'reserve_limit_down_mw', 'grid_import_mw', 'grid_export_mw', 'data_scope'}
+MODE_LABELS = {'full_fill': '100%中标', 'optimize': '含中标系数重新优化', 'posthoc': '固定决策事后折减'}
+MODE_TEXT = {
+    'full_fill': 'aFRR容量按100%中标计价，本情景未启用容量收入折减。',
+    'optimize': '历史逐QH、逐方向系统实际分配容量／总报价量的代理系数进入容量收入目标后重新优化；激活收益和完整备用物理约束沿用V1。',
+    'posthoc': '先按100%中标口径优化，再对容量现金流事后折减；交易决策沿用原解，没有按系数重新优化。',
+}
+
+
+def _load_run(run_dir):
+    manifest = json.loads((run_dir/'manifest.json').read_text(encoding='utf-8'))
+    summary = json.loads((run_dir/'summary.json').read_text(encoding='utf-8'))
+    config = _top_level_scalars(run_dir/'solver_input.json', CONFIG_FIELDS)
+    for k in CONFIG_FIELDS - {'data_scope'}:
+        if not math.isfinite(float(config[k])):
+            raise ValueError(f'Invalid config {k}')
+    if config['discharge_mw'] <= 0 or config['e_max_mwh'] <= config['e_min_mwh']:
+        raise ValueError('Invalid power or energy bounds')
+    start = datetime.fromisoformat(manifest['formal_start'])
+    end = datetime.fromisoformat(manifest['formal_end'])
+    rows = _formal_rows(_read_rows(run_dir/'result.json'), start, end)
+    data = aggregate(rows, float(config['discharge_mw']), start, end)
+    mode = manifest.get('capacity_award_mode') or summary.get('capacity_award_mode')
+    if mode is None:
+        scenario = manifest.get('scenario', '')
+        if 'capacity_award_rate_proxy' in scenario:
+            mode = 'posthoc' if 'posthoc' in scenario else 'optimize'
+        elif manifest.get('mode') == 'perfect_history_v1' and not manifest.get('award_rate_source'):
+            mode = 'full_fill'
+        else:
+            raise ValueError('Cannot determine capacity award mode from metadata')
+    if mode not in MODE_LABELS:
+        raise ValueError('Unknown capacity award mode')
+    return dict(manifest=manifest, summary=summary, config=config, start=start, end=end, data=data, mode=mode)
+
+
+def _validate_baseline(current, baseline):
+    for run in (current, baseline):
+        if not run['manifest'].get('input_end'):
+            raise ValueError('Missing comparison observation interval evidence')
+    if datetime.fromisoformat(current['manifest']['input_end']) != datetime.fromisoformat(baseline['manifest']['input_end']):
+        raise ValueError('Incompatible observation interval: input_end')
+    if baseline['mode'] != 'full_fill':
+        raise ValueError('Comparison baseline must use full_fill')
+    if not baseline['summary'].get('success'):
+        raise ValueError('Comparison baseline was not a successful run')
+    for key in CONFIG_FIELDS:
+        if current['config'][key] != baseline['config'][key]:
+            raise ValueError(f'Incompatible comparison configuration: {key}')
+    for key in ('start', 'end'):
+        if current[key] != baseline[key]:
+            raise ValueError(f'Incompatible comparison formal interval: {key}')
+    for key in ('mode',):
+        if not current['manifest'].get(key) or current['manifest'][key] != baseline['manifest'].get(key):
+            raise ValueError('Incompatible or undocumented planning mode')
+    for run in (current, baseline):
+        if not run['manifest'].get('scenario') or not run['summary'].get('annual_budget'):
+            raise ValueError('Missing comparison scenario or annual budget evidence')
+    if current['manifest']['scenario'].split('/capacity_award_rate_proxy')[0] != baseline['manifest']['scenario'].split('/capacity_award_rate_proxy')[0]:
+        raise ValueError('Incompatible calendar or activation scenario')
+    if current['summary']['annual_budget'] != baseline['summary']['annual_budget']:
+        raise ValueError('Incompatible annual EFC budgets')
+
+
+def _annual_data(run):
+    data = run['data']; months = data['monthly']; result = {}
+    for year in sorted({int(k[:4]) for k in months}):
+        keys = [k for k in months if int(k[:4]) == year]
+        lo = max(run['start'].astimezone(MADRID), datetime(year,1,1,tzinfo=MADRID))
+        hi = min(run['end'].astimezone(MADRID), datetime(year+1,1,1,tzinfo=MADRID))
+        days = [d for d in data['daily'] if int(d[:4]) == year]
+        complete = sum(v['total_qh'] == _expected_qh_for_day(d) and v['valid_qh'] == _expected_qh_for_day(d)
+                       for d,v in data['daily'].items() if int(d[:4]) == year)
+        result[year] = dict(cash_eur={m:sum(months[k]['cash_eur'][m] for k in keys) for m in MARKETS},
+                            valid_qh=sum(months[k]['valid_qh'] for k in keys),
+                            total_qh=sum(months[k]['total_qh'] for k in keys),
+                            efc=sum(months[k]['efc'] for k in keys),
+                            efc_known_qh=sum(months[k]['efc_known_qh'] for k in keys),
+                            complete_days=complete,total_days=len(days),
+                            year_days=(datetime(year+1,1,1)-datetime(year,1,1)).days,
+                            period=f"{lo:%Y/%m/%d}–{(hi-timedelta(microseconds=1)):%Y/%m/%d}")
+    return result
+
+
+def _csv(headers, rows):
+    import csv
+    from io import StringIO
+    stream=StringIO(); writer=csv.writer(stream, lineterminator='\n')
+    writer.writerow(headers); writer.writerows(rows)
+    return stream.getvalue()
+
+
+def _monthly_csv(months, discharge_mw, years=None):
+    records=[]
+    for key,item in sorted(months.items()):
+        values=[item['cash_eur'][m] for m in MARKETS]; values.append(sum(values))
+        records.append([key, *[_fmt(v/1000 if _has_cash(item) else None,csv=True) for v in values],
+            *[_fmt(v/(1000*discharge_mw) if _has_cash(item) else None,csv=True) for v in values],
+            item['valid_qh'],item['total_qh'],_coverage(item),
+            _fmt(item['efc'] if item.get('efc_known_qh',1) else None,csv=True),
+            item.get('efc_known_qh',''),item.get('calendar_complete',True)])
+    return _csv(['month',*[f'{m}_kEUR' for m in MARKETS],'total_kEUR',
+                 *[f'{m}_kEUR_per_MW' for m in MARKETS],'total_kEUR_per_MW',
+                 'valid_qh','total_qh','settlement_coverage','efc','efc_known_qh','calendar_complete'], records)
+
+
+def _annual_csv(annual, discharge_mw):
+    records=[]
+    for year,item in sorted(annual.items()):
+        values=[item['cash_eur'][m] for m in MARKETS]; values.append(sum(values))
+        records.append([year,item['period'],*[_fmt(v/1000 if _has_cash(item) else None,csv=True) for v in values],
+            *[_fmt(v/(1000*discharge_mw) if _has_cash(item) else None,csv=True) for v in values],
+            item['valid_qh'],item['total_qh'],_coverage(item),item['complete_days'],item['total_days'],item['year_days'],
+            _fmt(item['efc'] if item['efc_known_qh'] else None,csv=True),item['efc_known_qh']])
+    return _csv(['year','period',*[f'{m}_kEUR' for m in MARKETS],'total_kEUR',
+        *[f'{m}_kEUR_per_MW' for m in MARKETS],'total_kEUR_per_MW','valid_qh','total_qh','settlement_coverage',
+        'complete_days','total_days','year_days','efc','efc_known_qh'],records)
+
+
+def _hourly_records(rows):
+    for r in rows:
+        values=[r['components'][m] for m in MARKETS]; values.append(sum(values))
+        yield [r['hour'],*[_fmt(v if r['count'] else None,csv=True) for v in values],r['count']]
+
+
+def _hourly_csv(rows):
+    return _csv(['hour',*[f'{m}_kEUR_per_MW' for m in MARKETS],'total_kEUR_per_MW','sample_hours'], _hourly_records(rows))
+
+
+def _quarterly_csv(quarters):
+    return _csv(['quarter','hour',*[f'{m}_kEUR_per_MW' for m in MARKETS],'total_kEUR_per_MW','sample_hours'],
+                ([q,*r] for q,rows in quarters.items() for r in _hourly_records(rows)))
+
+
+def _monthly_hourly_csv(monthly_hours):
+    return _csv(['month','hour','average_total_kEUR_per_MW','sample_hours'],
+                ([m,r['hour'],_fmt(r['total_kEUR_per_MW'] if r['count'] else None,csv=True),r['count']]
+                 for m,rows in sorted(monthly_hours.items()) for r in rows))
+
+
+def _rolling_12m_csv(rows, v1_rows=None):
+    refs={r['month']:r for r in (v1_rows or [])}; records=[]
+    for r in rows:
+        ref=refs.get(r['month']); value=ref['kEUR_per_MW'] if ref else None
+        records.append([r['month'],r['window_start'],r['window_end'],_fmt(r['kEUR'],csv=True),
+                        _fmt(r['kEUR_per_MW'],csv=True),r['valid_qh'],r['total_qh'],_coverage(r),
+                        _fmt(value,csv=True),_fmt(value-r['kEUR_per_MW'] if value is not None else None,csv=True),_coverage(ref or {})])
+    return _csv(['month','window_start_month','window_end_month','rolling_total_kEUR','rolling_total_kEUR_per_MW',
+                 'valid_qh','total_qh','settlement_coverage','v1_100pct_kEUR_per_MW','v1_minus_current_kEUR_per_MW','baseline_coverage'],records)
+
+
+def _shares(months):
+    records=[]; lines=['| 月份 | '+' | '.join(LABELS_ZH[m] for m in MARKETS)+' |', '|---|'+'---:|'*6]
+    for key,item in sorted(months.items()):
+        total=sum(item['cash_eur'].values())
+        values=[item['cash_eur'][m]/total*100 if total and _has_cash(item) else None for m in MARKETS]
+        cells=[_fmt(v)+'%' if v is not None else '不可定义' for v in values]
+        lines.append('| '+key.replace('-','/')+' | '+' | '.join(cells)+' |')
+        records.append([key,*[_fmt(v,csv=True) for v in values],item['valid_qh'],item['total_qh']])
+    return '\n'.join(lines),_csv(['month',*[f'{m}_share_pct' for m in MARKETS],'valid_qh','total_qh'],records)
+
+
+def build(run_dir: Path, output_dir: Path, v1_monthly_csv: Path | None = None,
+          baseline_run_dir: Path | None = None) -> Path:
     if output_dir.exists():
         raise FileExistsError(output_dir)
-    manifest = json.loads((run_dir / 'manifest.json').read_text(encoding='utf-8'))
-    result_path = run_dir / 'result.json'
-    summary_path = run_dir / 'summary.json'
-    summary = json.loads(summary_path.read_text(encoding='utf-8'))
-    config = _top_level_scalars(run_dir / 'solver_input.json', {
-        'charge_mw', 'discharge_mw', 'e_min_mwh', 'e_max_mwh', 'e_initial_mwh',
-        'e_terminal_mwh', 'eta_charge', 'eta_discharge', 'reserve_limit_up_mw',
-        'reserve_limit_down_mw', 'data_scope',
-    })
-    rows = _read_rows(result_path)
-    start = datetime.fromisoformat(str(manifest['formal_start']))
-    end = datetime.fromisoformat(str(manifest['formal_end']))
-    rows = _formal_rows(rows, start, end)
-    data = aggregate(rows, float(config['discharge_mw']))
-    capacity_avg = average_capacity(run_dir / 'cash_ledger.json', set(data['valid_rows']), data['total_qh'])
+    if v1_monthly_csv is not None:
+        raise ValueError('CSV alone cannot verify battery and model compatibility; use --baseline-run-dir')
+    run=_load_run(run_dir); data=run['data']; config=run['config']; manifest=run['manifest']; summary=run['summary']
+    baseline=_load_run(baseline_run_dir) if baseline_run_dir else None
+    if baseline:
+        _validate_baseline(run,baseline)
+    months=data['monthly']; annual=_annual_data(run); power=config['discharge_mw']; mode=run['mode']
+    rolling=_rolling_12m(months,power)
+    reference=_rolling_12m(baseline['data']['monthly'],power) if baseline else None
+    quality=summary.get('quality',{}); unknown=max(quality.get('blocked_qh',0),data['unknown_execution_qh'])
+    ledger_exists=(run_dir/'cash_ledger.json').exists()
+    capacity=average_capacity(run_dir/'cash_ledger.json',set(data['valid_rows']),data['total_qh']) if ledger_exists and not unknown else None
     output_dir.mkdir(parents=True)
-
-    months = data['monthly']
-    years = sorted({int(m[:4]) for m in months})
-    annual = {}
-    complete_dates = {
-        day for day, item in data['daily'].items()
-        if item['total_qh'] == _expected_qh_for_day(day) and item['valid_qh'] == _expected_qh_for_day(day)
-    }
-    formal_start_date = start.astimezone(MADRID).date()
-    formal_end_date = end.astimezone(MADRID).date()
-    for year in years:
-        monthly_keys = [m for m in months if int(m[:4]) == year]
-        cash = {market: sum(months[m]['cash_eur'][market] for m in monthly_keys) for market in MARKETS}
-        year_start = max(formal_start_date, datetime(year, 1, 1).date())
-        year_end = min(formal_end_date, datetime(year + 1, 1, 1).date())
-        total_days = max((year_end - year_start).days, 0)
-        complete_days = sum(1 for day in complete_dates if year_start.isoformat() <= day < year_end.isoformat())
-        annual[year] = {'cash_eur': cash, 'efc': sum(months[m]['efc'] for m in monthly_keys),
-                        'total_qh': sum(months[m]['total_qh'] for m in monthly_keys),
-                        'valid_qh': sum(months[m]['valid_qh'] for m in monthly_keys),
-                        'complete_days': complete_days, 'total_days': total_days}
-    rolling_12m = _rolling_12m(months, data['discharge_mw'])
-    v1_rolling_12m = _rolling_v1_from_monthly_csv(v1_monthly_csv) if v1_monthly_csv else None
-
-    month_names = sorted(months)
-    _chart_svg('月度收益分解', '收入（kEUR）', [m.replace('-', '/') for m in month_names],
-               [{'components': {k: v / 1000 for k, v in months[m]['cash_eur'].items()}} for m in month_names],
-               output_dir / 'monthly_revenue_kEUR.svg')
-    _chart_svg('月度单位功率收益分解', '收入（kEUR / MW）', [m.replace('-', '/') for m in month_names],
-               [{'components': {k: v / (1000 * data['discharge_mw']) for k, v in months[m]['cash_eur'].items()}} for m in month_names],
-               output_dir / 'monthly_revenue_kEUR_per_MW.svg')
-    _rolling_12m_svg(rolling_12m, output_dir / 'rolling_12m_revenue_kEUR_per_MW.svg', v1_rolling_12m)
-    hour_labels = [str(i) for i in range(24)]
-    hourly_scaled = _scale_series(data['hours'], 1000.0)
-    _chart_svg('全周期小时平均收益分解', '平均收益（kEUR/MW × 10⁻³）', hour_labels, hourly_scaled,
-               output_dir / 'hourly_average_kEUR_per_MW.svg')
-    _monthly_hourly_heatmap(data['monthly_hours'], output_dir / 'monthly_hourly_heatmap_kEUR_per_MW.svg')
-    quarter_files = []
-    for quarter, values in data['quarters'].items():
-        filename = f'{quarter.lower()}_hourly_average_kEUR_per_MW.svg'
-        _chart_svg(f'{quarter} 小时平均收益分解', '平均收益（kEUR/MW × 10⁻³）', hour_labels,
-                   _scale_series(values, 1000.0), output_dir / filename, width=1000, height=410)
-        quarter_files.append((quarter, filename))
-
-    total = data['total_eur']
-    total_per_mw = total / (1000 * data['discharge_mw'])
-    valid_qh = max(data['valid_qh'], 1)
-    raw_complete = summary.get('quality', {}).get('raw_field_complete_qh')
-    quality = summary.get('quality', {})
-    award = manifest.get('award_rate_source') or {}
-    mode = manifest.get('capacity_award_mode')
-    if mode is None:
-        mode = 'optimize' if 'capacity_award_rate_proxy' in manifest.get('scenario', '') else 'full_fill'
-    source_ids = sorted({str(item.get('indicator')) for item in manifest.get('source_files', [])
-                         if item.get('indicator') is not None}, key=lambda x: int(x))
-    usable_mwh = float(config['e_max_mwh']) - float(config['e_min_mwh'])
-    efc_denominator = 2 * usable_mwh
-    income_lines = ['| 市场 | 收益（kEUR） | 收益（kEUR/MW） | 占净总收益 |', '|---|---:|---:|---:|']
-    for market in MARKETS:
-        eur = data['market_eur'][market]
-        share = eur / total * 100 if total else 0.0
-        income_lines.append(f'| {LABELS_ZH[market]} | {eur/1000:,.2f} | {eur/(1000*data["discharge_mw"]):,.2f} | {share:,.2f}% |')
-    income_lines.append(f'| **合计** | **{total/1000:,.2f}** | **{total_per_mw:,.2f}** | **100.00%** |')
-    cap_lines = ['| 市场/方向 | 平均功率（MW） | 口径 |', '|---|---:|---|']
-    for market in MARKETS:
-        if market in ('DA', 'ID'):
-            definition = '按全部正式QH求有符号均值；售电为正、购电为负，空闲桥接按0计'
-        elif market in ('cap_up', 'cap_down'):
-            definition = '第一阶段全额成交假设下的方向容量QH平均'
-        else:
-            definition = 'QH平均激活功率（MWh按时长折算）'
-        label = {'DA': 'DA电能执行功率', 'ID': 'ID电能执行功率'}.get(market, LABELS_ZH[market])
-        cap_lines.append(f'| {label} | {capacity_avg[market]:,.2f} | {definition} |')
-    cap_lines.insert(4, f'| DA+ID合并现货执行功率 | {capacity_avg["spot_net_da_id"]:,.2f} | 逐QH合并DA和ID有符号净功率后求全期平均 |')
-
-    start_local = start.astimezone(MADRID).strftime('%Y/%m/%d')
-    end_local = (end.astimezone(MADRID).date()).strftime('%Y/%m/%d')
-    input_end = manifest.get('input_end', '未记录')
-    raw_coverage = (raw_complete / quality['formal_qh'] * 100
-                    if raw_complete is not None and quality.get('formal_qh') else None)
-    settled_coverage = data['valid_qh'] / data['total_qh'] * 100 if data['total_qh'] else 0.0
-    avg_month_eur = total / max(len(months), 1)
-    avg_month_per_mw = total_per_mw / max(len(months), 1)
-    overview_income = ['| 期间 | 收益（kEUR） | 收益（kEUR/MW） |', '|---|---:|---:|',
-                       f'| 全期合计 | {total/1000:,.2f} | {total_per_mw:,.2f} |',
-                       f'| 月均（{len(months)}个月） | {avg_month_eur/1000:,.2f} | {avg_month_per_mw:,.2f} |']
-    overview_cycles = ['| 期间 | 等效循环次数（EFC） |', '|---|---:|',
-                       f'| 全期合计 | {data["total_efc"]:,.2f} |',
-                       f'| 月均（{len(months)}个月） | {data["total_efc"]/max(len(months),1):,.2f} |']
-    for year, item in sorted(annual.items()):
-        year_total = sum(item['cash_eur'].values())
-        period_label = f'{year}年（完整天 {item["complete_days"]}/{item["total_days"]}）'
-        overview_income.append(f'| {period_label} | {year_total/1000:,.2f} | {year_total/(1000*data["discharge_mw"]):,.2f} |')
-        overview_cycles.append(f'| {period_label} | {item["efc"]:,.2f} |')
-    latest_rolling = rolling_12m[-1] if rolling_12m else None
-    annualized_income = ['| 滚动窗口 | 年化收益（kEUR） | 年化收益（kEUR/MW） |', '|---|---:|---:|']
-    if latest_rolling:
-        latest_window = f'{latest_rolling["window_start"].replace("-", "/")}–{latest_rolling["window_end"].replace("-", "/")}'
-        annualized_income.append(f'| 最近完整12个月（{latest_window}） | {latest_rolling["kEUR"]:,.2f} | {latest_rolling["kEUR_per_MW"]:,.2f} |')
+    for per_mw,name in [(False,'monthly_revenue_kEUR.svg'),(True,'monthly_revenue_kEUR_per_MW.svg')]:
+        values=[dict(components={m:item['cash_eur'][m]/(1000*power if per_mw else 1000) for m in MARKETS},
+                     missing=not _has_cash(item)) for key,item in sorted(months.items())]
+        _chart_svg('月度六市场现金收益','市场现金收益（'+('kEUR/MW' if per_mw else 'kEUR')+'）',
+                   [k.replace('-','/') for k in sorted(months)],values,output_dir/name)
+    _rolling_12m_svg(rolling,output_dir/'rolling_12m_revenue_kEUR_per_MW.svg',reference,MODE_LABELS[mode])
+    _chart_svg('全期小时平均市场现金收益','平均收益（kEUR/MW × 10⁻³）',[str(h) for h in range(24)],
+               _scale_series(data['hours'],1000),output_dir/'hourly_average_kEUR_per_MW.svg')
+    _monthly_hourly_heatmap(data['monthly_hours'],output_dir/'monthly_hourly_heatmap_kEUR_per_MW.svg')
+    quarter_values={q:_scale_series(rows,1000) for q,rows in data['quarters'].items()}
+    bounds=(min([sum(min(0,v) for v in r['components'].values()) for rows in quarter_values.values() for r in rows]+[0]),
+            max([sum(max(0,v) for v in r['components'].values()) for rows in quarter_values.values() for r in rows]+[0]))
+    for q,values in quarter_values.items():
+        _chart_svg(q+'小时平均市场现金收益','平均收益（kEUR/MW × 10⁻³）',[str(h) for h in range(24)],values,
+                   output_dir/f'{q.lower()}_hourly_average_kEUR_per_MW.svg',width=1000,height=410,bounds=bounds)
+    lo=run['start'].astimezone(MADRID); hi=(run['end']-timedelta(microseconds=1)).astimezone(MADRID)
+    usable=config['e_max_mwh']-config['e_min_mwh']; total=data['total_eur']; valid_months=sum(_has_cash(v) for v in months.values())
+    award=manifest.get('award_rate_source') or {}
+    sources=sorted({str(x['indicator']) for x in manifest.get('source_files',[]) if x.get('indicator') is not None})
+    report=[f'# 西班牙MILP结果展示 {power:g} MW 可用{usable:g} MWh {MODE_LABELS[mode]}','',
+            f'正式统计期：{lo:%Y/%m/%d %H:%M} 至 {hi:%Y/%m/%d %H:%M}（含最后交付QH）；报告基线v1.0。',
+            f'运行状态：{summary.get("success", "未记录")}；中标模式：`{mode}`；输入目录：`{run_dir.as_posix()}`。','',
+            '## 假设概览','','| 项目 | 本次配置 |','|---|---|',
+            f'| 正式区间与观察数据 | 内部区间 [{run["start"].isoformat()}, {run["end"].isoformat()})；输入加载至 {manifest.get("input_end","未记录")}。观察日不计正式收益 |',
+            '| 时区和分辨率 | Europe/Madrid；15分钟QH；夏令时日按92／96／100个QH |',
+            f'| 电池配置 | 充／放功率{config["charge_mw"]:g}/{power:g} MW；SOC边界{config["e_min_mwh"]:g}–{config["e_max_mwh"]:g} MWh；可用时长{usable/power:.2f} h |',
+            f'| 初始与终点SOC | {config["e_initial_mwh"]:g}/{config["e_terminal_mwh"]:g} MWh |',
+            f'| 效率和备用上限 | 充／放效率{config["eta_charge"]:.1%}/{config["eta_discharge"]:.1%}；上／下备用{config["reserve_limit_up_mw"]:g}/{config["reserve_limit_down_mw"]:g} MW |',
+            f'| 来源 | eSIOS指标：{", ".join(sources) or "未记录"} |',
+            f'| 系数文件 | {award.get("path","本模式未启用" if mode=="full_fill" else "未记录")}；SHA-256：{award.get("sha256","不适用" if mode=="full_fill" else "未记录")} |',
+            f'| 原始字段完整QH | {quality.get("raw_field_complete_qh","未记录")} / {quality.get("formal_qh","未记录")} |',
+            f'| 正式结算覆盖 | {data["valid_qh"]}/{data["total_qh"]} QH（{_coverage(data)}）；空闲桥接{quality.get("assumed_idle_hours","未记录")}小时；阻断{quality.get("blocked_qh","未记录")} QH；结果缺行{data["missing_result_qh"]} QH |',
+            f'| 年度EFC预算 | {summary.get("annual_budget","未记录")}；分母为2×可用能量={2*usable:g} MWh |',
+            f'| 求解器累计用时 | {_fmt(summary.get("solver_seconds"))} 秒（空值表示未记录） |',
+            f'| 总运行用时 | {_fmt(summary.get("total_wall_seconds"))} 秒（空值表示未记录，含准备和输出） |','',
+            '- '+MODE_TEXT[mode],
+            '- 完美历史信息下的事后条件市场现金收益；两日滚动结果不代表已证明的全时域全局收益上界。',
+            '- GCT余量检查采用第一阶段全额成交建模假设。容量表为计划申报／预留MW。系数是历史系统比例代理，未据此缩减激活收益或物理预留。',
+            '- 收益为六市场带符号现金流合计，未扣除模型未计入的投资、运维等项目成本。缺失收益不按覆盖比例补算。','',
+            '## 结果概览','','### 全期与自然年市场现金收益','',
+            '| 期间 | 收益（kEUR） | 收益（kEUR/MW） |','|---|---:|---:|']
+    def income_row(label,value):
+        return f'| {label} | {_fmt(value/1000 if value is not None else None)} | {_fmt(value/(1000*power) if value is not None else None)} |'
+    report += [income_row('全期合计',total if valid_months else None),
+               income_row(f'有效结算月份月均（{valid_months}/{len(months)}个月，部分月不外推）',total/valid_months if valid_months else None)]
+    for year,item in annual.items():
+        label=f'{year}年 {item["period"]}；完整天{item["complete_days"]}/{item["total_days"]}；统计期/全年{item["total_days"]}/{item["year_days"]}'
+        report.append(income_row(label,sum(item['cash_eur'].values()) if _has_cash(item) else None))
+    report += ['', '### 最新滚动12个月市场现金收益','',
+               '滚动窗口覆盖12个完整自然月，每月至少有有效结算；不代表QH全部完整，不按缺失比例外推。']
+    if rolling:
+        r=rolling[-1];report += ['',f'最新窗口：{r["window_start"]}–{r["window_end"]}；{_fmt(r["kEUR"])} kEUR，{_fmt(r["kEUR_per_MW"])} kEUR/MW；QH覆盖{_coverage(r)}。']
     else:
-        annualized_income.append('| 数据不足12个连续月份 | — | — |')
-    if v1_rolling_12m:
-        latest_v1 = {r['month']: r for r in v1_rolling_12m}.get(latest_rolling['month']) if latest_rolling else None
-        if latest_v1:
-            annualized_income.append(f'| V1 100%中标（同窗口） | {latest_v1["kEUR_per_MW"]*data["discharge_mw"]:,.2f} | {latest_v1["kEUR_per_MW"]:,.2f} |')
-    report = [
-        '# 西班牙储能 MILP 结果展示', '',
-        f'输入结果目录：`{run_dir.as_posix()}`。情景：`{manifest.get("scenario", mode)}`；中标系数模式：`{mode}`。',
-        f'正式统计期：马德里当地 **{start_local} 至 {(end.astimezone(MADRID).date()).fromordinal((end.astimezone(MADRID).date()).toordinal()-1).strftime("%Y/%m/%d")}**（结束日期按排除端处理）。本次计算成功：`{summary.get("success")}`。', '',
-        '## 假设概览', '',
-        '| 项目 | 本次配置 |', '|---|---|',
-        f'| 数据时间范围 | 正式结算日 {start_local}–{(end.astimezone(MADRID).date()).fromordinal((end.astimezone(MADRID).date()).toordinal()-1).strftime("%Y/%m/%d")}；求解输入加载到 `{input_end}`（含观察数据） |',
-        f'| 时间分辨率与时区 | 15 分钟 QH；本地展示按 Europe/Madrid |',
-        f'| 输入来源标识 | eSIOS 指标 {", ".join(source_ids) if source_ids else "未记录"}；aFRR 系数文件 `{Path(award.get("path", "未记录")).name}` |',
-        f'| 系数文件 SHA-256 | `{award.get("sha256", "未记录")}` |',
-        f'| 原始字段完整度 | {raw_complete:,} / {quality.get("formal_qh", data["total_qh"]):,} QH ({raw_coverage:.2f}%) |' if raw_coverage is not None else '| 原始字段完整度 | 无法读取 |',
-        f'| 已结算覆盖率 | {data["valid_qh"]:,} / {data["total_qh"]:,} QH ({settled_coverage:.2f}%)；假设空缺时段空闲桥接 {quality.get("assumed_idle_hours", 0):,.1f} 小时；未知状态阻断 QH {quality.get("blocked_qh", 0)} |',
-        '| 完整天统计口径 | 当地自然日内所有预期 QH 均有有效结算记录；夏令时切换日按实际 92 或 100 个 QH 计算 |',
-        f'| 电池配置 | 充电/放电功率 {config["charge_mw"]:g}/{config["discharge_mw"]:g} MW；能量边界 {config["e_min_mwh"]:g}–{config["e_max_mwh"]:g} MWh；初始/终端能量 {config["e_initial_mwh"]:g}/{config["e_terminal_mwh"]:g} MWh |',
-        f'| 效率与备用上限 | 充/放电效率 {config["eta_charge"]:.1%}/{config["eta_discharge"]:.1%}；aFRR 上/下备用功率上限 {config["reserve_limit_up_mw"]:g}/{config["reserve_limit_down_mw"]:g} MW |',
-        f'| 年度 EFC 预算 | ' + '；'.join(f'{year}: {float(v["value"]):,.3f}' for year, v in manifest.get('budgets', {}).items()) + ' EFC |',
-        f'| 循环口径 | EFC 分母 = 2 × 可用能量 = {efc_denominator:,.1f} MWh；循环数采用模型记录的等效全循环（EFC） |',
-        '', '重要建模假设：', '',
-        '- 完美历史价格信息是事后理论上限，不是可执行的实时策略收益。',
-        '- 中标系数仅折减 aFRR 容量收入优化目标；本结果列示的上下调容量仍是第一阶段全额成交假设下的计划申报量，不是按中标率折算后的预期中标 MW。激活收益与物理容量承诺沿用原 V1 口径。系统分配量/报价量是敏感性代理，不是该电站的真实中标率。',
-        '- GCT 后备用余量按第一阶段全额成交建模假设处理；缺失输入按配置允许的空闲桥接处理。',
-        '', '## 结果概览', '',
-        '### 收益：全期、月均与自然年', '', *overview_income, '',
-        '### 年化收益：截至最新月份的滚动12个月', '', *annualized_income, '',
-        '### 逐月滚动12个月收益（kEUR/MW）', '',
-        '每个统计月份以当月为窗口终点，累计当月及此前连续11个月；仅列出具备连续12个月数据的窗口。V1 按同一 12 个月窗口计算，容量收入系数为 100%。V1 使用自身重新优化的调度结果，因此两条线的差额同时包含容量收益计价方式和调度变化。', '',
-        '![逐月滚动12个月收益，kEUR/MW](rolling_12m_revenue_kEUR_per_MW.svg)', '',
-        _rolling_12m_table(rolling_12m, v1_rolling_12m), '',
-        '### 循环次数：全期、月均与自然年', '',
-        'EFC（等效全循环）按各 QH 的 SOC 变化绝对值累计，再除以 2 × 可用能量；它可为小数，表示累计吞吐量折合了多少次满可用能量往返。完整充放电循环则是一次实际的充电—放电过程，按事件计数；部分循环、跨期循环及不同深度循环使两者不必相等。', '', *overview_cycles, '',
-        '### 市场收益和净收益占比', '', *income_lines, '',
-        '占比以净总收益为分母，因此负收益市场显示负占比，正收益市场占比之和可能超过 100%。', '',
-        '### 各市场平均执行功率和申报容量', '', *cap_lines, '',
-        'DA、ID 和合并现货行均按全期正式 QH 求带方向的净功率均值，不取绝对值；售电为正、购电为负，相反方向时段会抵消。没有有效市场数据并按假设空闲桥接的 QH 按 0 MW 计入平均。若要衡量市场内交易强度，可另看平均绝对净功率，本表不采用该口径。aFRR 上下调列是按全期 QH 统计的第一阶段全额成交假设下申报容量均值，空闲桥接 QH 以 0 计；供需系数折减容量收益，不折减申报 MW。上、下方向分开列示，不能相加理解为同一方向功率；激活列是平均实际激活功率。', '',
-        '## 月度结果概览', '',
-        '### 月度收入（kEUR）', '',
-        '![月度各市场收入，kEUR](monthly_revenue_kEUR.svg)', '',
-        '### 月度单位功率收入（kEUR/MW）', '',
-        '![月度各市场收入，kEUR/MW](monthly_revenue_kEUR_per_MW.svg)', '',
-        '### 月度收益明细与自然年合计', '',
-        _money_table(months, data['discharge_mw'], years, per_mw=False), '',
-        _money_table(months, data['discharge_mw'], years, per_mw=True), '',
-        '## 小时级结果概览', '',
-        '下图按马德里本地钟点，将每个完整且有效的实际小时内四个 QH 市场现金流先求和，再按可用小时求平均；数值按 0.001 kEUR/MW 作整数刻度，轴标题标明缩放系数，重复夏令时小时按实际 UTC 偏移分别计入。', '',
-        '![全周期0–23时平均小时收益](hourly_average_kEUR_per_MW.svg)', '',
-        f'完整有效小时：{len(data["complete_hours"]):,}。小时均值分母按小时 0–23 分别计算；每小时样本数见 `hourly.csv`。', '',
-        '### 月度 × 小时平均收益热力图', '',
-        '每格为该月该小时的完整有效小时平均总收益，单位 kEUR/MW；收益先按四个 QH 合计，再在当月同一钟点的样本小时间取平均。颜色以零为中心，红色表示负收益、蓝色表示正收益；格内显示数值。', '',
-        '![各月各小时平均收益热力图，kEUR/MW](monthly_hourly_heatmap_kEUR_per_MW.svg)', '',
-        '### 按季度分组的小时收益', '',
-        '每张图按跨年度相同季度汇总（例如 Q1 合并所有年份的一月至三月）；整数轴刻度为 0.001 kEUR/MW。', '',
-    ]
-    for quarter, filename in quarter_files:
-        report.extend([f'#### {quarter}', '', f'![{quarter} 0–23时平均收益]({filename})', ''])
-    report.extend([
-        '## 输出文件与口径', '',
-        '- `monthly.csv`：逐月六市场收益、总收益、每 MW 收益、结算覆盖率和 EFC；自然年合计另列于 `annual.csv`。',
-        '- `hourly.csv`、`quarterly_hourly.csv`：小时均值、样本小时数与六市场拆分。',
-        '- `monthly_hourly_heatmap.csv`：热力图每月每小时平均总收益和样本小时数。',
-        '- `rolling_12m.csv`：每月为窗口终点的连续12个月总收益。',
-        '- 图表均为 SVG，可放大查看；本脚本使用 Python 标准库生成，不依赖绘图库。',
-        '- 输入结果目录、来源清单、系数文件哈希以及本报告的小时完整性过滤口径均保留，便于审计和复算。',
-    ])
-    (output_dir / 'monthly.csv').write_text(_monthly_csv(months, data['discharge_mw'], years), encoding='utf-8-sig')
-    (output_dir / 'annual.csv').write_text(_annual_csv(annual, data['discharge_mw']), encoding='utf-8-sig')
-    (output_dir / 'hourly.csv').write_text(_hourly_csv(data['hours']), encoding='utf-8-sig')
-    (output_dir / 'quarterly_hourly.csv').write_text(_quarterly_csv(data['quarters']), encoding='utf-8-sig')
-    (output_dir / 'monthly_hourly_heatmap.csv').write_text(_monthly_hourly_csv(data['monthly_hours']), encoding='utf-8-sig')
-    (output_dir / 'rolling_12m.csv').write_text(_rolling_12m_csv(rolling_12m, v1_rolling_12m), encoding='utf-8-sig')
-    report_path = output_dir / '结果展示.md'
-    report_path.write_text('\n'.join(report) + '\n', encoding='utf-8')
-    return report_path
+        report += ['', '不足12个合格连续自然月。']
+    report += ['', '### 逐月滚动12个月收益','']
+    if baseline:
+        report += ['叠加同配置100%中标基线。'+('两情景分别优化，差额包含容量计价和调度变化。' if mode!='posthoc' else '当前情景沿用100%解后折减；只有执行头寸相同，才可把差额解释为纯现金折减。')+
+                   '各窗口覆盖率另列；覆盖不同时差额还包含覆盖差异。']
+    else:
+        report += ['仅展示当前情景曲线。']
+    report += ['', '![滚动12个月收益](rolling_12m_revenue_kEUR_per_MW.svg)','',_rolling_12m_table(rolling,reference),'',
+               '### 等效循环次数','',
+               'EFC直接汇总模型已执行记录，按各物理相位的SOC吞吐量／两倍可用能量计算；不使用QH起末净SOC差替代。它可为小数，与完整充放电事件次数不同。',
+               f'已知EFC记录{data["efc_known_qh"]}/{data["total_qh"]} QH；存在未知记录时以下为已知部分累计。','',
+               '| 期间 | EFC |','|---|---:|',f'| 全期已知合计 | {_fmt(data["total_efc"] if data["efc_known_qh"] else None)} |']
+    efc_months=sum(v['efc_known_qh']>0 for v in months.values())
+    report.append(f'| 月均（{efc_months}个有EFC记录的月份，部分月不外推） | {_fmt(data["total_efc"]/efc_months if efc_months else None)} |')
+    for year,item in annual.items():
+        report.append(f'| {year}年 {item["period"]}；完整天{item["complete_days"]}/{item["total_days"]}；统计期/全年{item["total_days"]}/{item["year_days"]} | {_fmt(item["efc"] if item["efc_known_qh"] else None)} |')
+    report += ['', '### 六市场收益和占比','','| 市场 | kEUR | kEUR/MW | 占总现金收益 |','|---|---:|---:|---:|']
+    for m in MARKETS:
+        v=data['market_eur'][m];share=_fmt(v/total*100)+'%' if total and valid_months else '不可定义'
+        report.append(f'| {LABELS_ZH[m]} | {_fmt(v/1000 if valid_months else None)} | {_fmt(v/(1000*power) if valid_months else None)} | {share} |')
+    report += [income_row('合计',total if valid_months else None)+(' 100.00% |' if total else ' 不可定义 |'),
+               '', '负收益和负占比保留，正收益市场占比之和可能超过100%；分母为0时占比不可定义。',
+               '', '### 各市场平均执行功率和申报容量','','| 市场 | 平均MW | 口径 |','|---|---:|---|']
+    for m in ('DA','ID','spot_net_da_id','cap_up','cap_down','act_up','act_down'):
+        label=LABELS_ZH.get(m,'DA＋ID合并现货')
+        definition='买卖有符号净额，售正购负' if m in ('DA','ID','spot_net_da_id') else '计划申报／预留容量' if m.startswith('cap_') else '执行MWh按时长折算MW'
+        report.append(f'| {label} | {_fmt(capacity[m] if capacity else None)} | {definition} |')
+    report += ['', f'分母为全部正式{data["total_qh"]}个QH；空闲桥接按0计。方向均值存在买卖抵消，各行不能相加视为电站容量分配比例。'+
+               ('存在未知执行状态或缺少账本，本次全期功率均值显示空值。' if capacity is None else ''),
+               '', '## 月度结果概览','','### 月度收入 kEUR','','![月度收入](monthly_revenue_kEUR.svg)','',
+               '### 月度单位功率收入 kEUR/MW','','![月度单位功率收入](monthly_revenue_kEUR_per_MW.svg)','',
+               '### 月度明细与自然年汇总','',_money_table(months,power,list(annual),False),'',_money_table(months,power,list(annual),True),
+               '', '### 月度六市场占比','',_shares(months)[0],
+               '', '## 小时级结果概览','',
+               '先合计实际小时内四个有效QH，再按同一当地钟点的有效小时数取均值；重复夏令时小时分别计入。月度图使用全部有效QH，两者样本不同。',
+               f'完整有效小时{len(data["complete_hours"])}；各钟点样本数见hourly.csv。整数刻度30表示0.03 kEUR/MW。','',
+               '![全期小时收益](hourly_average_kEUR_per_MW.svg)','','### 月份与小时热力图','',
+               '每格为当月该钟点平均总收益，单位kEUR/MW；蓝正红负、零中心；灰色破折号表示无样本。','',
+               '![月份与小时收益](monthly_hourly_heatmap_kEUR_per_MW.svg)','','### 季度小时收益','',
+               '跨年度相同季度合并，四图共用纵轴范围；下列月份为存在完整小时样本的月份。']
+    for q in quarter_values:
+        samples=[h for h in data['complete_hours'] if h['quarter']==int(q[1])]
+        included=', '.join(sorted({h['date'][:7] for h in samples})) or '无样本'
+        report += ['',f'#### {q}','',f'样本月份：{included}；完整有效小时：{len(samples)}。','',
+                   f'![{q}小时收益]({q.lower()}_hourly_average_kEUR_per_MW.svg)']
+    report += ['', '## 输出文件与口径','',
+               '- monthly.csv、annual.csv：六市场金额、覆盖、EFC及完整天；monthly_market_shares.csv：月度占比。',
+               '- hourly.csv、quarterly_hourly.csv、monthly_hourly_heatmap.csv：小时收益与样本数，缺样本留空。',
+               '- rolling_12m.csv：窗口收益、覆盖及可选100%基线。report_manifest.json：来源、配置和报告版本。',
+               '- SVG共9张；数据不足的图显示原因，历史报告保留。',
+               '- 市场规则和中标系数的研究依据见仓库research中的MILP数学规格和中标率敏感性方案；报价曲线与半岛范围匹配仍为研究待确认项。']
+    files={'monthly.csv':_monthly_csv(months,power),'annual.csv':_annual_csv(annual,power),
+           'hourly.csv':_hourly_csv(data['hours']),'quarterly_hourly.csv':_quarterly_csv(data['quarters']),
+           'monthly_hourly_heatmap.csv':_monthly_hourly_csv(data['monthly_hours']),
+           'rolling_12m.csv':_rolling_12m_csv(rolling,reference),'monthly_market_shares.csv':_shares(months)[1]}
+    for name,content in files.items():
+        (output_dir/name).write_text(content,encoding='utf-8-sig')
+    evidence=dict(report_version='1.0',run_dir=str(run_dir.resolve()),baseline_run_dir=str(baseline_run_dir.resolve()) if baseline_run_dir else None,
+                  mode=mode,config=config,formal_start=str(run['start']),formal_end=str(run['end']),
+                  award_rate_source=award,input_hash=manifest.get('input_hash'),
+                  valid_qh=data['valid_qh'],total_qh=data['total_qh'],missing_result_qh=data['missing_result_qh'],
+                  total_eur=total if valid_months else None,total_efc=data['total_efc'] if data['efc_known_qh'] else None,
+                  sources=manifest.get('source_files',[]))
+    (output_dir/'report_manifest.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2),encoding='utf-8')
+    path=output_dir/'结果展示.md';path.write_text('\n'.join(report)+'\n',encoding='utf-8')
+    return path
 
 
-def _monthly_csv(months: dict, discharge_mw: float, years: list[int]) -> str:
-    import csv
-    from io import StringIO
-    stream = StringIO()
-    writer = csv.writer(stream)
-    writer.writerow(['month', *[f'{m}_kEUR' for m in MARKETS], 'total_kEUR',
-                     *[f'{m}_kEUR_per_MW' for m in MARKETS], 'total_kEUR_per_MW',
-                     'valid_qh', 'total_qh', 'settlement_coverage', 'efc'])
-    for month, item in sorted(months.items()):
-        values = item['cash_eur']
-        total = sum(values.values())
-        writer.writerow([month, *[f'{values[m] / 1000:.2f}' for m in MARKETS], f'{total / 1000:.2f}',
-                         *[f'{values[m] / (1000 * discharge_mw):.2f}' for m in MARKETS],
-                         f'{total / (1000 * discharge_mw):.2f}', item['valid_qh'], item['total_qh'],
-                         item['valid_qh'] / item['total_qh'] if item['total_qh'] else 0,
-                         item['efc']])
-    return stream.getvalue().replace('\r\n', '\n')
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-dir',type=Path,required=True)
+    parser.add_argument('--output-dir',type=Path,required=True)
+    parser.add_argument('--baseline-run-dir',type=Path,help='same-config full_fill run, including manifest and solver input')
+    parser.add_argument('--v1-monthly-csv',type=Path,help='deprecated: supply --baseline-run-dir for configuration verification')
+    args=parser.parse_args()
+    print(build(args.run_dir,args.output_dir,args.v1_monthly_csv,args.baseline_run_dir))
 
 
-def _annual_csv(annual: dict, discharge_mw: float) -> str:
-    import csv
-    from io import StringIO
-    stream = StringIO()
-    writer = csv.writer(stream)
-    writer.writerow(['year', *[f'{m}_kEUR' for m in MARKETS], 'total_kEUR',
-                     *[f'{m}_kEUR_per_MW' for m in MARKETS], 'total_kEUR_per_MW',
-                     'valid_qh', 'total_qh', 'settlement_coverage', 'complete_days', 'total_days', 'efc'])
-    for year, item in sorted(annual.items()):
-        values = item['cash_eur']
-        total = sum(values.values())
-        writer.writerow([year, *[f'{values[m] / 1000:.2f}' for m in MARKETS], f'{total / 1000:.2f}',
-                         *[f'{values[m] / (1000 * discharge_mw):.2f}' for m in MARKETS],
-                         f'{total / (1000 * discharge_mw):.2f}', item['valid_qh'], item['total_qh'],
-                         item['valid_qh'] / item['total_qh'] if item['total_qh'] else 0,
-                         item['complete_days'], item['total_days'],
-                         item['efc']])
-    return stream.getvalue().replace('\r\n', '\n')
-
-
-def _hourly_csv(rows: list[dict]) -> str:
-    import csv
-    from io import StringIO
-    stream = StringIO()
-    writer = csv.writer(stream)
-    writer.writerow(['hour', *[f'{m}_kEUR_per_MW' for m in MARKETS],
-                     'total_kEUR_per_MW', 'sample_hours'])
-    for row in rows:
-        vals = row['components']
-        writer.writerow([row['hour'], *[f'{vals[m]:.2f}' for m in MARKETS],
-                         f'{sum(vals.values()):.2f}', row['count']])
-    return stream.getvalue().replace('\r\n', '\n')
-
-
-def _quarterly_csv(quarters: dict) -> str:
-    import csv
-    from io import StringIO
-    stream = StringIO()
-    writer = csv.writer(stream)
-    writer.writerow(['quarter', 'hour', *[f'{m}_kEUR_per_MW' for m in MARKETS],
-                     'total_kEUR_per_MW', 'sample_hours'])
-    for quarter, rows in quarters.items():
-        for row in rows:
-            vals = row['components']
-            writer.writerow([quarter, row['hour'], *[f'{vals[m]:.2f}' for m in MARKETS],
-                             f'{sum(vals.values()):.2f}', row['count']])
-    return stream.getvalue().replace('\r\n', '\n')
-
-
-def _monthly_hourly_csv(monthly_hours: dict[str, list[dict]]) -> str:
-    import csv
-    from io import StringIO
-    stream = StringIO()
-    writer = csv.writer(stream)
-    writer.writerow(['month', 'hour', 'average_total_kEUR_per_MW', 'sample_hours'])
-    for month, rows in sorted(monthly_hours.items()):
-        for row in rows:
-            value = f'{row["total_kEUR_per_MW"]:.2f}' if row['count'] else ''
-            writer.writerow([month, row['hour'], value, row['count']])
-    return stream.getvalue().replace('\r\n', '\n')
-
-
-def _rolling_12m_csv(rows: list[dict], v1_rows: list[dict] | None = None) -> str:
-    import csv
-    from io import StringIO
-    stream = StringIO()
-    writer = csv.writer(stream)
-    v1_by_month = {r['month']: r for r in (v1_rows or [])}
-    writer.writerow(['month', 'window_start_month', 'window_end_month',
-                     'rolling_total_kEUR', 'rolling_total_kEUR_per_MW',
-                     'v1_100pct_kEUR_per_MW', 'v1_minus_coefficient_kEUR_per_MW'])
-    for row in rows:
-        v1_value = v1_by_month.get(row['month'], {}).get('kEUR_per_MW')
-        writer.writerow([row['month'], row['window_start'], row['window_end'],
-                         f'{row["kEUR"]:.2f}', f'{row["kEUR_per_MW"]:.2f}',
-                         f'{v1_value:.2f}' if v1_value is not None else '',
-                         f'{v1_value-row["kEUR_per_MW"]:.2f}' if v1_value is not None else ''])
-    return stream.getvalue().replace('\r\n', '\n')
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--run-dir', type=Path, required=True, help='completed MILP output directory')
-    parser.add_argument('--output-dir', type=Path, required=True, help='new presentation output directory')
-    parser.add_argument('--v1-monthly-csv', type=Path, help='optional V1 100%%-award monthly.csv for rolling comparison')
-    args = parser.parse_args()
-    print(build(args.run_dir, args.output_dir, args.v1_monthly_csv))
-
-
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
