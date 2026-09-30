@@ -1,0 +1,44 @@
+{
+  "generator_sha256": "1d0a5ede036139d916056b4747235dc6983478e754bc53663aacbab14b2d2e14",
+  "checks": [
+    {
+      "report": "2h_optimize",
+      "total_eur": 59305355.3678857,
+      "delta_vs_summary_eur": -2.2351741790771484e-08,
+      "efc": 894.757830042881,
+      "efc_delta": -3.979039320256561e-12,
+      "max_month_market_rounding_error_kEUR": 0.004982490355473601,
+      "svg_count": 9,
+      "csv_count": 7,
+      "missing_links": [],
+      "valid_qh": 52438,
+      "total_qh": 58364
+    },
+    {
+      "report": "4h_full_fill",
+      "total_eur": 88242153.81660394,
+      "delta_vs_summary_eur": 2.9802322387695312e-08,
+      "efc": 628.2674801179404,
+      "efc_delta": -6.366462912410498e-12,
+      "max_month_market_rounding_error_kEUR": 0.004990000000134387,
+      "svg_count": 9,
+      "csv_count": 7,
+      "missing_links": [],
+      "valid_qh": 52438,
+      "total_qh": 58364
+    },
+    {
+      "report": "4h_optimize",
+      "total_eur": 71175417.31246938,
+      "delta_vs_summary_eur": -4.470348358154297e-08,
+      "efc": 686.3276348364367,
+      "efc_delta": -6.707523425575346e-12,
+      "max_month_market_rounding_error_kEUR": 0.004837776529484472,
+      "svg_count": 9,
+      "csv_count": 7,
+      "missing_links": [],
+      "valid_qh": 52438,
+      "total_qh": 58364
+    }
+  ]
+}
