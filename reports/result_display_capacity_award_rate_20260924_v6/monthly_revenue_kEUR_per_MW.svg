@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Segoe UI,Arial,sans-serif;fill:#263238}.tick{font-size:13px}.xlabel{font-size:12px}.legend{font-size:13px}.title{font-size:21px;font-weight:600}.axis{font-size:14px}</style>
+<text class="title" x="750.0" y="30" text-anchor="middle">月度单位功率收益分解</text>
+<line x1="100" y1="438.00" x2="1472" y2="438.00" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="442.00" text-anchor="end">-20</text>
+<line x1="100" y1="401.60" x2="1472" y2="401.60" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="405.60" text-anchor="end">-10</text>
+<line x1="100" y1="365.20" x2="1472" y2="365.20" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="369.20" text-anchor="end">0</text>
+<line x1="100" y1="328.80" x2="1472" y2="328.80" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="332.80" text-anchor="end">10</text>
+<line x1="100" y1="292.40" x2="1472" y2="292.40" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="296.40" text-anchor="end">20</text>
+<line x1="100" y1="256.00" x2="1472" y2="256.00" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="260.00" text-anchor="end">30</text>
+<line x1="100" y1="219.60" x2="1472" y2="219.60" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="223.60" text-anchor="end">40</text>
+<line x1="100" y1="183.20" x2="1472" y2="183.20" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="187.20" text-anchor="end">50</text>
+<line x1="100" y1="146.80" x2="1472" y2="146.80" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="150.80" text-anchor="end">60</text>
+<line x1="100" y1="110.40" x2="1472" y2="110.40" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="114.40" text-anchor="end">70</text>
+<line x1="100" y1="74.00" x2="1472" y2="74.00" stroke="#d9dfe5"/>
+<text class="tick" x="90" y="78.00" text-anchor="end">80</text>
+<line x1="100" y1="365.20" x2="1472" y2="365.20" stroke="#37474f" stroke-width="1.4"/>
+<text class="axis" x="20" y="256.0" text-anchor="middle" transform="rotate(-90 20 256.0)">收入（kEUR / MW）</text>
+<rect x="109.60" y="328.51" width="49.39" height="36.69" fill="#4472C4"/>
+<rect x="109.60" y="365.20" width="49.39" height="11.43" fill="#ED7D31"/>
+<rect x="109.60" y="244.50" width="49.39" height="84.01" fill="#70AD47"/>
+<rect x="109.60" y="195.32" width="49.39" height="49.18" fill="#A5A5A5"/>
+<rect x="109.60" y="168.02" width="49.39" height="27.30" fill="#FFC000"/>
+<rect x="109.60" y="376.63" width="49.39" height="5.82" fill="#8064A2"/>
+<text class="xlabel" x="134.30" y="461" text-anchor="middle">2025/01</text>
+<rect x="178.20" y="298.04" width="49.39" height="67.16" fill="#4472C4"/>
+<rect x="178.20" y="365.20" width="49.39" height="34.51" fill="#ED7D31"/>
+<rect x="178.20" y="192.52" width="49.39" height="105.52" fill="#70AD47"/>
+<rect x="178.20" y="148.51" width="49.39" height="44.01" fill="#A5A5A5"/>
+<rect x="178.20" y="125.25" width="49.39" height="23.26" fill="#FFC000"/>
+<rect x="178.20" y="399.71" width="49.39" height="6.30" fill="#8064A2"/>
+<text class="xlabel" x="202.90" y="461" text-anchor="middle">2025/02</text>
+<rect x="246.80" y="328.80" width="49.39" height="36.40" fill="#4472C4"/>
+<rect x="246.80" y="324.14" width="49.39" height="4.66" fill="#ED7D31"/>
+<rect x="246.80" y="267.98" width="49.39" height="56.17" fill="#70AD47"/>
+<rect x="246.80" y="210.43" width="49.39" height="57.55" fill="#A5A5A5"/>
+<rect x="246.80" y="183.49" width="49.39" height="26.94" fill="#FFC000"/>
+<rect x="246.80" y="177.89" width="49.39" height="5.61" fill="#8064A2"/>
+<text class="xlabel" x="271.50" y="461" text-anchor="middle">2025/03</text>
+<rect x="315.40" y="335.83" width="49.39" height="29.37" fill="#4472C4"/>
+<rect x="315.40" y="331.28" width="49.39" height="4.55" fill="#ED7D31"/>
+<rect x="315.40" y="307.87" width="49.39" height="23.41" fill="#70AD47"/>
+<rect x="315.40" y="281.23" width="49.39" height="26.64" fill="#A5A5A5"/>
+<rect x="315.40" y="264.55" width="49.39" height="16.67" fill="#FFC000"/>
+<rect x="315.40" y="258.18" width="49.39" height="6.37" fill="#8064A2"/>
+<text class="xlabel" x="340.10" y="461" text-anchor="middle">2025/04</text>
+<rect x="384.00" y="345.00" width="49.39" height="20.20" fill="#4472C4"/>
+<rect x="384.00" y="327.71" width="49.39" height="17.29" fill="#ED7D31"/>
+<rect x="384.00" y="317.04" width="49.39" height="10.67" fill="#70AD47"/>
+<rect x="384.00" y="298.73" width="49.39" height="18.31" fill="#A5A5A5"/>
+<rect x="384.00" y="288.14" width="49.39" height="10.59" fill="#FFC000"/>
+<rect x="384.00" y="283.12" width="49.39" height="5.02" fill="#8064A2"/>
+<text class="xlabel" x="408.70" y="461" text-anchor="middle">2025/05</text>
+<rect x="452.60" y="312.86" width="49.39" height="52.34" fill="#4472C4"/>
+<rect x="452.60" y="365.20" width="49.39" height="4.70" fill="#ED7D31"/>
+<rect x="452.60" y="288.21" width="49.39" height="24.64" fill="#70AD47"/>
+<rect x="452.60" y="273.07" width="49.39" height="15.14" fill="#A5A5A5"/>
+<rect x="452.60" y="247.56" width="49.39" height="25.52" fill="#FFC000"/>
+<rect x="452.60" y="369.90" width="49.39" height="2.88" fill="#8064A2"/>
+<text class="xlabel" x="477.30" y="461" text-anchor="middle">2025/06</text>
+<rect x="521.20" y="334.44" width="49.39" height="30.76" fill="#4472C4"/>
+<rect x="521.20" y="324.94" width="49.39" height="9.50" fill="#ED7D31"/>
+<rect x="521.20" y="281.59" width="49.39" height="43.35" fill="#70AD47"/>
+<rect x="521.20" y="263.57" width="49.39" height="18.02" fill="#A5A5A5"/>
+<rect x="521.20" y="248.54" width="49.39" height="15.03" fill="#FFC000"/>
+<rect x="521.20" y="365.20" width="49.39" height="2.73" fill="#8064A2"/>
+<text class="xlabel" x="545.90" y="461" text-anchor="middle">2025/07</text>
+<rect x="589.80" y="319.12" width="49.39" height="46.08" fill="#4472C4"/>
+<rect x="589.80" y="365.20" width="49.39" height="3.39" fill="#ED7D31"/>
+<rect x="589.80" y="267.76" width="49.39" height="51.36" fill="#70AD47"/>
+<rect x="589.80" y="238.89" width="49.39" height="28.87" fill="#A5A5A5"/>
+<rect x="589.80" y="219.53" width="49.39" height="19.36" fill="#FFC000"/>
+<rect x="589.80" y="368.59" width="49.39" height="3.20" fill="#8064A2"/>
+<text class="xlabel" x="614.50" y="461" text-anchor="middle">2025/08</text>
+<rect x="658.40" y="325.27" width="49.39" height="39.93" fill="#4472C4"/>
+<rect x="658.40" y="316.02" width="49.39" height="9.25" fill="#ED7D31"/>
+<rect x="658.40" y="267.47" width="49.39" height="48.56" fill="#70AD47"/>
+<rect x="658.40" y="223.42" width="49.39" height="44.04" fill="#A5A5A5"/>
+<rect x="658.40" y="205.00" width="49.39" height="18.42" fill="#FFC000"/>
+<rect x="658.40" y="204.64" width="49.39" height="0.70" fill="#8064A2"/>
+<text class="xlabel" x="683.10" y="461" text-anchor="middle">2025/09</text>
+<rect x="727.00" y="329.31" width="49.39" height="35.89" fill="#4472C4"/>
+<rect x="727.00" y="365.20" width="49.39" height="4.51" fill="#ED7D31"/>
+<rect x="727.00" y="291.20" width="49.39" height="38.11" fill="#70AD47"/>
+<rect x="727.00" y="273.95" width="49.39" height="17.25" fill="#A5A5A5"/>
+<rect x="727.00" y="256.87" width="49.39" height="17.07" fill="#FFC000"/>
+<rect x="727.00" y="369.71" width="49.39" height="0.70" fill="#8064A2"/>
+<text class="xlabel" x="751.70" y="461" text-anchor="middle">2025/10</text>
+<rect x="795.60" y="335.28" width="49.39" height="29.92" fill="#4472C4"/>
+<rect x="795.60" y="331.35" width="49.39" height="3.93" fill="#ED7D31"/>
+<rect x="795.60" y="327.20" width="49.39" height="4.15" fill="#70AD47"/>
+<rect x="795.60" y="322.03" width="49.39" height="5.17" fill="#A5A5A5"/>
+<text class="xlabel" x="820.30" y="461" text-anchor="middle">2025/11</text>
+<rect x="864.20" y="329.67" width="49.39" height="35.53" fill="#4472C4"/>
+<rect x="864.20" y="365.20" width="49.39" height="5.53" fill="#ED7D31"/>
+<rect x="864.20" y="328.04" width="49.39" height="1.64" fill="#70AD47"/>
+<rect x="864.20" y="324.87" width="49.39" height="3.17" fill="#A5A5A5"/>
+<text class="xlabel" x="888.90" y="461" text-anchor="middle">2025/12</text>
+<rect x="932.80" y="332.66" width="49.39" height="32.54" fill="#4472C4"/>
+<rect x="932.80" y="329.86" width="49.39" height="2.80" fill="#ED7D31"/>
+<rect x="932.80" y="300.84" width="49.39" height="29.01" fill="#70AD47"/>
+<rect x="932.80" y="288.18" width="49.39" height="12.67" fill="#A5A5A5"/>
+<rect x="932.80" y="265.61" width="49.39" height="22.57" fill="#FFC000"/>
+<rect x="932.80" y="260.26" width="49.39" height="5.35" fill="#8064A2"/>
+<text class="xlabel" x="957.50" y="461" text-anchor="middle">2026/01</text>
+<rect x="1001.40" y="347.00" width="49.39" height="18.20" fill="#4472C4"/>
+<rect x="1001.40" y="338.88" width="49.39" height="8.12" fill="#ED7D31"/>
+<rect x="1001.40" y="319.48" width="49.39" height="19.40" fill="#70AD47"/>
+<rect x="1001.40" y="293.20" width="49.39" height="26.28" fill="#A5A5A5"/>
+<rect x="1001.40" y="281.92" width="49.39" height="11.28" fill="#FFC000"/>
+<rect x="1001.40" y="273.25" width="49.39" height="8.66" fill="#8064A2"/>
+<text class="xlabel" x="1026.10" y="461" text-anchor="middle">2026/02</text>
+<rect x="1070.00" y="336.08" width="49.39" height="29.12" fill="#4472C4"/>
+<rect x="1070.00" y="311.62" width="49.39" height="24.46" fill="#ED7D31"/>
+<rect x="1070.00" y="292.80" width="49.39" height="18.82" fill="#70AD47"/>
+<rect x="1070.00" y="278.57" width="49.39" height="14.23" fill="#A5A5A5"/>
+<rect x="1070.00" y="264.59" width="49.39" height="13.98" fill="#FFC000"/>
+<rect x="1070.00" y="258.18" width="49.39" height="6.41" fill="#8064A2"/>
+<text class="xlabel" x="1094.70" y="461" text-anchor="middle">2026/03</text>
+<rect x="1138.60" y="365.20" width="49.39" height="5.35" fill="#4472C4"/>
+<rect x="1138.60" y="315.95" width="49.39" height="49.25" fill="#ED7D31"/>
+<rect x="1138.60" y="301.39" width="49.39" height="14.56" fill="#70AD47"/>
+<rect x="1138.60" y="278.90" width="49.39" height="22.50" fill="#A5A5A5"/>
+<rect x="1138.60" y="261.35" width="49.39" height="17.54" fill="#FFC000"/>
+<rect x="1138.60" y="260.59" width="49.39" height="0.76" fill="#8064A2"/>
+<text class="xlabel" x="1163.30" y="461" text-anchor="middle">2026/04</text>
+<rect x="1207.20" y="348.67" width="49.39" height="16.53" fill="#4472C4"/>
+<rect x="1207.20" y="318.68" width="49.39" height="29.99" fill="#ED7D31"/>
+<rect x="1207.20" y="293.82" width="49.39" height="24.86" fill="#70AD47"/>
+<rect x="1207.20" y="274.89" width="49.39" height="18.93" fill="#A5A5A5"/>
+<rect x="1207.20" y="260.08" width="49.39" height="14.81" fill="#FFC000"/>
+<rect x="1207.20" y="365.20" width="49.39" height="2.00" fill="#8064A2"/>
+<text class="xlabel" x="1231.90" y="461" text-anchor="middle">2026/05</text>
+<rect x="1275.80" y="343.40" width="49.39" height="21.80" fill="#4472C4"/>
+<rect x="1275.80" y="320.50" width="49.39" height="22.90" fill="#ED7D31"/>
+<rect x="1275.80" y="293.02" width="49.39" height="27.48" fill="#70AD47"/>
+<rect x="1275.80" y="283.77" width="49.39" height="9.25" fill="#A5A5A5"/>
+<rect x="1275.80" y="263.35" width="49.39" height="20.42" fill="#FFC000"/>
+<rect x="1275.80" y="365.20" width="49.39" height="2.18" fill="#8064A2"/>
+<text class="xlabel" x="1300.50" y="461" text-anchor="middle">2026/06</text>
+<rect x="1344.40" y="365.20" width="49.39" height="15.72" fill="#4472C4"/>
+<rect x="1344.40" y="309.11" width="49.39" height="56.09" fill="#ED7D31"/>
+<rect x="1344.40" y="302.30" width="49.39" height="6.81" fill="#70AD47"/>
+<rect x="1344.40" y="300.12" width="49.39" height="2.18" fill="#A5A5A5"/>
+<rect x="1344.40" y="297.10" width="49.39" height="3.02" fill="#FFC000"/>
+<text class="xlabel" x="1369.10" y="461" text-anchor="middle">2026/07</text>
+<rect x="1413.00" y="342.20" width="49.39" height="23.00" fill="#4472C4"/>
+<rect x="1413.00" y="335.68" width="49.39" height="6.52" fill="#ED7D31"/>
+<rect x="1413.00" y="328.76" width="49.39" height="6.92" fill="#70AD47"/>
+<rect x="1413.00" y="326.25" width="49.39" height="2.51" fill="#A5A5A5"/>
+<rect x="1413.00" y="325.67" width="49.39" height="0.70" fill="#FFC000"/>
+<rect x="1413.00" y="365.20" width="49.39" height="0.70" fill="#8064A2"/>
+<text class="xlabel" x="1437.70" y="461" text-anchor="middle">2026/08</text>
+<rect x="100.0" y="514" width="14" height="14" fill="#4472C4"/>
+<text class="legend" x="120.0" y="526">DA电能</text>
+<rect x="328.7" y="514" width="14" height="14" fill="#ED7D31"/>
+<text class="legend" x="348.7" y="526">ID电能</text>
+<rect x="557.3" y="514" width="14" height="14" fill="#70AD47"/>
+<text class="legend" x="577.3" y="526">aFRR容量上调</text>
+<rect x="786.0" y="514" width="14" height="14" fill="#A5A5A5"/>
+<text class="legend" x="806.0" y="526">aFRR容量下调</text>
+<rect x="1014.7" y="514" width="14" height="14" fill="#FFC000"/>
+<text class="legend" x="1034.7" y="526">aFRR激活上调</text>
+<rect x="1243.3" y="514" width="14" height="14" fill="#8064A2"/>
+<text class="legend" x="1263.3" y="526">aFRR激活下调</text>
+</svg>

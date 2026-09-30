@@ -1,0 +1,1016 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1580" height="776" viewBox="0 0 1580 776">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Segoe UI,Arial,sans-serif;fill:#263238}.tick{font-size:12px}.cell{font-size:10px}.title{font-size:21px;font-weight:600}.axis{font-size:14px}</style>
+<text class="title" x="790.0" y="32" text-anchor="middle">按月和小时的平均总收益热力图</text>
+<text class="tick" x="142.1" y="70" text-anchor="middle">0</text>
+<text class="tick" x="202.2" y="70" text-anchor="middle">1</text>
+<text class="tick" x="262.4" y="70" text-anchor="middle">2</text>
+<text class="tick" x="322.6" y="70" text-anchor="middle">3</text>
+<text class="tick" x="382.7" y="70" text-anchor="middle">4</text>
+<text class="tick" x="442.9" y="70" text-anchor="middle">5</text>
+<text class="tick" x="503.1" y="70" text-anchor="middle">6</text>
+<text class="tick" x="563.2" y="70" text-anchor="middle">7</text>
+<text class="tick" x="623.4" y="70" text-anchor="middle">8</text>
+<text class="tick" x="683.6" y="70" text-anchor="middle">9</text>
+<text class="tick" x="743.8" y="70" text-anchor="middle">10</text>
+<text class="tick" x="803.9" y="70" text-anchor="middle">11</text>
+<text class="tick" x="864.1" y="70" text-anchor="middle">12</text>
+<text class="tick" x="924.2" y="70" text-anchor="middle">13</text>
+<text class="tick" x="984.4" y="70" text-anchor="middle">14</text>
+<text class="tick" x="1044.6" y="70" text-anchor="middle">15</text>
+<text class="tick" x="1104.7" y="70" text-anchor="middle">16</text>
+<text class="tick" x="1164.9" y="70" text-anchor="middle">17</text>
+<text class="tick" x="1225.1" y="70" text-anchor="middle">18</text>
+<text class="tick" x="1285.2" y="70" text-anchor="middle">19</text>
+<text class="tick" x="1345.4" y="70" text-anchor="middle">20</text>
+<text class="tick" x="1405.6" y="70" text-anchor="middle">21</text>
+<text class="tick" x="1465.7" y="70" text-anchor="middle">22</text>
+<text class="tick" x="1525.9" y="70" text-anchor="middle">23</text>
+<text class="tick" x="102" y="102.4" text-anchor="end">2025/01</text>
+<rect x="112.5" y="82.5" width="59.2" height="29.0" fill="#bccee0" stroke="white"><title>2025-01 00:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="142.1" y="102.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="172.7" y="82.5" width="59.2" height="29.0" fill="#c2d2e3" stroke="white"><title>2025-01 01:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="202.2" y="102.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="232.8" y="82.5" width="59.2" height="29.0" fill="#bfd0e1" stroke="white"><title>2025-01 02:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="262.4" y="102.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="293.0" y="82.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2025-01 03:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="322.6" y="102.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="353.2" y="82.5" width="59.2" height="29.0" fill="#c4d4e4" stroke="white"><title>2025-01 04:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="382.7" y="102.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="413.3" y="82.5" width="59.2" height="29.0" fill="#bfd0e1" stroke="white"><title>2025-01 05:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="442.9" y="102.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="473.5" y="82.5" width="59.2" height="29.0" fill="#b0c5da" stroke="white"><title>2025-01 06:00，平均 0.07 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="503.1" y="102.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="533.7" y="82.5" width="59.2" height="29.0" fill="#b3c7dc" stroke="white"><title>2025-01 07:00，平均 0.07 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="563.2" y="102.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="593.8" y="82.5" width="59.2" height="29.0" fill="#b4c8dc" stroke="white"><title>2025-01 08:00，平均 0.07 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="623.4" y="102.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="654.0" y="82.5" width="59.2" height="29.0" fill="#5b88b3" stroke="white"><title>2025-01 09:00，平均 0.16 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="683.6" y="102.1" text-anchor="middle" fill="white">0.16</text>
+<rect x="714.2" y="82.5" width="59.2" height="29.0" fill="#a2bcd4" stroke="white"><title>2025-01 10:00，平均 0.09 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="743.8" y="102.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="774.3" y="82.5" width="59.2" height="29.0" fill="#c5d5e4" stroke="white"><title>2025-01 11:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="803.9" y="102.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="834.5" y="82.5" width="59.2" height="29.0" fill="#ecf1f6" stroke="white"><title>2025-01 12:00，平均 0.01 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="864.1" y="102.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="894.7" y="82.5" width="59.2" height="29.0" fill="#dee7ef" stroke="white"><title>2025-01 13:00，平均 0.03 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="924.2" y="102.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="954.8" y="82.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2025-01 14:00，平均 0.02 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="984.4" y="102.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="82.5" width="59.2" height="29.0" fill="#dee7ef" stroke="white"><title>2025-01 15:00，平均 0.03 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1044.6" y="102.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1075.2" y="82.5" width="59.2" height="29.0" fill="#8aaac9" stroke="white"><title>2025-01 16:00，平均 0.11 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1104.7" y="102.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1135.3" y="82.5" width="59.2" height="29.0" fill="#9cb7d1" stroke="white"><title>2025-01 17:00，平均 0.09 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1164.9" y="102.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1195.5" y="82.5" width="59.2" height="29.0" fill="#90aecb" stroke="white"><title>2025-01 18:00，平均 0.11 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1225.1" y="102.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1255.7" y="82.5" width="59.2" height="29.0" fill="#81a4c5" stroke="white"><title>2025-01 19:00，平均 0.12 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1285.2" y="102.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="1315.8" y="82.5" width="59.2" height="29.0" fill="#90aecc" stroke="white"><title>2025-01 20:00，平均 0.11 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1345.4" y="102.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1376.0" y="82.5" width="59.2" height="29.0" fill="#a6bed6" stroke="white"><title>2025-01 21:00，平均 0.08 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1405.6" y="102.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1436.2" y="82.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-01 22:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1465.7" y="102.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1496.3" y="82.5" width="59.2" height="29.0" fill="#b9ccde" stroke="white"><title>2025-01 23:00，平均 0.06 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1525.9" y="102.1" text-anchor="middle" fill="#263238">0.06</text>
+<text class="tick" x="102" y="132.4" text-anchor="end">2025/02</text>
+<rect x="112.5" y="112.5" width="59.2" height="29.0" fill="#aac1d8" stroke="white"><title>2025-02 00:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="142.1" y="132.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="172.7" y="112.5" width="59.2" height="29.0" fill="#b4c9dc" stroke="white"><title>2025-02 01:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="202.2" y="132.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="232.8" y="112.5" width="59.2" height="29.0" fill="#b8cbde" stroke="white"><title>2025-02 02:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="132.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="293.0" y="112.5" width="59.2" height="29.0" fill="#b0c6da" stroke="white"><title>2025-02 03:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="322.6" y="132.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="353.2" y="112.5" width="59.2" height="29.0" fill="#b3c8dc" stroke="white"><title>2025-02 04:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="382.7" y="132.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="413.3" y="112.5" width="59.2" height="29.0" fill="#b3c8dc" stroke="white"><title>2025-02 05:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="132.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="473.5" y="112.5" width="59.2" height="29.0" fill="#a7bfd6" stroke="white"><title>2025-02 06:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="503.1" y="132.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="533.7" y="112.5" width="59.2" height="29.0" fill="#9fb9d2" stroke="white"><title>2025-02 07:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="563.2" y="132.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="593.8" y="112.5" width="59.2" height="29.0" fill="#81a4c5" stroke="white"><title>2025-02 08:00，平均 0.12 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="623.4" y="132.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="654.0" y="112.5" width="59.2" height="29.0" fill="#6690b8" stroke="white"><title>2025-02 09:00，平均 0.15 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="683.6" y="132.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="714.2" y="112.5" width="59.2" height="29.0" fill="#a5bdd5" stroke="white"><title>2025-02 10:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="743.8" y="132.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="774.3" y="112.5" width="59.2" height="29.0" fill="#b7cbde" stroke="white"><title>2025-02 11:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="132.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="834.5" y="112.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2025-02 12:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="864.1" y="132.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="112.5" width="59.2" height="29.0" fill="#e1e9f1" stroke="white"><title>2025-02 13:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="924.2" y="132.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="954.8" y="112.5" width="59.2" height="29.0" fill="#e5ecf2" stroke="white"><title>2025-02 14:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="984.4" y="132.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="112.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2025-02 15:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1044.6" y="132.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1075.2" y="112.5" width="59.2" height="29.0" fill="#97b4cf" stroke="white"><title>2025-02 16:00，平均 0.10 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1104.7" y="132.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1135.3" y="112.5" width="59.2" height="29.0" fill="#1c5a96" stroke="white"><title>2025-02 17:00，平均 0.23 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1164.9" y="132.1" text-anchor="middle" fill="white">0.23</text>
+<rect x="1195.5" y="112.5" width="59.2" height="29.0" fill="#8eadcb" stroke="white"><title>2025-02 18:00，平均 0.11 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1225.1" y="132.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1255.7" y="112.5" width="59.2" height="29.0" fill="#5986b2" stroke="white"><title>2025-02 19:00，平均 0.16 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1285.2" y="132.1" text-anchor="middle" fill="white">0.16</text>
+<rect x="1315.8" y="112.5" width="59.2" height="29.0" fill="#5a87b3" stroke="white"><title>2025-02 20:00，平均 0.16 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1345.4" y="132.1" text-anchor="middle" fill="white">0.16</text>
+<rect x="1376.0" y="112.5" width="59.2" height="29.0" fill="#91afcc" stroke="white"><title>2025-02 21:00，平均 0.11 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1405.6" y="132.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1436.2" y="112.5" width="59.2" height="29.0" fill="#b9ccde" stroke="white"><title>2025-02 22:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1465.7" y="132.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1496.3" y="112.5" width="59.2" height="29.0" fill="#abc2d8" stroke="white"><title>2025-02 23:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1525.9" y="132.1" text-anchor="middle" fill="#263238">0.08</text>
+<text class="tick" x="102" y="162.4" text-anchor="end">2025/03</text>
+<rect x="112.5" y="142.5" width="59.2" height="29.0" fill="#b2c7db" stroke="white"><title>2025-03 00:00，平均 0.07 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="142.1" y="162.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="172.7" y="142.5" width="59.2" height="29.0" fill="#bbcedf" stroke="white"><title>2025-03 01:00，平均 0.06 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="202.2" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="232.8" y="142.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2025-03 02:00，平均 0.06 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="262.4" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="293.0" y="142.5" width="59.2" height="29.0" fill="#bdcfe0" stroke="white"><title>2025-03 03:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="322.6" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="353.2" y="142.5" width="59.2" height="29.0" fill="#bed0e1" stroke="white"><title>2025-03 04:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="382.7" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="413.3" y="142.5" width="59.2" height="29.0" fill="#c4d4e4" stroke="white"><title>2025-03 05:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="442.9" y="162.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="473.5" y="142.5" width="59.2" height="29.0" fill="#b7cbde" stroke="white"><title>2025-03 06:00，平均 0.07 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="503.1" y="162.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="533.7" y="142.5" width="59.2" height="29.0" fill="#a9c0d7" stroke="white"><title>2025-03 07:00，平均 0.08 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="563.2" y="162.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="593.8" y="142.5" width="59.2" height="29.0" fill="#648eb7" stroke="white"><title>2025-03 08:00，平均 0.15 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="623.4" y="162.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="654.0" y="142.5" width="59.2" height="29.0" fill="#aac1d8" stroke="white"><title>2025-03 09:00，平均 0.08 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="683.6" y="162.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="714.2" y="142.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2025-03 10:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="743.8" y="162.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="774.3" y="142.5" width="59.2" height="29.0" fill="#ccdae7" stroke="white"><title>2025-03 11:00，平均 0.04 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="803.9" y="162.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="834.5" y="142.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2025-03 12:00，平均 0.02 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="864.1" y="162.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="142.5" width="59.2" height="29.0" fill="#dee7f0" stroke="white"><title>2025-03 13:00，平均 0.03 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="924.2" y="162.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="954.8" y="142.5" width="59.2" height="29.0" fill="#d8e3ed" stroke="white"><title>2025-03 14:00，平均 0.03 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="984.4" y="162.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1015.0" y="142.5" width="59.2" height="29.0" fill="#cad8e6" stroke="white"><title>2025-03 15:00，平均 0.05 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1044.6" y="162.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1075.2" y="142.5" width="59.2" height="29.0" fill="#b9ccde" stroke="white"><title>2025-03 16:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1104.7" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1135.3" y="142.5" width="59.2" height="29.0" fill="#7097bd" stroke="white"><title>2025-03 17:00，平均 0.14 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1164.9" y="162.1" text-anchor="middle" fill="white">0.14</text>
+<rect x="1195.5" y="142.5" width="59.2" height="29.0" fill="#84a6c6" stroke="white"><title>2025-03 18:00，平均 0.12 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1225.1" y="162.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="1255.7" y="142.5" width="59.2" height="29.0" fill="#7b9fc2" stroke="white"><title>2025-03 19:00，平均 0.13 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1285.2" y="162.1" text-anchor="middle" fill="white">0.13</text>
+<rect x="1315.8" y="142.5" width="59.2" height="29.0" fill="#88a9c8" stroke="white"><title>2025-03 20:00，平均 0.11 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1345.4" y="162.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1376.0" y="142.5" width="59.2" height="29.0" fill="#9cb7d1" stroke="white"><title>2025-03 21:00，平均 0.09 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1405.6" y="162.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1436.2" y="142.5" width="59.2" height="29.0" fill="#bfd0e1" stroke="white"><title>2025-03 22:00，平均 0.06 kEUR/MW，完整样本 31 小时</title></rect>
+<text class="cell" x="1465.7" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1496.3" y="142.5" width="59.2" height="29.0" fill="#bdcfe0" stroke="white"><title>2025-03 23:00，平均 0.06 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1525.9" y="162.1" text-anchor="middle" fill="#263238">0.06</text>
+<text class="tick" x="102" y="192.4" text-anchor="end">2025/04</text>
+<rect x="112.5" y="172.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-04 00:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="142.1" y="192.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="172.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2025-04 01:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="202.2" y="192.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="232.8" y="172.5" width="59.2" height="29.0" fill="#cedbe8" stroke="white"><title>2025-04 02:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="192.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="172.5" width="59.2" height="29.0" fill="#cddae8" stroke="white"><title>2025-04 03:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="322.6" y="192.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="172.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-04 04:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="382.7" y="192.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="413.3" y="172.5" width="59.2" height="29.0" fill="#ccdae7" stroke="white"><title>2025-04 05:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="192.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="172.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2025-04 06:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="503.1" y="192.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="533.7" y="172.5" width="59.2" height="29.0" fill="#b5c9dc" stroke="white"><title>2025-04 07:00，平均 0.07 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="563.2" y="192.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="593.8" y="172.5" width="59.2" height="29.0" fill="#99b5d0" stroke="white"><title>2025-04 08:00，平均 0.10 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="623.4" y="192.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="654.0" y="172.5" width="59.2" height="29.0" fill="#bfd1e1" stroke="white"><title>2025-04 09:00，平均 0.06 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="683.6" y="192.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="714.2" y="172.5" width="59.2" height="29.0" fill="#d9e4ed" stroke="white"><title>2025-04 10:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="743.8" y="192.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="172.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2025-04 11:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="803.9" y="192.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="834.5" y="172.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2025-04 12:00，平均 0.02 kEUR/MW，完整样本 23 小时</title></rect>
+<text class="cell" x="864.1" y="192.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="172.5" width="59.2" height="29.0" fill="#e9eff4" stroke="white"><title>2025-04 13:00，平均 0.01 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="924.2" y="192.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="172.5" width="59.2" height="29.0" fill="#e6edf3" stroke="white"><title>2025-04 14:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="984.4" y="192.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="172.5" width="59.2" height="29.0" fill="#e7eef4" stroke="white"><title>2025-04 15:00，平均 0.02 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="1044.6" y="192.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="172.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2025-04 16:00，平均 0.02 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="1104.7" y="192.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="172.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2025-04 17:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1164.9" y="192.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1195.5" y="172.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2025-04 18:00，平均 0.04 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1225.1" y="192.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1255.7" y="172.5" width="59.2" height="29.0" fill="#a4bcd5" stroke="white"><title>2025-04 19:00，平均 0.09 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1285.2" y="192.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1315.8" y="172.5" width="59.2" height="29.0" fill="#a0bad3" stroke="white"><title>2025-04 20:00，平均 0.09 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1345.4" y="192.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1376.0" y="172.5" width="59.2" height="29.0" fill="#97b3cf" stroke="white"><title>2025-04 21:00，平均 0.10 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1405.6" y="192.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1436.2" y="172.5" width="59.2" height="29.0" fill="#acc2d8" stroke="white"><title>2025-04 22:00，平均 0.08 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1465.7" y="192.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1496.3" y="172.5" width="59.2" height="29.0" fill="#afc4da" stroke="white"><title>2025-04 23:00，平均 0.07 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1525.9" y="192.1" text-anchor="middle" fill="#263238">0.07</text>
+<text class="tick" x="102" y="222.4" text-anchor="end">2025/05</text>
+<rect x="112.5" y="202.5" width="59.2" height="29.0" fill="#d0dde9" stroke="white"><title>2025-05 00:00，平均 0.04 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="142.1" y="222.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="172.7" y="202.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2025-05 01:00，平均 0.03 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="202.2" y="222.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="202.5" width="59.2" height="29.0" fill="#d8e2ec" stroke="white"><title>2025-05 02:00，平均 0.03 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="262.4" y="222.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="202.5" width="59.2" height="29.0" fill="#d9e3ed" stroke="white"><title>2025-05 03:00，平均 0.03 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="322.6" y="222.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="353.2" y="202.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2025-05 04:00，平均 0.03 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="382.7" y="222.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="413.3" y="202.5" width="59.2" height="29.0" fill="#d1deea" stroke="white"><title>2025-05 05:00，平均 0.04 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="442.9" y="222.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="202.5" width="59.2" height="29.0" fill="#c6d5e4" stroke="white"><title>2025-05 06:00，平均 0.05 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="503.1" y="222.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="202.5" width="59.2" height="29.0" fill="#b7cadd" stroke="white"><title>2025-05 07:00，平均 0.07 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="563.2" y="222.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="593.8" y="202.5" width="59.2" height="29.0" fill="#c5d5e4" stroke="white"><title>2025-05 08:00，平均 0.05 kEUR/MW，完整样本 23 小时</title></rect>
+<text class="cell" x="623.4" y="222.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="654.0" y="202.5" width="59.2" height="29.0" fill="#d1dde9" stroke="white"><title>2025-05 09:00，平均 0.04 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="683.6" y="222.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="714.2" y="202.5" width="59.2" height="29.0" fill="#e3eaf2" stroke="white"><title>2025-05 10:00，平均 0.02 kEUR/MW，完整样本 23 小时</title></rect>
+<text class="cell" x="743.8" y="222.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="774.3" y="202.5" width="59.2" height="29.0" fill="#ecf1f6" stroke="white"><title>2025-05 11:00，平均 0.01 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="803.9" y="222.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="834.5" y="202.5" width="59.2" height="29.0" fill="#e1e9f1" stroke="white"><title>2025-05 12:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="864.1" y="222.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="202.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2025-05 13:00，平均 0.01 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="924.2" y="222.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="202.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2025-05 14:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="984.4" y="222.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="202.5" width="59.2" height="29.0" fill="#dee7f0" stroke="white"><title>2025-05 15:00，平均 0.03 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1044.6" y="222.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1075.2" y="202.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2025-05 16:00，平均 0.02 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="1104.7" y="222.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="202.5" width="59.2" height="29.0" fill="#dfe8f0" stroke="white"><title>2025-05 17:00，平均 0.02 kEUR/MW，完整样本 24 小时</title></rect>
+<text class="cell" x="1164.9" y="222.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1195.5" y="202.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2025-05 18:00，平均 0.03 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1225.1" y="222.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1255.7" y="202.5" width="59.2" height="29.0" fill="#c4d4e3" stroke="white"><title>2025-05 19:00，平均 0.05 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1285.2" y="222.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1315.8" y="202.5" width="59.2" height="29.0" fill="#aac1d8" stroke="white"><title>2025-05 20:00，平均 0.08 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1345.4" y="222.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1376.0" y="202.5" width="59.2" height="29.0" fill="#a6bed6" stroke="white"><title>2025-05 21:00，平均 0.08 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1405.6" y="222.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1436.2" y="202.5" width="59.2" height="29.0" fill="#b3c7db" stroke="white"><title>2025-05 22:00，平均 0.07 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1465.7" y="222.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1496.3" y="202.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2025-05 23:00，平均 0.06 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1525.9" y="222.1" text-anchor="middle" fill="#263238">0.06</text>
+<text class="tick" x="102" y="252.4" text-anchor="end">2025/06</text>
+<rect x="112.5" y="232.5" width="59.2" height="29.0" fill="#c6d6e5" stroke="white"><title>2025-06 00:00，平均 0.05 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="142.1" y="252.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="232.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2025-06 01:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="202.2" y="252.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="232.8" y="232.5" width="59.2" height="29.0" fill="#d8e2ed" stroke="white"><title>2025-06 02:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="262.4" y="252.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="232.5" width="59.2" height="29.0" fill="#dee7ef" stroke="white"><title>2025-06 03:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="322.6" y="252.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="353.2" y="232.5" width="59.2" height="29.0" fill="#d9e3ed" stroke="white"><title>2025-06 04:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="382.7" y="252.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="413.3" y="232.5" width="59.2" height="29.0" fill="#dce5ee" stroke="white"><title>2025-06 05:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="442.9" y="252.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="473.5" y="232.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-06 06:00，平均 0.05 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="503.1" y="252.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="232.5" width="59.2" height="29.0" fill="#a7bfd6" stroke="white"><title>2025-06 07:00，平均 0.08 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="563.2" y="252.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="593.8" y="232.5" width="59.2" height="29.0" fill="#c2d2e2" stroke="white"><title>2025-06 08:00，平均 0.05 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="623.4" y="252.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="654.0" y="232.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2025-06 09:00，平均 0.06 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="683.6" y="252.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="714.2" y="232.5" width="59.2" height="29.0" fill="#d8e3ed" stroke="white"><title>2025-06 10:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="743.8" y="252.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="232.5" width="59.2" height="29.0" fill="#e7eef4" stroke="white"><title>2025-06 11:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="803.9" y="252.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="232.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2025-06 12:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="864.1" y="252.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="232.5" width="59.2" height="29.0" fill="#eff3f7" stroke="white"><title>2025-06 13:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="924.2" y="252.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="232.5" width="59.2" height="29.0" fill="#f1f5f8" stroke="white"><title>2025-06 14:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="984.4" y="252.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="232.5" width="59.2" height="29.0" fill="#f0f4f8" stroke="white"><title>2025-06 15:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1044.6" y="252.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1075.2" y="232.5" width="59.2" height="29.0" fill="#ecf1f6" stroke="white"><title>2025-06 16:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1104.7" y="252.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1135.3" y="232.5" width="59.2" height="29.0" fill="#d7e2ec" stroke="white"><title>2025-06 17:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1164.9" y="252.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1195.5" y="232.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2025-06 18:00，平均 0.05 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1225.1" y="252.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1255.7" y="232.5" width="59.2" height="29.0" fill="#b5c9dd" stroke="white"><title>2025-06 19:00，平均 0.07 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1285.2" y="252.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1315.8" y="232.5" width="59.2" height="29.0" fill="#a0bad3" stroke="white"><title>2025-06 20:00，平均 0.09 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1345.4" y="252.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1376.0" y="232.5" width="59.2" height="29.0" fill="#6790b9" stroke="white"><title>2025-06 21:00，平均 0.15 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1405.6" y="252.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="1436.2" y="232.5" width="59.2" height="29.0" fill="#7097bd" stroke="white"><title>2025-06 22:00，平均 0.14 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1465.7" y="252.1" text-anchor="middle" fill="white">0.14</text>
+<rect x="1496.3" y="232.5" width="59.2" height="29.0" fill="#9fb9d3" stroke="white"><title>2025-06 23:00，平均 0.09 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1525.9" y="252.1" text-anchor="middle" fill="#263238">0.09</text>
+<text class="tick" x="102" y="282.4" text-anchor="end">2025/07</text>
+<rect x="112.5" y="262.5" width="59.2" height="29.0" fill="#c3d3e3" stroke="white"><title>2025-07 00:00，平均 0.05 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="142.1" y="282.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="262.5" width="59.2" height="29.0" fill="#d8e3ed" stroke="white"><title>2025-07 01:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="202.2" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="262.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2025-07 02:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="262.4" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="262.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2025-07 03:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="322.6" y="282.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="262.5" width="59.2" height="29.0" fill="#dce5ee" stroke="white"><title>2025-07 04:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="382.7" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="413.3" y="262.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2025-07 05:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="442.9" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="473.5" y="262.5" width="59.2" height="29.0" fill="#c0d1e1" stroke="white"><title>2025-07 06:00，平均 0.06 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="503.1" y="282.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="533.7" y="262.5" width="59.2" height="29.0" fill="#80a3c4" stroke="white"><title>2025-07 07:00，平均 0.12 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="563.2" y="282.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="593.8" y="262.5" width="59.2" height="29.0" fill="#97b3cf" stroke="white"><title>2025-07 08:00，平均 0.10 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="623.4" y="282.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="654.0" y="262.5" width="59.2" height="29.0" fill="#bfd0e1" stroke="white"><title>2025-07 09:00，平均 0.06 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="683.6" y="282.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="714.2" y="262.5" width="59.2" height="29.0" fill="#dce5ef" stroke="white"><title>2025-07 10:00，平均 0.03 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="743.8" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="262.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2025-07 11:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="803.9" y="282.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="262.5" width="59.2" height="29.0" fill="#dae4ee" stroke="white"><title>2025-07 12:00，平均 0.03 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="864.1" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="894.7" y="262.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2025-07 13:00，平均 0.03 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="924.2" y="282.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="954.8" y="262.5" width="59.2" height="29.0" fill="#e3eaf2" stroke="white"><title>2025-07 14:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="984.4" y="282.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="262.5" width="59.2" height="29.0" fill="#e7eef4" stroke="white"><title>2025-07 15:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1044.6" y="282.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="262.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2025-07 16:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1104.7" y="282.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="262.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2025-07 17:00，平均 0.04 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1164.9" y="282.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1195.5" y="262.5" width="59.2" height="29.0" fill="#c4d4e3" stroke="white"><title>2025-07 18:00，平均 0.05 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1225.1" y="282.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1255.7" y="262.5" width="59.2" height="29.0" fill="#b3c7db" stroke="white"><title>2025-07 19:00，平均 0.07 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1285.2" y="282.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1315.8" y="262.5" width="59.2" height="29.0" fill="#a6bed6" stroke="white"><title>2025-07 20:00，平均 0.08 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1345.4" y="282.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1376.0" y="262.5" width="59.2" height="29.0" fill="#84a5c6" stroke="white"><title>2025-07 21:00，平均 0.12 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1405.6" y="282.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="1436.2" y="262.5" width="59.2" height="29.0" fill="#81a3c4" stroke="white"><title>2025-07 22:00，平均 0.12 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1465.7" y="282.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="1496.3" y="262.5" width="59.2" height="29.0" fill="#9cb7d1" stroke="white"><title>2025-07 23:00，平均 0.09 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1525.9" y="282.1" text-anchor="middle" fill="#263238">0.09</text>
+<text class="tick" x="102" y="312.4" text-anchor="end">2025/08</text>
+<rect x="112.5" y="292.5" width="59.2" height="29.0" fill="#cad8e6" stroke="white"><title>2025-08 00:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="142.1" y="312.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="292.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2025-08 01:00，平均 0.03 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="202.2" y="312.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="292.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2025-08 02:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="262.4" y="312.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="292.5" width="59.2" height="29.0" fill="#cedbe8" stroke="white"><title>2025-08 03:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="322.6" y="312.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="292.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2025-08 04:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="382.7" y="312.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="292.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2025-08 05:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="442.9" y="312.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="292.5" width="59.2" height="29.0" fill="#c3d3e3" stroke="white"><title>2025-08 06:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="503.1" y="312.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="292.5" width="59.2" height="29.0" fill="#86a7c7" stroke="white"><title>2025-08 07:00，平均 0.12 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="563.2" y="312.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="593.8" y="292.5" width="59.2" height="29.0" fill="#7298be" stroke="white"><title>2025-08 08:00，平均 0.14 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="623.4" y="312.1" text-anchor="middle" fill="white">0.14</text>
+<rect x="654.0" y="292.5" width="59.2" height="29.0" fill="#aec4da" stroke="white"><title>2025-08 09:00，平均 0.07 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="683.6" y="312.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="714.2" y="292.5" width="59.2" height="29.0" fill="#d3dfeb" stroke="white"><title>2025-08 10:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="743.8" y="312.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="774.3" y="292.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2025-08 11:00，平均 0.02 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="803.9" y="312.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="292.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2025-08 12:00，平均 0.02 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="864.1" y="312.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="292.5" width="59.2" height="29.0" fill="#e9eff4" stroke="white"><title>2025-08 13:00，平均 0.01 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="924.2" y="312.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="292.5" width="59.2" height="29.0" fill="#edf2f6" stroke="white"><title>2025-08 14:00，平均 0.01 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="984.4" y="312.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="292.5" width="59.2" height="29.0" fill="#eaf0f5" stroke="white"><title>2025-08 15:00，平均 0.01 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1044.6" y="312.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1075.2" y="292.5" width="59.2" height="29.0" fill="#d7e2ec" stroke="white"><title>2025-08 16:00，平均 0.03 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1104.7" y="312.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1135.3" y="292.5" width="59.2" height="29.0" fill="#cddae8" stroke="white"><title>2025-08 17:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1164.9" y="312.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1195.5" y="292.5" width="59.2" height="29.0" fill="#b7cbdd" stroke="white"><title>2025-08 18:00，平均 0.07 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1225.1" y="312.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1255.7" y="292.5" width="59.2" height="29.0" fill="#9eb8d2" stroke="white"><title>2025-08 19:00，平均 0.09 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1285.2" y="312.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1315.8" y="292.5" width="59.2" height="29.0" fill="#95b2ce" stroke="white"><title>2025-08 20:00，平均 0.10 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1345.4" y="312.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1376.0" y="292.5" width="59.2" height="29.0" fill="#7ca0c2" stroke="white"><title>2025-08 21:00，平均 0.13 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1405.6" y="312.1" text-anchor="middle" fill="white">0.13</text>
+<rect x="1436.2" y="292.5" width="59.2" height="29.0" fill="#8babc9" stroke="white"><title>2025-08 22:00，平均 0.11 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1465.7" y="312.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1496.3" y="292.5" width="59.2" height="29.0" fill="#aec4d9" stroke="white"><title>2025-08 23:00，平均 0.08 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1525.9" y="312.1" text-anchor="middle" fill="#263238">0.08</text>
+<text class="tick" x="102" y="342.4" text-anchor="end">2025/09</text>
+<rect x="112.5" y="322.5" width="59.2" height="29.0" fill="#ccdae7" stroke="white"><title>2025-09 00:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="142.1" y="342.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="172.7" y="322.5" width="59.2" height="29.0" fill="#cedbe8" stroke="white"><title>2025-09 01:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="202.2" y="342.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="232.8" y="322.5" width="59.2" height="29.0" fill="#cedce8" stroke="white"><title>2025-09 02:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="262.4" y="342.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="322.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-09 03:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="322.6" y="342.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="353.2" y="322.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-09 04:00，平均 0.04 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="382.7" y="342.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="322.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2025-09 05:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="442.9" y="342.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="473.5" y="322.5" width="59.2" height="29.0" fill="#bbcddf" stroke="white"><title>2025-09 06:00，平均 0.06 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="503.1" y="342.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="533.7" y="322.5" width="59.2" height="29.0" fill="#a5bed5" stroke="white"><title>2025-09 07:00，平均 0.08 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="563.2" y="342.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="593.8" y="322.5" width="59.2" height="29.0" fill="#7fa2c4" stroke="white"><title>2025-09 08:00，平均 0.12 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="623.4" y="342.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="654.0" y="322.5" width="59.2" height="29.0" fill="#a0bad3" stroke="white"><title>2025-09 09:00，平均 0.09 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="683.6" y="342.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="714.2" y="322.5" width="59.2" height="29.0" fill="#c9d7e6" stroke="white"><title>2025-09 10:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="743.8" y="342.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="774.3" y="322.5" width="59.2" height="29.0" fill="#d3dfea" stroke="white"><title>2025-09 11:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="803.9" y="342.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="834.5" y="322.5" width="59.2" height="29.0" fill="#dfe8f0" stroke="white"><title>2025-09 12:00，平均 0.02 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="864.1" y="342.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="322.5" width="59.2" height="29.0" fill="#e6edf3" stroke="white"><title>2025-09 13:00，平均 0.02 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="924.2" y="342.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="954.8" y="322.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2025-09 14:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="984.4" y="342.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="322.5" width="59.2" height="29.0" fill="#dfe8f0" stroke="white"><title>2025-09 15:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1044.6" y="342.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="322.5" width="59.2" height="29.0" fill="#e1e9f1" stroke="white"><title>2025-09 16:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1104.7" y="342.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="322.5" width="59.2" height="29.0" fill="#c8d7e5" stroke="white"><title>2025-09 17:00，平均 0.05 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1164.9" y="342.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1195.5" y="322.5" width="59.2" height="29.0" fill="#afc5da" stroke="white"><title>2025-09 18:00，平均 0.07 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1225.1" y="342.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1255.7" y="322.5" width="59.2" height="29.0" fill="#366da2" stroke="white"><title>2025-09 19:00，平均 0.20 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1285.2" y="342.1" text-anchor="middle" fill="white">0.20</text>
+<rect x="1315.8" y="322.5" width="59.2" height="29.0" fill="#6a93ba" stroke="white"><title>2025-09 20:00，平均 0.15 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1345.4" y="342.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="1376.0" y="322.5" width="59.2" height="29.0" fill="#7fa2c3" stroke="white"><title>2025-09 21:00，平均 0.12 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1405.6" y="342.1" text-anchor="middle" fill="white">0.12</text>
+<rect x="1436.2" y="322.5" width="59.2" height="29.0" fill="#95b2ce" stroke="white"><title>2025-09 22:00，平均 0.10 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1465.7" y="342.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1496.3" y="322.5" width="59.2" height="29.0" fill="#b5c9dd" stroke="white"><title>2025-09 23:00，平均 0.07 kEUR/MW，完整样本 30 小时</title></rect>
+<text class="cell" x="1525.9" y="342.1" text-anchor="middle" fill="#263238">0.07</text>
+<text class="tick" x="102" y="372.4" text-anchor="end">2025/10</text>
+<rect x="112.5" y="352.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2025-10 00:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="142.1" y="372.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="352.5" width="59.2" height="29.0" fill="#d4dfeb" stroke="white"><title>2025-10 01:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="202.2" y="372.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="232.8" y="352.5" width="59.2" height="29.0" fill="#d8e2ed" stroke="white"><title>2025-10 02:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="262.4" y="372.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="352.5" width="59.2" height="29.0" fill="#d9e3ed" stroke="white"><title>2025-10 03:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="322.6" y="372.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="353.2" y="352.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2025-10 04:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="382.7" y="372.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="413.3" y="352.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2025-10 05:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="442.9" y="372.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="352.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2025-10 06:00，平均 0.05 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="503.1" y="372.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="352.5" width="59.2" height="29.0" fill="#b9ccdf" stroke="white"><title>2025-10 07:00，平均 0.06 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="563.2" y="372.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="593.8" y="352.5" width="59.2" height="29.0" fill="#9db8d2" stroke="white"><title>2025-10 08:00，平均 0.09 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="623.4" y="372.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="654.0" y="352.5" width="59.2" height="29.0" fill="#adc3d9" stroke="white"><title>2025-10 09:00，平均 0.08 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="683.6" y="372.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="714.2" y="352.5" width="59.2" height="29.0" fill="#cad8e6" stroke="white"><title>2025-10 10:00，平均 0.05 kEUR/MW，完整样本 23 小时</title></rect>
+<text class="cell" x="743.8" y="372.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="774.3" y="352.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2025-10 11:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="803.9" y="372.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="352.5" width="59.2" height="29.0" fill="#dee7ef" stroke="white"><title>2025-10 12:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="864.1" y="372.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="894.7" y="352.5" width="59.2" height="29.0" fill="#ebf0f6" stroke="white"><title>2025-10 13:00，平均 0.01 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="924.2" y="372.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="352.5" width="59.2" height="29.0" fill="#ecf1f6" stroke="white"><title>2025-10 14:00，平均 0.01 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="984.4" y="372.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="352.5" width="59.2" height="29.0" fill="#d9e3ed" stroke="white"><title>2025-10 15:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1044.6" y="372.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1075.2" y="352.5" width="59.2" height="29.0" fill="#d4dfeb" stroke="white"><title>2025-10 16:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1104.7" y="372.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1135.3" y="352.5" width="59.2" height="29.0" fill="#b8cbde" stroke="white"><title>2025-10 17:00，平均 0.06 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1164.9" y="372.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1195.5" y="352.5" width="59.2" height="29.0" fill="#aac1d7" stroke="white"><title>2025-10 18:00，平均 0.08 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1225.1" y="372.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1255.7" y="352.5" width="59.2" height="29.0" fill="#9bb6d1" stroke="white"><title>2025-10 19:00，平均 0.09 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1285.2" y="372.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1315.8" y="352.5" width="59.2" height="29.0" fill="#8babc9" stroke="white"><title>2025-10 20:00，平均 0.11 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1345.4" y="372.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1376.0" y="352.5" width="59.2" height="29.0" fill="#8faecb" stroke="white"><title>2025-10 21:00，平均 0.11 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1405.6" y="372.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1436.2" y="352.5" width="59.2" height="29.0" fill="#a8c0d7" stroke="white"><title>2025-10 22:00，平均 0.08 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1465.7" y="372.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1496.3" y="352.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2025-10 23:00，平均 0.06 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1525.9" y="372.1" text-anchor="middle" fill="#263238">0.06</text>
+<text class="tick" x="102" y="402.4" text-anchor="end">2025/11</text>
+<rect x="112.5" y="382.5" width="59.2" height="29.0" fill="#d0dce9" stroke="white"><title>2025-11 00:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="142.1" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="172.7" y="382.5" width="59.2" height="29.0" fill="#d8e3ed" stroke="white"><title>2025-11 01:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="202.2" y="402.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="382.5" width="59.2" height="29.0" fill="#d1dde9" stroke="white"><title>2025-11 02:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="382.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2025-11 03:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="322.6" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="382.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2025-11 04:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="382.7" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="382.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2025-11 05:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="382.5" width="59.2" height="29.0" fill="#c8d7e6" stroke="white"><title>2025-11 06:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="503.1" y="402.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="382.5" width="59.2" height="29.0" fill="#bccee0" stroke="white"><title>2025-11 07:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="563.2" y="402.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="593.8" y="382.5" width="59.2" height="29.0" fill="#a9c0d7" stroke="white"><title>2025-11 08:00，平均 0.08 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="623.4" y="402.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="654.0" y="382.5" width="59.2" height="29.0" fill="#c0d1e2" stroke="white"><title>2025-11 09:00，平均 0.06 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="683.6" y="402.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="714.2" y="382.5" width="59.2" height="29.0" fill="#d4dfeb" stroke="white"><title>2025-11 10:00，平均 0.04 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="743.8" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="774.3" y="382.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2025-11 11:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="402.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="382.5" width="59.2" height="29.0" fill="#e6edf3" stroke="white"><title>2025-11 12:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="864.1" y="402.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="382.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2025-11 13:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="924.2" y="402.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="954.8" y="382.5" width="59.2" height="29.0" fill="#e3ebf2" stroke="white"><title>2025-11 14:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="984.4" y="402.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="382.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2025-11 15:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1044.6" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1075.2" y="382.5" width="59.2" height="29.0" fill="#c2d2e2" stroke="white"><title>2025-11 16:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1104.7" y="402.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1135.3" y="382.5" width="59.2" height="29.0" fill="#afc5da" stroke="white"><title>2025-11 17:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1164.9" y="402.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1195.5" y="382.5" width="59.2" height="29.0" fill="#a9c0d7" stroke="white"><title>2025-11 18:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1225.1" y="402.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1255.7" y="382.5" width="59.2" height="29.0" fill="#a4bcd5" stroke="white"><title>2025-11 19:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1285.2" y="402.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1315.8" y="382.5" width="59.2" height="29.0" fill="#a3bcd4" stroke="white"><title>2025-11 20:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1345.4" y="402.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1376.0" y="382.5" width="59.2" height="29.0" fill="#a4bdd5" stroke="white"><title>2025-11 21:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1405.6" y="402.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1436.2" y="382.5" width="59.2" height="29.0" fill="#bccee0" stroke="white"><title>2025-11 22:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1465.7" y="402.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1496.3" y="382.5" width="59.2" height="29.0" fill="#d1deea" stroke="white"><title>2025-11 23:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1525.9" y="402.1" text-anchor="middle" fill="#263238">0.04</text>
+<text class="tick" x="102" y="432.4" text-anchor="end">2025/12</text>
+<rect x="112.5" y="412.5" width="59.2" height="29.0" fill="#dfe8f0" stroke="white"><title>2025-12 00:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="142.1" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="172.7" y="412.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2025-12 01:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="202.2" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="232.8" y="412.5" width="59.2" height="29.0" fill="#e3ebf2" stroke="white"><title>2025-12 02:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="262.4" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="293.0" y="412.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2025-12 03:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="322.6" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="353.2" y="412.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2025-12 04:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="382.7" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="413.3" y="412.5" width="59.2" height="29.0" fill="#ebf1f6" stroke="white"><title>2025-12 05:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="442.9" y="432.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="473.5" y="412.5" width="59.2" height="29.0" fill="#dfe8f0" stroke="white"><title>2025-12 06:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="503.1" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="533.7" y="412.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2025-12 07:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="563.2" y="432.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="593.8" y="412.5" width="59.2" height="29.0" fill="#bbcedf" stroke="white"><title>2025-12 08:00，平均 0.06 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="623.4" y="432.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="654.0" y="412.5" width="59.2" height="29.0" fill="#c2d3e3" stroke="white"><title>2025-12 09:00，平均 0.05 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="683.6" y="432.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="714.2" y="412.5" width="59.2" height="29.0" fill="#dce5ee" stroke="white"><title>2025-12 10:00，平均 0.03 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="743.8" y="432.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="412.5" width="59.2" height="29.0" fill="#f1f4f8" stroke="white"><title>2025-12 11:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="803.9" y="432.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="834.5" y="412.5" width="59.2" height="29.0" fill="#eef2f7" stroke="white"><title>2025-12 12:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="864.1" y="432.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="894.7" y="412.5" width="59.2" height="29.0" fill="#f1f5f8" stroke="white"><title>2025-12 13:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="924.2" y="432.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="412.5" width="59.2" height="29.0" fill="#f5f7fa" stroke="white"><title>2025-12 14:00，平均 0.00 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="984.4" y="432.1" text-anchor="middle" fill="#263238">0.00</text>
+<rect x="1015.0" y="412.5" width="59.2" height="29.0" fill="#eaeff5" stroke="white"><title>2025-12 15:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1044.6" y="432.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1075.2" y="412.5" width="59.2" height="29.0" fill="#cedce8" stroke="white"><title>2025-12 16:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1104.7" y="432.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1135.3" y="412.5" width="59.2" height="29.0" fill="#c3d3e3" stroke="white"><title>2025-12 17:00，平均 0.05 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1164.9" y="432.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1195.5" y="412.5" width="59.2" height="29.0" fill="#b0c5da" stroke="white"><title>2025-12 18:00，平均 0.07 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1225.1" y="432.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1255.7" y="412.5" width="59.2" height="29.0" fill="#a5bdd5" stroke="white"><title>2025-12 19:00，平均 0.08 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1285.2" y="432.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1315.8" y="412.5" width="59.2" height="29.0" fill="#a7bfd6" stroke="white"><title>2025-12 20:00，平均 0.08 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1345.4" y="432.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1376.0" y="412.5" width="59.2" height="29.0" fill="#b3c8dc" stroke="white"><title>2025-12 21:00，平均 0.07 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1405.6" y="432.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1436.2" y="412.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2025-12 22:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1465.7" y="432.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1496.3" y="412.5" width="59.2" height="29.0" fill="#e1e9f1" stroke="white"><title>2025-12 23:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1525.9" y="432.1" text-anchor="middle" fill="#263238">0.02</text>
+<text class="tick" x="102" y="462.4" text-anchor="end">2026/01</text>
+<rect x="112.5" y="442.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2026-01 00:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="142.1" y="462.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="172.7" y="442.5" width="59.2" height="29.0" fill="#dce5ef" stroke="white"><title>2026-01 01:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="202.2" y="462.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="442.5" width="59.2" height="29.0" fill="#dbe4ee" stroke="white"><title>2026-01 02:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="462.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="442.5" width="59.2" height="29.0" fill="#dbe5ee" stroke="white"><title>2026-01 03:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="322.6" y="462.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="353.2" y="442.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2026-01 04:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="382.7" y="462.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="413.3" y="442.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2026-01 05:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="462.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="473.5" y="442.5" width="59.2" height="29.0" fill="#cddbe8" stroke="white"><title>2026-01 06:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="503.1" y="462.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="533.7" y="442.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2026-01 07:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="563.2" y="462.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="593.8" y="442.5" width="59.2" height="29.0" fill="#bfd0e1" stroke="white"><title>2026-01 08:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="623.4" y="462.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="654.0" y="442.5" width="59.2" height="29.0" fill="#a7bfd6" stroke="white"><title>2026-01 09:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="683.6" y="462.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="714.2" y="442.5" width="59.2" height="29.0" fill="#c2d2e2" stroke="white"><title>2026-01 10:00，平均 0.05 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="743.8" y="462.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="774.3" y="442.5" width="59.2" height="29.0" fill="#d9e3ed" stroke="white"><title>2026-01 11:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="462.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="834.5" y="442.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2026-01 12:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="864.1" y="462.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="442.5" width="59.2" height="29.0" fill="#ebf0f6" stroke="white"><title>2026-01 13:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="924.2" y="462.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="442.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2026-01 14:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="984.4" y="462.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1015.0" y="442.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2026-01 15:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1044.6" y="462.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1075.2" y="442.5" width="59.2" height="29.0" fill="#c0d1e1" stroke="white"><title>2026-01 16:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1104.7" y="462.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1135.3" y="442.5" width="59.2" height="29.0" fill="#bccee0" stroke="white"><title>2026-01 17:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1164.9" y="462.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1195.5" y="442.5" width="59.2" height="29.0" fill="#b0c6da" stroke="white"><title>2026-01 18:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1225.1" y="462.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1255.7" y="442.5" width="59.2" height="29.0" fill="#aac1d7" stroke="white"><title>2026-01 19:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1285.2" y="462.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1315.8" y="442.5" width="59.2" height="29.0" fill="#abc2d8" stroke="white"><title>2026-01 20:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1345.4" y="462.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1376.0" y="442.5" width="59.2" height="29.0" fill="#aec4d9" stroke="white"><title>2026-01 21:00，平均 0.08 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1405.6" y="462.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1436.2" y="442.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2026-01 22:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1465.7" y="462.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1496.3" y="442.5" width="59.2" height="29.0" fill="#d3dfea" stroke="white"><title>2026-01 23:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1525.9" y="462.1" text-anchor="middle" fill="#263238">0.04</text>
+<text class="tick" x="102" y="492.4" text-anchor="end">2026/02</text>
+<rect x="112.5" y="472.5" width="59.2" height="29.0" fill="#d1dde9" stroke="white"><title>2026-02 00:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="142.1" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="172.7" y="472.5" width="59.2" height="29.0" fill="#d5e1ec" stroke="white"><title>2026-02 01:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="202.2" y="492.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="472.5" width="59.2" height="29.0" fill="#d3dfea" stroke="white"><title>2026-02 02:00，平均 0.04 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="262.4" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="472.5" width="59.2" height="29.0" fill="#d8e2ed" stroke="white"><title>2026-02 03:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="322.6" y="492.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="353.2" y="472.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2026-02 04:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="382.7" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="472.5" width="59.2" height="29.0" fill="#d8e3ed" stroke="white"><title>2026-02 05:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="492.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="473.5" y="472.5" width="59.2" height="29.0" fill="#cedbe8" stroke="white"><title>2026-02 06:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="503.1" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="533.7" y="472.5" width="59.2" height="29.0" fill="#c5d5e4" stroke="white"><title>2026-02 07:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="563.2" y="492.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="593.8" y="472.5" width="59.2" height="29.0" fill="#a4bdd5" stroke="white"><title>2026-02 08:00，平均 0.09 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="623.4" y="492.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="654.0" y="472.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2026-02 09:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="683.6" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="714.2" y="472.5" width="59.2" height="29.0" fill="#dfe7f0" stroke="white"><title>2026-02 10:00，平均 0.02 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="743.8" y="492.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="774.3" y="472.5" width="59.2" height="29.0" fill="#ebf0f5" stroke="white"><title>2026-02 11:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="492.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="834.5" y="472.5" width="59.2" height="29.0" fill="#e9eff4" stroke="white"><title>2026-02 12:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="864.1" y="492.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="894.7" y="472.5" width="59.2" height="29.0" fill="#edf1f6" stroke="white"><title>2026-02 13:00，平均 0.01 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="924.2" y="492.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="472.5" width="59.2" height="29.0" fill="#ebf0f6" stroke="white"><title>2026-02 14:00，平均 0.01 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="984.4" y="492.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="472.5" width="59.2" height="29.0" fill="#ebf0f5" stroke="white"><title>2026-02 15:00，平均 0.01 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1044.6" y="492.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1075.2" y="472.5" width="59.2" height="29.0" fill="#e3eaf2" stroke="white"><title>2026-02 16:00，平均 0.02 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1104.7" y="492.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="472.5" width="59.2" height="29.0" fill="#d5e1ec" stroke="white"><title>2026-02 17:00，平均 0.03 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1164.9" y="492.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1195.5" y="472.5" width="59.2" height="29.0" fill="#bdcfe0" stroke="white"><title>2026-02 18:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1225.1" y="492.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1255.7" y="472.5" width="59.2" height="29.0" fill="#b8cbde" stroke="white"><title>2026-02 19:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1285.2" y="492.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1315.8" y="472.5" width="59.2" height="29.0" fill="#b6cadd" stroke="white"><title>2026-02 20:00，平均 0.07 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1345.4" y="492.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1376.0" y="472.5" width="59.2" height="29.0" fill="#bfd0e1" stroke="white"><title>2026-02 21:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1405.6" y="492.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1436.2" y="472.5" width="59.2" height="29.0" fill="#ccdae7" stroke="white"><title>2026-02 22:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1465.7" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1496.3" y="472.5" width="59.2" height="29.0" fill="#d1dde9" stroke="white"><title>2026-02 23:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1525.9" y="492.1" text-anchor="middle" fill="#263238">0.04</text>
+<text class="tick" x="102" y="522.4" text-anchor="end">2026/03</text>
+<rect x="112.5" y="502.5" width="59.2" height="29.0" fill="#cad9e6" stroke="white"><title>2026-03 00:00，平均 0.05 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="142.1" y="522.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="502.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2026-03 01:00，平均 0.03 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="202.2" y="522.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="502.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2026-03 02:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="522.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="502.5" width="59.2" height="29.0" fill="#d4dfeb" stroke="white"><title>2026-03 03:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="322.6" y="522.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="502.5" width="59.2" height="29.0" fill="#d7e1ec" stroke="white"><title>2026-03 04:00，平均 0.03 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="382.7" y="522.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="413.3" y="502.5" width="59.2" height="29.0" fill="#cedbe8" stroke="white"><title>2026-03 05:00，平均 0.04 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="442.9" y="522.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="502.5" width="59.2" height="29.0" fill="#c0d1e2" stroke="white"><title>2026-03 06:00，平均 0.06 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="503.1" y="522.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="533.7" y="502.5" width="59.2" height="29.0" fill="#b6cadd" stroke="white"><title>2026-03 07:00，平均 0.07 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="563.2" y="522.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="593.8" y="502.5" width="59.2" height="29.0" fill="#b9ccde" stroke="white"><title>2026-03 08:00，平均 0.06 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="623.4" y="522.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="654.0" y="502.5" width="59.2" height="29.0" fill="#c3d3e3" stroke="white"><title>2026-03 09:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="683.6" y="522.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="714.2" y="502.5" width="59.2" height="29.0" fill="#e1e9f1" stroke="white"><title>2026-03 10:00，平均 0.02 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="743.8" y="522.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="774.3" y="502.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2026-03 11:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="803.9" y="522.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="502.5" width="59.2" height="29.0" fill="#ecf1f6" stroke="white"><title>2026-03 12:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="864.1" y="522.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="894.7" y="502.5" width="59.2" height="29.0" fill="#e9eff4" stroke="white"><title>2026-03 13:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="924.2" y="522.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="502.5" width="59.2" height="29.0" fill="#ebf0f5" stroke="white"><title>2026-03 14:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="984.4" y="522.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="502.5" width="59.2" height="29.0" fill="#e9eff5" stroke="white"><title>2026-03 15:00，平均 0.01 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1044.6" y="522.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1075.2" y="502.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2026-03 16:00，平均 0.02 kEUR/MW，完整样本 29 小时</title></rect>
+<text class="cell" x="1104.7" y="522.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="502.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2026-03 17:00，平均 0.04 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1164.9" y="522.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1195.5" y="502.5" width="59.2" height="29.0" fill="#b7cadd" stroke="white"><title>2026-03 18:00，平均 0.07 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1225.1" y="522.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1255.7" y="502.5" width="59.2" height="29.0" fill="#a5bdd5" stroke="white"><title>2026-03 19:00，平均 0.08 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1285.2" y="522.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1315.8" y="502.5" width="59.2" height="29.0" fill="#93b0cd" stroke="white"><title>2026-03 20:00，平均 0.10 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1345.4" y="522.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1376.0" y="502.5" width="59.2" height="29.0" fill="#98b4cf" stroke="white"><title>2026-03 21:00，平均 0.10 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1405.6" y="522.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1436.2" y="502.5" width="59.2" height="29.0" fill="#b6cadd" stroke="white"><title>2026-03 22:00，平均 0.07 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1465.7" y="522.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1496.3" y="502.5" width="59.2" height="29.0" fill="#c6d5e4" stroke="white"><title>2026-03 23:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1525.9" y="522.1" text-anchor="middle" fill="#263238">0.05</text>
+<text class="tick" x="102" y="552.4" text-anchor="end">2026/04</text>
+<rect x="112.5" y="532.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2026-04 00:00，平均 0.05 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="142.1" y="552.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="532.5" width="59.2" height="29.0" fill="#d5e0eb" stroke="white"><title>2026-04 01:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="202.2" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="232.8" y="532.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2026-04 02:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="262.4" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="293.0" y="532.5" width="59.2" height="29.0" fill="#d7e2ec" stroke="white"><title>2026-04 03:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="322.6" y="552.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="353.2" y="532.5" width="59.2" height="29.0" fill="#d3dfea" stroke="white"><title>2026-04 04:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="382.7" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="532.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2026-04 05:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="442.9" y="552.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="473.5" y="532.5" width="59.2" height="29.0" fill="#cad8e6" stroke="white"><title>2026-04 06:00，平均 0.05 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="503.1" y="552.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="532.5" width="59.2" height="29.0" fill="#aec4da" stroke="white"><title>2026-04 07:00，平均 0.07 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="563.2" y="552.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="593.8" y="532.5" width="59.2" height="29.0" fill="#87a7c7" stroke="white"><title>2026-04 08:00，平均 0.12 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="623.4" y="552.1" text-anchor="middle" fill="#263238">0.12</text>
+<rect x="654.0" y="532.5" width="59.2" height="29.0" fill="#ccdae7" stroke="white"><title>2026-04 09:00，平均 0.04 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="683.6" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="714.2" y="532.5" width="59.2" height="29.0" fill="#dee7ef" stroke="white"><title>2026-04 10:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="743.8" y="552.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="532.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2026-04 11:00，平均 0.04 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="803.9" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="834.5" y="532.5" width="59.2" height="29.0" fill="#dae4ee" stroke="white"><title>2026-04 12:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="864.1" y="552.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="894.7" y="532.5" width="59.2" height="29.0" fill="#dee7ef" stroke="white"><title>2026-04 13:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="924.2" y="552.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="954.8" y="532.5" width="59.2" height="29.0" fill="#e7edf3" stroke="white"><title>2026-04 14:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="984.4" y="552.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="532.5" width="59.2" height="29.0" fill="#e0e9f1" stroke="white"><title>2026-04 15:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1044.6" y="552.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="532.5" width="59.2" height="29.0" fill="#e3eaf2" stroke="white"><title>2026-04 16:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1104.7" y="552.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="532.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2026-04 17:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1164.9" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1195.5" y="532.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2026-04 18:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1225.1" y="552.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1255.7" y="532.5" width="59.2" height="29.0" fill="#bbcddf" stroke="white"><title>2026-04 19:00，平均 0.06 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1285.2" y="552.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1315.8" y="532.5" width="59.2" height="29.0" fill="#a2bbd4" stroke="white"><title>2026-04 20:00，平均 0.09 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1345.4" y="552.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1376.0" y="532.5" width="59.2" height="29.0" fill="#9ab5d0" stroke="white"><title>2026-04 21:00，平均 0.10 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1405.6" y="552.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="1436.2" y="532.5" width="59.2" height="29.0" fill="#aac1d7" stroke="white"><title>2026-04 22:00，平均 0.08 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1465.7" y="552.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="1496.3" y="532.5" width="59.2" height="29.0" fill="#afc5da" stroke="white"><title>2026-04 23:00，平均 0.07 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1525.9" y="552.1" text-anchor="middle" fill="#263238">0.07</text>
+<text class="tick" x="102" y="582.4" text-anchor="end">2026/05</text>
+<rect x="112.5" y="562.5" width="59.2" height="29.0" fill="#c9d8e6" stroke="white"><title>2026-05 00:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="142.1" y="582.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="172.7" y="562.5" width="59.2" height="29.0" fill="#d2deea" stroke="white"><title>2026-05 01:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="202.2" y="582.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="232.8" y="562.5" width="59.2" height="29.0" fill="#d9e3ed" stroke="white"><title>2026-05 02:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="582.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="562.5" width="59.2" height="29.0" fill="#d4dfeb" stroke="white"><title>2026-05 03:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="322.6" y="582.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="562.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2026-05 04:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="382.7" y="582.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="562.5" width="59.2" height="29.0" fill="#d1dde9" stroke="white"><title>2026-05 05:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="582.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="473.5" y="562.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2026-05 06:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="503.1" y="582.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="562.5" width="59.2" height="29.0" fill="#a0bad3" stroke="white"><title>2026-05 07:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="563.2" y="582.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="593.8" y="562.5" width="59.2" height="29.0" fill="#9ab5d0" stroke="white"><title>2026-05 08:00，平均 0.10 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="623.4" y="582.1" text-anchor="middle" fill="#263238">0.10</text>
+<rect x="654.0" y="562.5" width="59.2" height="29.0" fill="#c8d7e5" stroke="white"><title>2026-05 09:00，平均 0.05 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="683.6" y="582.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="714.2" y="562.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2026-05 10:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="743.8" y="582.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="562.5" width="59.2" height="29.0" fill="#e9eff4" stroke="white"><title>2026-05 11:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="582.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="834.5" y="562.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2026-05 12:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="864.1" y="582.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="562.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2026-05 13:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="924.2" y="582.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="954.8" y="562.5" width="59.2" height="29.0" fill="#eaf0f5" stroke="white"><title>2026-05 14:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="984.4" y="582.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="562.5" width="59.2" height="29.0" fill="#e1e9f1" stroke="white"><title>2026-05 15:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1044.6" y="582.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="562.5" width="59.2" height="29.0" fill="#e7edf4" stroke="white"><title>2026-05 16:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1104.7" y="582.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="562.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2026-05 17:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1164.9" y="582.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1195.5" y="562.5" width="59.2" height="29.0" fill="#d1deea" stroke="white"><title>2026-05 18:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1225.1" y="582.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1255.7" y="562.5" width="59.2" height="29.0" fill="#bacddf" stroke="white"><title>2026-05 19:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1285.2" y="582.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1315.8" y="562.5" width="59.2" height="29.0" fill="#9bb6d1" stroke="white"><title>2026-05 20:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1345.4" y="582.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1376.0" y="562.5" width="59.2" height="29.0" fill="#7ea1c3" stroke="white"><title>2026-05 21:00，平均 0.12 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1405.6" y="582.1" text-anchor="middle" fill="white">0.12</text>
+<rect x="1436.2" y="562.5" width="59.2" height="29.0" fill="#89a9c8" stroke="white"><title>2026-05 22:00，平均 0.11 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1465.7" y="582.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1496.3" y="562.5" width="59.2" height="29.0" fill="#9eb9d2" stroke="white"><title>2026-05 23:00，平均 0.09 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1525.9" y="582.1" text-anchor="middle" fill="#263238">0.09</text>
+<text class="tick" x="102" y="612.4" text-anchor="end">2026/06</text>
+<rect x="112.5" y="592.5" width="59.2" height="29.0" fill="#ccdae7" stroke="white"><title>2026-06 00:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="142.1" y="612.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="172.7" y="592.5" width="59.2" height="29.0" fill="#d8e2ed" stroke="white"><title>2026-06 01:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="202.2" y="612.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="592.5" width="59.2" height="29.0" fill="#dee7f0" stroke="white"><title>2026-06 02:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="262.4" y="612.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="592.5" width="59.2" height="29.0" fill="#e3eaf2" stroke="white"><title>2026-06 03:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="322.6" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="353.2" y="592.5" width="59.2" height="29.0" fill="#e6edf3" stroke="white"><title>2026-06 04:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="382.7" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="413.3" y="592.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2026-06 05:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="442.9" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="473.5" y="592.5" width="59.2" height="29.0" fill="#c7d6e5" stroke="white"><title>2026-06 06:00，平均 0.05 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="503.1" y="612.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="533.7" y="592.5" width="59.2" height="29.0" fill="#9db8d2" stroke="white"><title>2026-06 07:00，平均 0.09 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="563.2" y="612.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="593.8" y="592.5" width="59.2" height="29.0" fill="#a8c0d7" stroke="white"><title>2026-06 08:00，平均 0.08 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="623.4" y="612.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="654.0" y="592.5" width="59.2" height="29.0" fill="#d4dfeb" stroke="white"><title>2026-06 09:00，平均 0.04 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="683.6" y="612.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="714.2" y="592.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2026-06 10:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="743.8" y="612.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="592.5" width="59.2" height="29.0" fill="#e6ecf3" stroke="white"><title>2026-06 11:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="592.5" width="59.2" height="29.0" fill="#e2eaf1" stroke="white"><title>2026-06 12:00，平均 0.02 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="864.1" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="592.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2026-06 13:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="924.2" y="612.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="592.5" width="59.2" height="29.0" fill="#ebf0f5" stroke="white"><title>2026-06 14:00，平均 0.01 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="984.4" y="612.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1015.0" y="592.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2026-06 15:00，平均 0.02 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1044.6" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="592.5" width="59.2" height="29.0" fill="#e5ecf3" stroke="white"><title>2026-06 16:00，平均 0.02 kEUR/MW，完整样本 25 小时</title></rect>
+<text class="cell" x="1104.7" y="612.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="592.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2026-06 17:00，平均 0.03 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1164.9" y="612.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1195.5" y="592.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2026-06 18:00，平均 0.03 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1225.1" y="612.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="1255.7" y="592.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2026-06 19:00，平均 0.06 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1285.2" y="612.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="1315.8" y="592.5" width="59.2" height="29.0" fill="#a1bad3" stroke="white"><title>2026-06 20:00，平均 0.09 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1345.4" y="612.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="1376.0" y="592.5" width="59.2" height="29.0" fill="#638eb7" stroke="white"><title>2026-06 21:00，平均 0.15 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="1405.6" y="612.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="1436.2" y="592.5" width="59.2" height="29.0" fill="#6e95bc" stroke="white"><title>2026-06 22:00，平均 0.14 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1465.7" y="612.1" text-anchor="middle" fill="white">0.14</text>
+<rect x="1496.3" y="592.5" width="59.2" height="29.0" fill="#8eacca" stroke="white"><title>2026-06 23:00，平均 0.11 kEUR/MW，完整样本 26 小时</title></rect>
+<text class="cell" x="1525.9" y="612.1" text-anchor="middle" fill="#263238">0.11</text>
+<text class="tick" x="102" y="642.4" text-anchor="end">2026/07</text>
+<rect x="112.5" y="622.5" width="59.2" height="29.0" fill="#c2d2e2" stroke="white"><title>2026-07 00:00，平均 0.06 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="142.1" y="642.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="172.7" y="622.5" width="59.2" height="29.0" fill="#d6e1ec" stroke="white"><title>2026-07 01:00，平均 0.03 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="202.2" y="642.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="232.8" y="622.5" width="59.2" height="29.0" fill="#dbe5ee" stroke="white"><title>2026-07 02:00，平均 0.03 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="262.4" y="642.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="293.0" y="622.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2026-07 03:00，平均 0.04 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="322.6" y="642.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="622.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2026-07 04:00，平均 0.04 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="382.7" y="642.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="622.5" width="59.2" height="29.0" fill="#dde6ef" stroke="white"><title>2026-07 05:00，平均 0.03 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="442.9" y="642.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="473.5" y="622.5" width="59.2" height="29.0" fill="#bbcddf" stroke="white"><title>2026-07 06:00，平均 0.06 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="503.1" y="642.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="533.7" y="622.5" width="59.2" height="29.0" fill="#aac1d7" stroke="white"><title>2026-07 07:00，平均 0.08 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="563.2" y="642.1" text-anchor="middle" fill="#263238">0.08</text>
+<rect x="593.8" y="622.5" width="59.2" height="29.0" fill="#b3c8dc" stroke="white"><title>2026-07 08:00，平均 0.07 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="623.4" y="642.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="654.0" y="622.5" width="59.2" height="29.0" fill="#cedbe8" stroke="white"><title>2026-07 09:00，平均 0.04 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="683.6" y="642.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="714.2" y="622.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2026-07 10:00，平均 0.02 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="743.8" y="642.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="774.3" y="622.5" width="59.2" height="29.0" fill="#edf1f6" stroke="white"><title>2026-07 11:00，平均 0.01 kEUR/MW，完整样本 27 小时</title></rect>
+<text class="cell" x="803.9" y="642.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="834.5" y="622.5" width="59.2" height="29.0" fill="#f2f5f9" stroke="white"><title>2026-07 12:00，平均 0.00 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="864.1" y="642.1" text-anchor="middle" fill="#263238">0.00</text>
+<rect x="894.7" y="622.5" width="59.2" height="29.0" fill="#f7f9fb" stroke="white"><title>2026-07 13:00，平均 0.00 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="924.2" y="642.1" text-anchor="middle" fill="#263238">0.00</text>
+<rect x="954.8" y="622.5" width="59.2" height="29.0" fill="#f2f6f9" stroke="white"><title>2026-07 14:00，平均 0.00 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="984.4" y="642.1" text-anchor="middle" fill="#263238">0.00</text>
+<rect x="1015.0" y="622.5" width="59.2" height="29.0" fill="#eff3f7" stroke="white"><title>2026-07 15:00，平均 0.01 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1044.6" y="642.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="1075.2" y="622.5" width="59.2" height="29.0" fill="#e3eaf2" stroke="white"><title>2026-07 16:00，平均 0.02 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1104.7" y="642.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="622.5" width="59.2" height="29.0" fill="#e0e8f0" stroke="white"><title>2026-07 17:00，平均 0.02 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1164.9" y="642.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1195.5" y="622.5" width="59.2" height="29.0" fill="#ccd9e7" stroke="white"><title>2026-07 18:00，平均 0.04 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1225.1" y="642.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1255.7" y="622.5" width="59.2" height="29.0" fill="#c6d5e4" stroke="white"><title>2026-07 19:00，平均 0.05 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1285.2" y="642.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="1315.8" y="622.5" width="59.2" height="29.0" fill="#8cabca" stroke="white"><title>2026-07 20:00，平均 0.11 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1345.4" y="642.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1376.0" y="622.5" width="59.2" height="29.0" fill="#4679aa" stroke="white"><title>2026-07 21:00，平均 0.18 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1405.6" y="642.1" text-anchor="middle" fill="white">0.18</text>
+<rect x="1436.2" y="622.5" width="59.2" height="29.0" fill="#668fb8" stroke="white"><title>2026-07 22:00，平均 0.15 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1465.7" y="642.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="1496.3" y="622.5" width="59.2" height="29.0" fill="#95b2ce" stroke="white"><title>2026-07 23:00，平均 0.10 kEUR/MW，完整样本 28 小时</title></rect>
+<text class="cell" x="1525.9" y="642.1" text-anchor="middle" fill="#263238">0.10</text>
+<text class="tick" x="102" y="672.4" text-anchor="end">2026/08</text>
+<rect x="112.5" y="652.5" width="59.2" height="29.0" fill="#c1d2e2" stroke="white"><title>2026-08 00:00，平均 0.06 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="142.1" y="672.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="172.7" y="652.5" width="59.2" height="29.0" fill="#d4e0eb" stroke="white"><title>2026-08 01:00，平均 0.04 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="202.2" y="672.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="232.8" y="652.5" width="59.2" height="29.0" fill="#c2d2e2" stroke="white"><title>2026-08 02:00，平均 0.05 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="262.4" y="672.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="293.0" y="652.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2026-08 03:00，平均 0.04 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="322.6" y="672.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="353.2" y="652.5" width="59.2" height="29.0" fill="#cfdce9" stroke="white"><title>2026-08 04:00，平均 0.04 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="382.7" y="672.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="413.3" y="652.5" width="59.2" height="29.0" fill="#cbd9e7" stroke="white"><title>2026-08 05:00，平均 0.05 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="442.9" y="672.1" text-anchor="middle" fill="#263238">0.05</text>
+<rect x="473.5" y="652.5" width="59.2" height="29.0" fill="#bbcddf" stroke="white"><title>2026-08 06:00，平均 0.06 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="503.1" y="672.1" text-anchor="middle" fill="#263238">0.06</text>
+<rect x="533.7" y="652.5" width="59.2" height="29.0" fill="#7097bd" stroke="white"><title>2026-08 07:00，平均 0.14 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="563.2" y="672.1" text-anchor="middle" fill="white">0.14</text>
+<rect x="593.8" y="652.5" width="59.2" height="29.0" fill="#215e98" stroke="white"><title>2026-08 08:00，平均 0.22 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="623.4" y="672.1" text-anchor="middle" fill="white">0.22</text>
+<rect x="654.0" y="652.5" width="59.2" height="29.0" fill="#9eb8d2" stroke="white"><title>2026-08 09:00，平均 0.09 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="683.6" y="672.1" text-anchor="middle" fill="#263238">0.09</text>
+<rect x="714.2" y="652.5" width="59.2" height="29.0" fill="#d5e1ec" stroke="white"><title>2026-08 10:00，平均 0.03 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="743.8" y="672.1" text-anchor="middle" fill="#263238">0.03</text>
+<rect x="774.3" y="652.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2026-08 11:00，平均 0.02 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="803.9" y="672.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="834.5" y="652.5" width="59.2" height="29.0" fill="#e7eef4" stroke="white"><title>2026-08 12:00，平均 0.02 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="864.1" y="672.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="894.7" y="652.5" width="59.2" height="29.0" fill="#ebf1f6" stroke="white"><title>2026-08 13:00，平均 0.01 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="924.2" y="672.1" text-anchor="middle" fill="#263238">0.01</text>
+<rect x="954.8" y="652.5" width="59.2" height="29.0" fill="#e8eef4" stroke="white"><title>2026-08 14:00，平均 0.02 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="984.4" y="672.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1015.0" y="652.5" width="59.2" height="29.0" fill="#e6ecf3" stroke="white"><title>2026-08 15:00，平均 0.02 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1044.6" y="672.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1075.2" y="652.5" width="59.2" height="29.0" fill="#e4ebf2" stroke="white"><title>2026-08 16:00，平均 0.02 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1104.7" y="672.1" text-anchor="middle" fill="#263238">0.02</text>
+<rect x="1135.3" y="652.5" width="59.2" height="29.0" fill="#cddae8" stroke="white"><title>2026-08 17:00，平均 0.04 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1164.9" y="672.1" text-anchor="middle" fill="#263238">0.04</text>
+<rect x="1195.5" y="652.5" width="59.2" height="29.0" fill="#b2c7db" stroke="white"><title>2026-08 18:00，平均 0.07 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1225.1" y="672.1" text-anchor="middle" fill="#263238">0.07</text>
+<rect x="1255.7" y="652.5" width="59.2" height="29.0" fill="#88a8c8" stroke="white"><title>2026-08 19:00，平均 0.11 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1285.2" y="672.1" text-anchor="middle" fill="#263238">0.11</text>
+<rect x="1315.8" y="652.5" width="59.2" height="29.0" fill="#648eb7" stroke="white"><title>2026-08 20:00，平均 0.15 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1345.4" y="672.1" text-anchor="middle" fill="white">0.15</text>
+<rect x="1376.0" y="652.5" width="59.2" height="29.0" fill="#2f689f" stroke="white"><title>2026-08 21:00，平均 0.21 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1405.6" y="672.1" text-anchor="middle" fill="white">0.21</text>
+<rect x="1436.2" y="652.5" width="59.2" height="29.0" fill="#4376a8" stroke="white"><title>2026-08 22:00，平均 0.19 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1465.7" y="672.1" text-anchor="middle" fill="white">0.19</text>
+<rect x="1496.3" y="652.5" width="59.2" height="29.0" fill="#6690b8" stroke="white"><title>2026-08 23:00，平均 0.15 kEUR/MW，完整样本 20 小时</title></rect>
+<text class="cell" x="1525.9" y="672.1" text-anchor="middle" fill="white">0.15</text>
+<text class="axis" x="112" y="720">平均收益（kEUR/MW）</text>
+<rect x="317" y="705" width="22" height="16" fill="#b43737"/>
+<text class="tick" x="345" y="718">负收益</text>
+<rect x="432" y="705" width="22" height="16" fill="#f7f9fb" stroke="#cfd8dc"/>
+<text class="tick" x="460" y="718">接近零</text>
+<rect x="547" y="705" width="22" height="16" fill="#1c5a96"/>
+<text class="tick" x="575" y="718">正收益</text>
+</svg>

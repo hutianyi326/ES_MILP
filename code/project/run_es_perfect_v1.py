@@ -82,6 +82,8 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--budget-json',type=Path,help='explicit formal year:value map; not tail budgets')
     p.add_argument('--time-limit',type=float,default=30.)
+    p.add_argument('--e-max-mwh',type=float,
+        help='override maximum SOC energy; minimum, initial, and terminal SOC remain at the configured 10 MWh')
     p.add_argument('--preflight-only',action='store_true')
     p.add_argument('--checkpoint-every',type=int,default=1,help='save cumulative checkpoint every N windows')
     p.add_argument('--capacity-award-mode',choices=('full_fill','optimize','posthoc'),default='full_fill',
@@ -93,6 +95,7 @@ def main():
     if args.capacity_award_mode=='full_fill' and args.award_rate_file:
         p.error('--award-rate-file requires --capacity-award-mode optimize or posthoc')
     if args.checkpoint_every<1:p.error('checkpoint-every must be positive')
+    if args.e_max_mwh is not None and args.e_max_mwh<=10:p.error('--e-max-mwh must exceed the fixed 10 MWh minimum SOC')
     start=datetime.fromisoformat(args.start).replace(tzinfo=MADRID)
     end=datetime.fromisoformat(args.end).replace(tzinfo=MADRID)
     if start>=end:p.error('end must follow start')
@@ -115,6 +118,8 @@ def main():
     inp,mask,evidence,budgets=prepare(bundle,end,formal_budget=explicit,
         budget_source=('explicit:'+digest(explicit)) if explicit is not None else 'formal_valid_mask',
         award_rates=preparation_rates)
+    if args.e_max_mwh is not None:
+        inp=replace(inp,e_max_mwh=args.e_max_mwh)
     if args.capacity_award_mode=='posthoc':
         # Solve exactly the full-fill V1 problem; retain rates as separate audit evidence.
         inp=replace(inp,qhs=tuple(replace(q,afrr_award_rate_up=1.0,afrr_award_rate_down=1.0) for q in inp.qhs))
@@ -122,7 +127,8 @@ def main():
                              if 'award_rate_up' in row or 'award_rate_down' in row]
     else:
         save_award_evidence=None
-    run_id='ES_HISTORICAL_CONDITIONAL_PERFECT_V1'+('_CAP_RATE_OPT' if args.capacity_award_mode=='optimize' else '_CAP_RATE_POSTHOC' if args.capacity_award_mode=='posthoc' else '')
+    energy_suffix=f'_EMAX{args.e_max_mwh:g}' if args.e_max_mwh is not None else ''
+    run_id='ES_HISTORICAL_CONDITIONAL_PERFECT_V1'+('_CAP_RATE_OPT' if args.capacity_award_mode=='optimize' else '_CAP_RATE_POSTHOC' if args.capacity_award_mode=='posthoc' else '')+energy_suffix
     save('input_evidence.json',evidence)
     save('solver_input.json',asdict(inp))
     if save_award_evidence is not None:
@@ -135,7 +141,8 @@ def main():
         input_hash=digest(asdict(inp)),source_files=bundle.sources,rejected=bundle.rejected,
         code_hashes={str(f.relative_to(CODE)):__import__('hashlib').sha256(f.read_bytes()).hexdigest()
                      for folder in ('src/es_synthetic_market','src/es_historical_conditional') for f in (CODE/folder).glob('*.py')},
-        preparation_seconds=perf_counter()-started))
+        preparation_seconds=perf_counter()-started,e_max_override_mwh=args.e_max_mwh,
+        energy_capacity_assumption='only maximum SOC energy is overridden; minimum, initial, and terminal SOC remain 10 MWh; power and formal annual EFC cycle budgets unchanged'))
     if args.preflight_only:
         print(json.dumps(dict(status='preflight_complete',qh=len(inp.qhs),gaps=len(mask),budgets=budgets),default=str))
         return

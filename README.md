@@ -51,6 +51,21 @@ $esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
 
 2025-01 至 2026-08 的 [容量收入敏感性结果对比](reports/capacity_award_rate_sensitivity_20260923/结果对比.md) 包含 V1、固定调度折减和重新求解的总/月度收益，以及六项市场分解、EFC 用量与求解时间。原始月度 ZIP、处理后的系数表及大型结果保存在本机，不随 Git 上传。
 
+## MILP 结果展示
+
+对已完成的模型运行目录，可用 `code/project/build_es_result_presentation.py` 生成统一的 Markdown 报告、六市场月度表、自然年合计、小时表、SVG 图表和季度小时图。示例：
+
+```powershell
+& $esPython code/project/build_es_result_presentation.py `
+  --run-dir output/capacity_award_rate_full_accelerated_20260923 `
+  --output-dir reports/result_display_capacity_award_rate_20260924_v8 `
+  --v1-monthly-csv reports/capacity_award_rate_sensitivity_20260923/monthly.csv
+```
+
+报告包含数据区间和完整度、电池配置与建模假设、全期/月均/自然年收益、截至最新完整月的滚动12个月年化收益和逐月滚动收益表、EFC、各市场平均执行功率和申报容量、月度收入图及自然年汇总、0–23 时收益图、月份×小时热力图和 Q1–Q4 小图。传入 `--v1-monthly-csv` 后，报告会将 V1 100%中标口径与当前系数口径按相同连续12个月窗口绘制和列示；两者均为各自优化后的调度结果。自然年收益与 EFC 标注完整有效天数/期间日数；完整天要求该当地日内所有预期 QH 均有效，夏令时切换日按 92 或 100 个 QH 计算。收益在展示表格和 CSV 中保留两位小数；图表纵轴为整数、10 等分且采用清晰步长。小时图以 0.001 kEUR/MW 为刻度并标明比例。小时均值要求四个 QH 均完整有效，再将 QH 收益合成实际小时；月度热力图只对完整有效小时求当月同一钟点的均值。季度图将不同自然年的同一季度合并。月度表列全每月数据、年度月均和自然年合计，kEUR 与 kEUR/MW 两种口径均输出，负值保留。
+
+模型 EFC 按各 QH `|ΔSOC| / [2 × (E_max − E_min)]` 累加，是以可用能量吞吐量折算的等效循环；它可以是小数，也不必等于按完整充放电事件计数的循环数。滚动年化收益要求连续12个自然月，以统计月为窗口终点，累计当月及此前11个月。DA/ID 平均功率按全部正式 QH 保留买卖方向符号，售电为正、购电为负；空闲桥接 QH 按 0 计，另列 DA+ID 合并净执行功率，因此正负时段会相互抵消。aFRR 容量按方向展示第一阶段全额成交假设下的申报容量 MW；中标系数仅折减容量收益，并未折减表中申报 MW。激活按 MWh/时长换算为 MW。各市场分项不相加视为站点额定功率，因为交易时段及方向可能重叠。生成文件还包括便于复核的 `monthly.csv`、`annual.csv`、`hourly.csv`、`quarterly_hourly.csv`、`monthly_hourly_heatmap.csv` 和 `rolling_12m.csv`；CSV 收益也固定两位小数。
+
 ## 文件分类
 
 | 目录 | 内容 |
