@@ -62,6 +62,9 @@ def main():
         folder=args.baseline_run if name=='baseline_100_100' and args.baseline_run else args.input/name
         s=json.loads((folder/'summary.json').read_text(encoding='utf-8'))
         m=json.loads((folder/'manifest.json').read_text(encoding='utf-8'))
+        code_root=Path(__file__).resolve().parents[1]
+        for rel,expected_hash in m['code_hashes'].items():
+            assert digest(code_root/rel)==expected_hash, f'model source changed: {rel}'
         retry_history=[];provenance=[];visited=set();ancestor=folder.resolve()
         while ancestor not in visited:
             visited.add(ancestor)
@@ -212,11 +215,16 @@ def main():
         '代码验收记录：58项每日额度及旧核心相关测试通过；补充激活吞吐量测试后，每日额度专项7项全部通过。三个场景四天试算成功。求解gap默认1e-4；窗口最优标记仅指该窗口达到求解标准。',
         '','## 官方来源、未解决问题与文件','',
         '规则事实和官方数据沿用REE/eSIOS及OMIE既有归档，详见[已确认研究及官方来源记录](../../research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。本次没有新增官方规则；每日2次EFC为用户指定建模假设。访问及获取日期沿用原归档，未重新下载原始数据。',
-        '仍待确认：150 MW跨零调节资格与设备能力、历史容量机制切换日期、报价与分配容量地域匹配、连续满额激活履约能力。上述限制不因本次循环额度修改而消失。',
+        '仍待确认：150 MW跨零调节资格与设备能力、历史容量机制切换日期、报价与分配容量地域匹配、连续满额激活履约能力。上述限制不因本次循环额度修改而消失。','',
         '- [逐日EFC与现金明细](daily_efc.csv)：日期、场景、EFC次数、2次日上限、有效时段数及欧元现金。',
         '- [月度六项收益和EFC](monthly_results.csv)：收益列单位已写入字段名keur_per_mw，整站金额为cash_eur。',
         '- [输入哈希与验证证据](validation_evidence.json)：场景配置、数据及代码哈希、原始结果目录和核验统计。',
         '- [已确认测算边界及数学约束](../../code/project/每日EFC额度边界_20261029.md)。','']
+    report+=['## 本次变更文件','',
+        '- 模型：[核心约束与独立审计](../../code/src/es_synthetic_market/_baseline_core.py)、[求解入口](../../code/src/es_synthetic_market/core.py)、[每日滚动执行及报告](../../code/src/es_synthetic_market/perfect.py)、[执行年度检查开关](../../code/src/es_synthetic_market/rolling.py)。',
+        '- 运行：[参数与输入留档](../../code/project/run_es_perfect_v1.py)、[恢复及数值重试](../../code/project/resume_es_capacity_award_rate.py)、[三场景批量入口](../../code/project/run_es_daily_efc_20261029.py)。',
+        '- 验证与文档：[每日EFC测试](../../code/tests/test_es_daily_efc.py)、[独立验证和报告生成](../../code/project/report_es_daily_efc_20261029.py)、[项目说明](../../README.md)、上述边界文件、本报告及三份数据/证据附件。',
+        '- 原始输入未修改；大体量运行明细保留在本地output目录，不纳入Git。各场景精确目录及哈希见validation_evidence.json；原失败输出未覆盖。','']
     (out/'测算对比报告.md').write_text('\n'.join(report),encoding='utf-8')
     print(json.dumps(stats,ensure_ascii=False,indent=2))
 

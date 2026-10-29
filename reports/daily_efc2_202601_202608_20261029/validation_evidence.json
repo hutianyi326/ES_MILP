@@ -1,0 +1,293 @@
+{
+  "baseline_100_100": {
+    "configuration": {
+      "grid_import_mw": 100.0,
+      "discharge_mw": 100.0,
+      "eta_discharge": 0.92,
+      "eta_charge": 0.92,
+      "e_terminal_mwh": 10.0,
+      "reserve_limit_up_mw": 100.0,
+      "e_initial_mwh": 10.0,
+      "reserve_limit_down_mw": 100.0,
+      "e_min_mwh": 10.0,
+      "charge_mw": 100.0,
+      "grid_export_mw": 100.0,
+      "e_max_mwh": 190.0
+    },
+    "input_evidence_sha256": "bc135b59d9281c301164920eeeb76ff27a4f7da388d4c637dc26a5c5b2550a18",
+    "solver_input_sha256": "2ae2e73a972f005feec865267da32410b60a5f9226874e6222febac48538f0d4",
+    "summary_sha256": "4e919b0876bbf2ab960a08a058d8ed1f47aa3b98591fbd9c5e449653f4681161",
+    "result_sha256": "e1afa19fd3f0f4752239324db23d6f428bc9021bdc27876adb4e04dd2f4c660d",
+    "award_source": {
+      "path": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz",
+      "sha256": "4cb874fe00103112943a68c9895808f59b54b49c890b13472f339000c8c80ef0"
+    },
+    "retry_history": [
+      {
+        "run_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\baseline_100_100_resume",
+        "window_start": "2026-04-20T22:00:00+00:00",
+        "initial_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "retry_feasible": false,
+        "retry_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "calls": [
+          {
+            "seconds": 0.05177889997139573,
+            "status": 2,
+            "presolve": false,
+            "feasibility_tolerance": null
+          },
+          {
+            "seconds": 0.02103880001232028,
+            "status": 2,
+            "presolve": true,
+            "feasibility_tolerance": null
+          }
+        ]
+      },
+      {
+        "run_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\baseline_100_100_resume",
+        "window_start": "2026-04-20T22:00:00+00:00",
+        "retry_kind": "solver_feasibility_tolerance_only",
+        "tolerance": 1e-05,
+        "independent_audit_tolerance": 1e-05,
+        "initial_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "retry_feasible": true,
+        "retry_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "calls": [
+          {
+            "seconds": 0.05177889997139573,
+            "status": 2,
+            "presolve": false,
+            "feasibility_tolerance": null
+          },
+          {
+            "seconds": 0.02103880001232028,
+            "status": 2,
+            "presolve": true,
+            "feasibility_tolerance": null
+          },
+          {
+            "seconds": 0.09372440003789961,
+            "status": 0,
+            "presolve": false,
+            "feasibility_tolerance": 1e-05
+          }
+        ]
+      },
+      {
+        "run_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\baseline_100_100",
+        "window_start": "2026-04-20T22:00:00+00:00",
+        "initial_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "retry_feasible": false,
+        "retry_message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "calls": [
+          {
+            "seconds": 0.028890099958516657,
+            "status": 2,
+            "presolve": false
+          },
+          {
+            "seconds": 0.012870499980635941,
+            "status": 2,
+            "presolve": true
+          }
+        ]
+      }
+    ],
+    "resume_provenance": [
+      {
+        "source": "output\\daily_efc2_202601_202608_20261029\\baseline_100_100",
+        "checkpoint": "output\\daily_efc2_202601_202608_20261029\\baseline_100_100\\final_checkpoint.json",
+        "checkpoint_hash": "8bfb5dc2c7d4c14de53338857b10e9a4c36c68b88e162c0006b43206975b01c1",
+        "committed_windows": 110,
+        "capacity_award_mode": "optimize",
+        "run_id": "ES_HISTORICAL_CONDITIONAL_PERFECT_V1_CAP_RATE_OPT_DAILY_EFC_2",
+        "original_failure": "window has no audited feasible solution: The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "numerical_retry_tolerance": 1e-05,
+        "independent_audit_tolerance": 1e-05,
+        "resume_runner_sha256": "845190b6e5cf56c40e076be00b26c0f7586dd66749c4ffdb716151261524478c",
+        "retry_policy": "on status 2 or independent numerical audit assertion: presolve=True; optional feasibility tolerance retry after status 2; unchanged constraints and independent audits"
+      },
+      {
+        "source": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\baseline_100_100_input",
+        "checkpoint": null,
+        "checkpoint_hash": null,
+        "committed_windows": 0,
+        "capacity_award_mode": "optimize",
+        "run_id": "ES_HISTORICAL_CONDITIONAL_PERFECT_V1_CAP_RATE_OPT_DAILY_EFC_2",
+        "original_failure": null,
+        "retry_policy": "on status 2 or independent numerical audit assertion, same input and constraints, presolve=True"
+      }
+    ],
+    "source_code_hashes": {
+      "src\\es_synthetic_market\\core.py": "e83d5ded88a38b6d3ce194696f1c9fb7708e15bb09c2ee8387841f8a8cfa22f3",
+      "src\\es_synthetic_market\\diagnostics.py": "54cf187fc94e62cf02cfd484c89e4d00a035b4fb4a86868a9a766633085d6821",
+      "src\\es_synthetic_market\\integration.py": "1ca6a80e377f671356a944139de45de9195a3e454de23f1a1d6a2fea94dd820c",
+      "src\\es_synthetic_market\\ledger.py": "c7a8ea81d9ba80fbf3942e944213ab9abf0f4e79ec567344e4c7a1db656ded99",
+      "src\\es_synthetic_market\\perfect.py": "f577ffa84289eeb3b95bcd19e7c472b315ed569d410f21a4096220a819d8b71f",
+      "src\\es_synthetic_market\\rolling.py": "dd7f3a9223111924ac8df537930ad89172b4589693588d448e1453b50b568b34",
+      "src\\es_synthetic_market\\_baseline_core.py": "883bb4913f1a7df2729e4e16866db74e996a8d49f24ef3e3d02111157520a16b",
+      "src\\es_synthetic_market\\__init__.py": "429f17abfcc8176ecd6b54190f7e283d7893e33c3472a1cb479c4b4308c733de",
+      "src\\es_historical_conditional\\adapter.py": "187d71760d0e55a1bc220a50d8d3bc966ee6685a1550a2a8e6c67ff72db84438",
+      "src\\es_historical_conditional\\perfect.py": "bfda46c158d2352e8f3bf213261b6fce2b76aa238cc0f6c27bdf31a48285a6ac",
+      "src\\es_historical_conditional\\runner.py": "c3ca728aa960581c68fb1709e37c57068d2aefa34a12e144610b9d737673db90",
+      "src\\es_historical_conditional\\__init__.py": "dcf738086a03a3fb14c46981508d91bb11f68b3a32eaa91e36f8f6370816b0b7",
+      "src\\es_historical_conditional\\__main__.py": "1a8834b93cd89751d1d59617ab3a5f2972d8053b7040395b88e8cbb8c61ceaea"
+    },
+    "run_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\baseline_100_100_resume",
+    "stats": {
+      "total_cash_eur": 22593518.09286354,
+      "total_keur_per_mw": 225.93518092863542,
+      "efc": 387.6056079860024,
+      "max_daily_efc": 2.000000000001742,
+      "days_at_limit": 53,
+      "days_with_activity": 212,
+      "valid_qh": 20263,
+      "total_qh": 23324,
+      "windows": 243,
+      "proven_optimal": 243,
+      "retries": 3,
+      "final_soc_mwh": 9.999999999991868,
+      "physical_efc_error_max": 0.0,
+      "physical_soc_error_max": 0.0
+    }
+  },
+  "asymmetric_cap100": {
+    "configuration": {
+      "grid_import_mw": 50.0,
+      "discharge_mw": 100.0,
+      "eta_discharge": 0.92,
+      "eta_charge": 0.92,
+      "e_terminal_mwh": 10.0,
+      "reserve_limit_up_mw": 100.0,
+      "e_initial_mwh": 10.0,
+      "reserve_limit_down_mw": 100.0,
+      "e_min_mwh": 10.0,
+      "charge_mw": 50.0,
+      "grid_export_mw": 100.0,
+      "e_max_mwh": 190.0
+    },
+    "input_evidence_sha256": "bc135b59d9281c301164920eeeb76ff27a4f7da388d4c637dc26a5c5b2550a18",
+    "solver_input_sha256": "a53a68c843d87f2d498533b504fb69c0ba68dfbe723a0ec32615d76e687dcc82",
+    "summary_sha256": "4af4671a0c0b76b8d95585b0524f6107811b651e4fd921e5259c66a3931cd66a",
+    "result_sha256": "03454231e6b3866010e62e1b846a4f78f0b0a62ddb6e9102cc133c7dc05ab341",
+    "award_source": {
+      "path": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz",
+      "sha256": "4cb874fe00103112943a68c9895808f59b54b49c890b13472f339000c8c80ef0"
+    },
+    "retry_history": [],
+    "resume_provenance": [
+      {
+        "source": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\asymmetric_cap100_input",
+        "checkpoint": null,
+        "checkpoint_hash": null,
+        "committed_windows": 0,
+        "capacity_award_mode": "optimize",
+        "run_id": "ES_HISTORICAL_CONDITIONAL_PERFECT_V1_CAP_RATE_OPT_DAILY_EFC_2",
+        "original_failure": null,
+        "retry_policy": "on status 2 or independent numerical audit assertion, same input and constraints, presolve=True"
+      }
+    ],
+    "source_code_hashes": {
+      "src\\es_synthetic_market\\core.py": "e83d5ded88a38b6d3ce194696f1c9fb7708e15bb09c2ee8387841f8a8cfa22f3",
+      "src\\es_synthetic_market\\diagnostics.py": "54cf187fc94e62cf02cfd484c89e4d00a035b4fb4a86868a9a766633085d6821",
+      "src\\es_synthetic_market\\integration.py": "1ca6a80e377f671356a944139de45de9195a3e454de23f1a1d6a2fea94dd820c",
+      "src\\es_synthetic_market\\ledger.py": "c7a8ea81d9ba80fbf3942e944213ab9abf0f4e79ec567344e4c7a1db656ded99",
+      "src\\es_synthetic_market\\perfect.py": "f577ffa84289eeb3b95bcd19e7c472b315ed569d410f21a4096220a819d8b71f",
+      "src\\es_synthetic_market\\rolling.py": "dd7f3a9223111924ac8df537930ad89172b4589693588d448e1453b50b568b34",
+      "src\\es_synthetic_market\\_baseline_core.py": "883bb4913f1a7df2729e4e16866db74e996a8d49f24ef3e3d02111157520a16b",
+      "src\\es_synthetic_market\\__init__.py": "429f17abfcc8176ecd6b54190f7e283d7893e33c3472a1cb479c4b4308c733de",
+      "src\\es_historical_conditional\\adapter.py": "187d71760d0e55a1bc220a50d8d3bc966ee6685a1550a2a8e6c67ff72db84438",
+      "src\\es_historical_conditional\\perfect.py": "bfda46c158d2352e8f3bf213261b6fce2b76aa238cc0f6c27bdf31a48285a6ac",
+      "src\\es_historical_conditional\\runner.py": "c3ca728aa960581c68fb1709e37c57068d2aefa34a12e144610b9d737673db90",
+      "src\\es_historical_conditional\\__init__.py": "dcf738086a03a3fb14c46981508d91bb11f68b3a32eaa91e36f8f6370816b0b7",
+      "src\\es_historical_conditional\\__main__.py": "1a8834b93cd89751d1d59617ab3a5f2972d8053b7040395b88e8cbb8c61ceaea"
+    },
+    "run_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\asymmetric_cap100",
+    "stats": {
+      "total_cash_eur": 19780154.162388187,
+      "total_keur_per_mw": 197.80154162388186,
+      "efc": 391.365796996354,
+      "max_daily_efc": 2.000000000000019,
+      "days_at_limit": 50,
+      "days_with_activity": 212,
+      "valid_qh": 20263,
+      "total_qh": 23324,
+      "windows": 243,
+      "proven_optimal": 243,
+      "retries": 0,
+      "final_soc_mwh": 9.999999999999952,
+      "physical_efc_error_max": 0.0,
+      "physical_soc_error_max": 0.0
+    }
+  },
+  "asymmetric_cap150": {
+    "configuration": {
+      "grid_import_mw": 50.0,
+      "discharge_mw": 100.0,
+      "eta_discharge": 0.92,
+      "eta_charge": 0.92,
+      "e_terminal_mwh": 10.0,
+      "reserve_limit_up_mw": 150.0,
+      "e_initial_mwh": 10.0,
+      "reserve_limit_down_mw": 150.0,
+      "e_min_mwh": 10.0,
+      "charge_mw": 50.0,
+      "grid_export_mw": 100.0,
+      "e_max_mwh": 190.0
+    },
+    "input_evidence_sha256": "bc135b59d9281c301164920eeeb76ff27a4f7da388d4c637dc26a5c5b2550a18",
+    "solver_input_sha256": "6ab58472939b32a1d6badd12604d4c2128ffcfa47d48e9fd58c33a1cf9e8f38f",
+    "summary_sha256": "082f7ecd48aaed26965f2b31a929267e467538cb0df2407629dd99b911b14a49",
+    "result_sha256": "3990caaee836ca03ce2bad409f2ce4c05fecb43076767126cc9e5beed8f58326",
+    "award_source": {
+      "path": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz",
+      "sha256": "4cb874fe00103112943a68c9895808f59b54b49c890b13472f339000c8c80ef0"
+    },
+    "retry_history": [],
+    "resume_provenance": [
+      {
+        "source": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\asymmetric_cap150_input",
+        "checkpoint": null,
+        "checkpoint_hash": null,
+        "committed_windows": 0,
+        "capacity_award_mode": "optimize",
+        "run_id": "ES_HISTORICAL_CONDITIONAL_PERFECT_V1_CAP_RATE_OPT_DAILY_EFC_2",
+        "original_failure": null,
+        "retry_policy": "on status 2 or independent numerical audit assertion, same input and constraints, presolve=True"
+      }
+    ],
+    "source_code_hashes": {
+      "src\\es_synthetic_market\\core.py": "e83d5ded88a38b6d3ce194696f1c9fb7708e15bb09c2ee8387841f8a8cfa22f3",
+      "src\\es_synthetic_market\\diagnostics.py": "54cf187fc94e62cf02cfd484c89e4d00a035b4fb4a86868a9a766633085d6821",
+      "src\\es_synthetic_market\\integration.py": "1ca6a80e377f671356a944139de45de9195a3e454de23f1a1d6a2fea94dd820c",
+      "src\\es_synthetic_market\\ledger.py": "c7a8ea81d9ba80fbf3942e944213ab9abf0f4e79ec567344e4c7a1db656ded99",
+      "src\\es_synthetic_market\\perfect.py": "f577ffa84289eeb3b95bcd19e7c472b315ed569d410f21a4096220a819d8b71f",
+      "src\\es_synthetic_market\\rolling.py": "dd7f3a9223111924ac8df537930ad89172b4589693588d448e1453b50b568b34",
+      "src\\es_synthetic_market\\_baseline_core.py": "883bb4913f1a7df2729e4e16866db74e996a8d49f24ef3e3d02111157520a16b",
+      "src\\es_synthetic_market\\__init__.py": "429f17abfcc8176ecd6b54190f7e283d7893e33c3472a1cb479c4b4308c733de",
+      "src\\es_historical_conditional\\adapter.py": "187d71760d0e55a1bc220a50d8d3bc966ee6685a1550a2a8e6c67ff72db84438",
+      "src\\es_historical_conditional\\perfect.py": "bfda46c158d2352e8f3bf213261b6fce2b76aa238cc0f6c27bdf31a48285a6ac",
+      "src\\es_historical_conditional\\runner.py": "c3ca728aa960581c68fb1709e37c57068d2aefa34a12e144610b9d737673db90",
+      "src\\es_historical_conditional\\__init__.py": "dcf738086a03a3fb14c46981508d91bb11f68b3a32eaa91e36f8f6370816b0b7",
+      "src\\es_historical_conditional\\__main__.py": "1a8834b93cd89751d1d59617ab3a5f2972d8053b7040395b88e8cbb8c61ceaea"
+    },
+    "run_directory": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\daily_efc2_202601_202608_20261029\\asymmetric_cap150",
+    "stats": {
+      "total_cash_eur": 21570791.325448114,
+      "total_keur_per_mw": 215.70791325448116,
+      "efc": 415.70938353676434,
+      "max_daily_efc": 2.000000000000647,
+      "days_at_limit": 98,
+      "days_with_activity": 212,
+      "valid_qh": 20263,
+      "total_qh": 23324,
+      "windows": 243,
+      "proven_optimal": 243,
+      "retries": 0,
+      "final_soc_mwh": 9.999999999999885,
+      "physical_efc_error_max": 0.0,
+      "physical_soc_error_max": 0.0
+    }
+  }
+}

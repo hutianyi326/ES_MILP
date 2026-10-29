@@ -16,6 +16,8 @@ def main():
     p.add_argument('--start',default='2026-01-01')
     p.add_argument('--end',default='2026-09-01')
     p.add_argument('--workers',type=int,default=3)
+    p.add_argument('--numerical-retry-tolerance',type=float,default=1e-5,
+        help='fallback solver tolerance; independent audits remain at 1e-5')
     args=p.parse_args()
     base=args.output.resolve();base.mkdir(parents=True,exist_ok=False)
     def run(name,powers):
@@ -31,7 +33,8 @@ def main():
         with (base/(name+'.log')).open('x',encoding='utf-8') as log:
             subprocess.run(command,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=True)
             subprocess.run([sys.executable,str(ROOT/'code/project/resume_es_capacity_award_rate.py'),
-                '--source',str(prep),'--output',str(out),'--fresh','--checkpoint-every','30'],
+                '--source',str(prep),'--output',str(out),'--fresh','--checkpoint-every','30',
+                '--numerical-retry-tolerance',str(args.numerical_retry_tolerance)],
                 cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,check=True)
         summary=json.loads((out/'summary.json').read_text(encoding='utf-8'))
         if not summary['success']:raise RuntimeError(f'{name}: {summary["failure"]}')
