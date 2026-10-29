@@ -7,6 +7,7 @@ import argparse
 from dataclasses import asdict,replace
 from datetime import datetime,timedelta
 import json
+import math
 from pathlib import Path
 import sys
 from time import perf_counter
@@ -84,6 +85,9 @@ def main():
     p.add_argument('--time-limit',type=float,default=30.)
     p.add_argument('--e-max-mwh',type=float,
         help='override maximum SOC energy; minimum, initial, and terminal SOC remain at the configured 10 MWh')
+    for flag in ('charge-mw','discharge-mw','grid-import-mw','grid-export-mw',
+                 'reserve-limit-up-mw','reserve-limit-down-mw'):
+        p.add_argument('--'+flag,type=float,help='override '+flag+' in the prepared input')
     p.add_argument('--preflight-only',action='store_true')
     p.add_argument('--checkpoint-every',type=int,default=1,help='save cumulative checkpoint every N windows')
     p.add_argument('--capacity-award-mode',choices=('full_fill','optimize','posthoc'),default='full_fill',
@@ -96,6 +100,10 @@ def main():
         p.error('--award-rate-file requires --capacity-award-mode optimize or posthoc')
     if args.checkpoint_every<1:p.error('checkpoint-every must be positive')
     if args.e_max_mwh is not None and args.e_max_mwh<=10:p.error('--e-max-mwh must exceed the fixed 10 MWh minimum SOC')
+    overrides={name:getattr(args,name) for name in ('charge_mw','discharge_mw','grid_import_mw',
+        'grid_export_mw','reserve_limit_up_mw','reserve_limit_down_mw') if getattr(args,name) is not None}
+    if any(not math.isfinite(value) or value < 0 for value in overrides.values()):
+        p.error('power and reserve overrides must be finite and nonnegative')
     start=datetime.fromisoformat(args.start).replace(tzinfo=MADRID)
     end=datetime.fromisoformat(args.end).replace(tzinfo=MADRID)
     if start>=end:p.error('end must follow start')
@@ -119,7 +127,9 @@ def main():
         budget_source=('explicit:'+digest(explicit)) if explicit is not None else 'formal_valid_mask',
         award_rates=preparation_rates)
     if args.e_max_mwh is not None:
-        inp=replace(inp,e_max_mwh=args.e_max_mwh)
+        overrides['e_max_mwh']=args.e_max_mwh
+    if overrides:
+        inp=replace(inp,**overrides)
     if args.capacity_award_mode=='posthoc':
         # Solve exactly the full-fill V1 problem; retain rates as separate audit evidence.
         inp=replace(inp,qhs=tuple(replace(q,afrr_award_rate_up=1.0,afrr_award_rate_down=1.0) for q in inp.qhs))
@@ -142,7 +152,8 @@ def main():
         code_hashes={str(f.relative_to(CODE)):__import__('hashlib').sha256(f.read_bytes()).hexdigest()
                      for folder in ('src/es_synthetic_market','src/es_historical_conditional') for f in (CODE/folder).glob('*.py')},
         preparation_seconds=perf_counter()-started,e_max_override_mwh=args.e_max_mwh,
-        energy_capacity_assumption='only maximum SOC energy is overridden; minimum, initial, and terminal SOC remain 10 MWh; power and formal annual EFC cycle budgets unchanged'))
+        parameter_overrides=overrides,
+        energy_capacity_assumption='minimum, initial and terminal SOC remain configured; formal annual EFC cycle budgets unchanged'))
     if args.preflight_only:
         print(json.dumps(dict(status='preflight_complete',qh=len(inp.qhs),gaps=len(mask),budgets=budgets),default=str))
         return

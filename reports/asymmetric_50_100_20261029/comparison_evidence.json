@@ -1,0 +1,131 @@
+{
+  "inputs": {
+    "baseline_100_100": {
+      "grid_import_mw": 100.0,
+      "grid_export_mw": 100.0,
+      "discharge_mw": 100.0,
+      "e_terminal_mwh": 10.0,
+      "e_min_mwh": 10.0,
+      "e_initial_mwh": 10.0,
+      "reserve_limit_down_mw": 100.0,
+      "eta_charge": 0.92,
+      "charge_mw": 100.0,
+      "eta_discharge": 0.92,
+      "reserve_limit_up_mw": 100.0,
+      "e_max_mwh": 190.0
+    },
+    "asymmetric_cap100": {
+      "grid_import_mw": 50.0,
+      "grid_export_mw": 100.0,
+      "discharge_mw": 100.0,
+      "e_terminal_mwh": 10.0,
+      "e_min_mwh": 10.0,
+      "e_initial_mwh": 10.0,
+      "reserve_limit_down_mw": 100.0,
+      "eta_charge": 0.92,
+      "charge_mw": 50.0,
+      "eta_discharge": 0.92,
+      "reserve_limit_up_mw": 100.0,
+      "e_max_mwh": 190.0
+    },
+    "asymmetric_cap150": {
+      "grid_import_mw": 50.0,
+      "grid_export_mw": 100.0,
+      "discharge_mw": 100.0,
+      "e_terminal_mwh": 10.0,
+      "e_min_mwh": 10.0,
+      "e_initial_mwh": 10.0,
+      "reserve_limit_down_mw": 150.0,
+      "eta_charge": 0.92,
+      "charge_mw": 50.0,
+      "eta_discharge": 0.92,
+      "reserve_limit_up_mw": 150.0,
+      "e_max_mwh": 190.0
+    }
+  },
+  "valid_qh_by_run": {
+    "baseline_100_100": 52438,
+    "asymmetric_cap100": 52438,
+    "asymmetric_cap150": 52438
+  },
+  "common_valid_qh": 52438,
+  "all_valid_sets_equal": true,
+  "common_cash_keur_per_mw": {
+    "baseline_100_100": {
+      "DA": 159.44907442005572,
+      "ID": 50.919668103036265,
+      "cap_up": 175.6755975980129,
+      "cap_down": 119.76459004878389,
+      "act_up": 83.61781960107568,
+      "act_down": 3.6268039078927115
+    },
+    "asymmetric_cap100": {
+      "DA": 196.84159908371007,
+      "ID": -28.21944033715495,
+      "cap_up": 169.83995441484635,
+      "cap_down": 74.73627340226446,
+      "act_up": 80.59612896113266,
+      "act_down": 7.998181460786423
+    },
+    "asymmetric_cap150": {
+      "DA": 164.1600504749984,
+      "ID": -17.482760268281616,
+      "cap_up": 155.23253257745,
+      "cap_down": 60.85473749990691,
+      "act_up": 77.30054385376134,
+      "act_down": 14.320182949748636
+    }
+  },
+  "input_evidence_sha256": {
+    "baseline_100_100": "584edbdde4b66a646712795dd7b15244dda761815e7e6255d9392d5162d24e53",
+    "asymmetric_cap100": "584edbdde4b66a646712795dd7b15244dda761815e7e6255d9392d5162d24e53",
+    "asymmetric_cap150": "584edbdde4b66a646712795dd7b15244dda761815e7e6255d9392d5162d24e53"
+  },
+  "budget": {
+    "2025": 548.7661703394889,
+    "2026": 345.99166170339595
+  },
+  "annual_used": {
+    "baseline_100_100": {
+      "2025": 548.7661693394889,
+      "2026": 345.9916607033961
+    },
+    "asymmetric_cap100": {
+      "2025": 548.766169339877,
+      "2026": 345.99166070339624
+    },
+    "asymmetric_cap150": {
+      "2025": 548.7661693400659,
+      "2026": 345.9916607033962
+    }
+  },
+  "solver_seconds": {
+    "baseline_100_100": 223.6768630000879,
+    "asymmetric_cap100": 331.38279959978536,
+    "asymmetric_cap150": 587.1879015985178
+  },
+  "total_wall_seconds": {
+    "baseline_100_100": 344.18637569999555,
+    "asymmetric_cap100": 1631.0868792000692,
+    "asymmetric_cap150": 1809.26728320017
+  },
+  "run_directories": {
+    "baseline_100_100": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\capacity_award_rate_full_accelerated_20260923",
+    "asymmetric_cap100": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\asymmetric_50_100_cap100_resume_20261029",
+    "asymmetric_cap150": "C:\\Users\\Tianyi\\OneDrive\\融和元储工作\\模型等其他参考资料\\Python\\Counry_Investigation\\countries\\ES\\MILP\\output\\asymmetric_50_100_cap150_resume_20261029"
+  },
+  "award_sources": {
+    "baseline_100_100": {
+      "path": "input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz",
+      "sha256": "4cb874fe00103112943a68c9895808f59b54b49c890b13472f339000c8c80ef0"
+    },
+    "asymmetric_cap100": {
+      "path": "input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz",
+      "sha256": "4cb874fe00103112943a68c9895808f59b54b49c890b13472f339000c8c80ef0"
+    },
+    "asymmetric_cap150": {
+      "path": "input\\processed\\ES\\afrr_capacity_award_rate_202501_202608.csv.gz",
+      "sha256": "4cb874fe00103112943a68c9895808f59b54b49c890b13472f339000c8c80ef0"
+    }
+  }
+}

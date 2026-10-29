@@ -80,7 +80,7 @@ def main():
         checkpoint_hash=cp['state_hash'], committed_windows=len(engine._windows),
         capacity_award_mode=award_mode,run_id=run_id,
         original_failure=engine.failure,
-        retry_policy='on status 2 only, same input and constraints, presolve=True'))
+        retry_policy='on status 2 or independent numerical audit assertion, same input and constraints, presolve=True'))
     del cp
     gc.collect()
     engine.failure = None
@@ -100,7 +100,18 @@ def main():
 
     def checked(win, order_mode, **options):
         first = len(calls)
-        result = original_solve(win, order_mode, **options)
+        try:
+            result = original_solve(win, order_mode, **options)
+        except AssertionError as exc:
+            if options['presolve'] or not str(exc).startswith('independent synthetic market audit failed:'):
+                raise
+            result = original_solve(win, order_mode, **{**options, 'presolve': True})
+            event = dict(window_start=win.qhs[0].start_utc.isoformat(),
+                         initial_message=str(exc), retry_feasible=result.feasible,
+                         retry_message=result.message, calls=calls[first:])
+            retries.append(event)
+            with (output / 'retry_events.jsonl').open('a', encoding='utf-8') as stream:
+                stream.write(json.dumps(event) + '\n')
         if not result.feasible and result.status == 2 and not options['presolve']:
             initial_message = result.message
             result = original_solve(win, order_mode, **{**options, 'presolve': True})

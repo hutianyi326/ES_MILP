@@ -26,12 +26,12 @@ _TOL = 1e-9
 REQUIRED_TZDATA_VERSION = "2026.4"
 
 
-def _canonical_trade_mw(value: float) -> float:
+def _canonical_trade_mw(value: float, limit: float = 100.0) -> float:
     """Remove <=1e-9 MW solver overflow at 0/100, not input-data clipping."""
     value = float(value)
-    if not isfinite(value) or value < -_TOL or value > 100.0 + _TOL:
-        raise ValueError("solver trade materially outside [0,100] MW")
-    return min(100.0, max(0.0, value))
+    if not isfinite(value) or value < -_TOL or value > limit + _TOL:
+        raise ValueError("solver trade materially outside configured reserve limit")
+    return min(limit, max(0.0, value))
 
 
 def _canonical_net_trade_mw(value: float) -> float:
@@ -542,9 +542,12 @@ def solve_joint(
         raise ValueError("remaining annual budget must be finite in [0,600]")
     if set(frozen_spot) - {c.contract_id for c in contracts} or set(frozen_reserve) - {q.qh_id for q in qhs}:
         raise ValueError("frozen order outside modeled window")
-    for key, pair in list(frozen_spot.items()) + list(frozen_reserve.items()):
+    for key, pair in frozen_spot.items():
         if len(pair) != 2 or any(not isfinite(float(v)) or not 0 <= v <= 100 for v in pair):
             raise ValueError("invalid frozen order MW")
+    for pair in frozen_reserve.values():
+        if len(pair) != 2 or any(not isfinite(float(v)) or float(v) < 0 for v in pair):
+            raise ValueError("invalid frozen reserve MW")
     if any(s > 1e-7 and b > 1e-7 for s,b in frozen_spot.values()):
         raise ValueError("frozen spot order cannot buy and sell simultaneously")
     try:
@@ -859,10 +862,13 @@ def solve_joint(
         old = float(x[idx])
         x[idx] = _canonical_net_trade_mw(min(100.,max(-100.,old)) if reserve_headroom_from_gct and -100.-1e-5 <= old <= 100.+1e-5 else old)
         trade_bound_adjustment = max(trade_bound_adjustment, abs(old-x[idx]))
-    for idx in np.concatenate((reserve_up_index[reserve_up_index >= 0], reserve_down_index[reserve_down_index >= 0])):
-        old = float(x[idx])
-        x[idx] = _canonical_trade_mw(float(round(old)) if reserve_headroom_from_gct and abs(old-round(old)) <= 1e-5 else old)
-        trade_bound_adjustment = max(trade_bound_adjustment, abs(old-x[idx]))
+    for indices, limits in ((reserve_up_index, reserve_up_limit), (reserve_down_index, reserve_down_limit)):
+        for i, idx in enumerate(indices):
+            if idx < 0:
+                continue
+            old = float(x[idx])
+            x[idx] = _canonical_trade_mw(float(round(old)) if reserve_headroom_from_gct and abs(old-round(old)) <= 1e-5 else old, limits[i])
+            trade_bound_adjustment = max(trade_bound_adjustment, abs(old-x[idx]))
 
     def logical_values(indices: np.ndarray, fixed_values: np.ndarray) -> np.ndarray:
         return np.array([
