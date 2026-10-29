@@ -82,6 +82,7 @@ def main():
     p.add_argument('--input',type=Path,default=CODE.parent/'input')
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--budget-json',type=Path,help='explicit formal year:value map; not tail budgets')
+    p.add_argument('--daily-efc-limit',type=float,help='replace annual budget with an independent Madrid-local daily EFC cap; no carry-forward')
     p.add_argument('--time-limit',type=float,default=30.)
     p.add_argument('--e-max-mwh',type=float,
         help='override maximum SOC energy; minimum, initial, and terminal SOC remain at the configured 10 MWh')
@@ -94,6 +95,11 @@ def main():
         help='full_fill: ignore award rates; optimize: include rates in MILP objective; posthoc: haircut capacity cash after V1 decisions')
     p.add_argument('--award-rate-file',type=Path,help='required for optimize/posthoc; QH/direction CSV.GZ')
     args=p.parse_args()
+    if args.daily_efc_limit is not None:
+        if not math.isfinite(args.daily_efc_limit) or args.daily_efc_limit<0:
+            p.error('daily EFC limit must be finite and nonnegative')
+        if args.budget_json:
+            p.error('daily-only policy cannot be combined with --budget-json')
     if args.capacity_award_mode!='full_fill' and not args.award_rate_file:
         p.error('--award-rate-file is required for optimize and posthoc modes')
     if args.capacity_award_mode=='full_fill' and args.award_rate_file:
@@ -116,7 +122,7 @@ def main():
     explicit=None
     if args.budget_json:
         explicit={int(k):float(v) for k,v in json.loads(args.budget_json.read_text(encoding='utf-8')).items()}
-    if explicit is None and args.start=='2025-01-01' and args.end=='2026-09-01':
+    if args.daily_efc_limit is None and explicit is None and args.start=='2025-01-01' and args.end=='2026-09-01':
         archived=CODE.parent/'output/full_range/final_report.json'
         if not archived.exists():
             raise ValueError('v5 comparison requires archived annual budgets or --budget-json')
@@ -126,6 +132,10 @@ def main():
     inp,mask,evidence,budgets=prepare(bundle,end,formal_budget=explicit,
         budget_source=('explicit:'+digest(explicit)) if explicit is not None else 'formal_valid_mask',
         award_rates=preparation_rates)
+    if args.daily_efc_limit is not None:
+        budgets={y:dict(kind='daily_only',daily_efc_limit=args.daily_efc_limit,
+            timezone='Europe/Madrid',carry_forward=False,annual_efc_enforced=False,
+            source='user_confirmed_daily_efc_policy',interval=[str(start),str(end)]) for y in budgets}
     if args.e_max_mwh is not None:
         overrides['e_max_mwh']=args.e_max_mwh
     if overrides:
@@ -139,6 +149,8 @@ def main():
         save_award_evidence=None
     energy_suffix=f'_EMAX{args.e_max_mwh:g}' if args.e_max_mwh is not None else ''
     run_id='ES_HISTORICAL_CONDITIONAL_PERFECT_V1'+('_CAP_RATE_OPT' if args.capacity_award_mode=='optimize' else '_CAP_RATE_POSTHOC' if args.capacity_award_mode=='posthoc' else '')+energy_suffix
+    if args.daily_efc_limit is not None:
+        run_id+=f'_DAILY_EFC_{args.daily_efc_limit:g}'
     save('input_evidence.json',evidence)
     save('solver_input.json',asdict(inp))
     if save_award_evidence is not None:
@@ -153,12 +165,16 @@ def main():
                      for folder in ('src/es_synthetic_market','src/es_historical_conditional') for f in (CODE/folder).glob('*.py')},
         preparation_seconds=perf_counter()-started,e_max_override_mwh=args.e_max_mwh,
         parameter_overrides=overrides,
-        energy_capacity_assumption='minimum, initial and terminal SOC remain configured; formal annual EFC cycle budgets unchanged'))
+        daily_efc_limit=args.daily_efc_limit,
+        cycle_policy='annual' if args.daily_efc_limit is None else 'daily_only_no_carry_forward',
+        energy_capacity_assumption='minimum, initial and terminal SOC remain configured',
+        annual_budget_note='enforced' if args.daily_efc_limit is None else 'solver_input annual budget fields are legacy metadata only and not enforced'))
     if args.preflight_only:
         print(json.dumps(dict(status='preflight_complete',qh=len(inp.qhs),gaps=len(mask),budgets=budgets),default=str))
         return
     engine=PerfectEngine(inp,execution_end=end,inactive=mask,evidence=evidence,budget_manifest=budgets,
         capacity_award_sensitivity=args.capacity_award_mode=='optimize',
+        daily_efc_limit=args.daily_efc_limit,
         run_id=run_id,
         history_mode='delta',time_limit_seconds=args.time_limit)
     solve_started=perf_counter()
@@ -185,6 +201,8 @@ def main():
     summary={k:report[k] for k in ('mode','success','failure','annual_budget','annual_used','coverage','quality',
                                  'solver_seconds','execution_wall_seconds','total_wall_seconds','months')}
     summary['capacity_award_mode']=args.capacity_award_mode
+    summary['cycle_policy']=report['cycle_policy']
+    summary['daily_efc_used']=report['daily_efc_used']
     summary['cash_basis']=report['cash_basis']
     save('summary.json',summary)
     print(json.dumps(summary,ensure_ascii=False))

@@ -320,7 +320,7 @@ class RollingEngine:
                     raise AssertionError("independent executed SOC audit failed")
                 operation.append(dict(qh_id=q.qh_id,phase=phase,hours=h,power_mw=power,start_soc_mwh=prior,end_soc_mwh=e,efc=efc,madrid_year=q.madrid_year))
                 trace_index+=1
-        if any(used[y]>self._budget[y]+TOL for y in used): raise AssertionError("executed annual EFC budget exceeded")
+        if getattr(self,'enforce_annual_efc',True) and any(used[y]>self._budget[y]+TOL for y in used): raise AssertionError("executed annual EFC budget exceeded")
         cash=ledger.total_cash_eur-before
         if abs(cash-expected_cash)>TOL: raise AssertionError("independent executed cash audit failed")
         if not hasattr(self,"execution_end") and execute_end==segment[-1].end_utc and abs(e-10)>TOL: raise AssertionError("segment terminal SOC is not 10")

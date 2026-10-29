@@ -16,6 +16,7 @@ from .core import _required_madrid_timezone
 class PerfectEngine(RollingEngine):
     def __init__(self, inp, *, execution_end, inactive=(), evidence=None, budget_manifest=None,
                  capacity_award_sensitivity=False,
+                 daily_efc_limit=None,
                  run_id="ES_SYNTHETIC_PERFECT_V1", order_mode="D", **kwargs):
         if execution_end.tzinfo is None:
             raise ValueError("aware execution_end required")
@@ -24,6 +25,10 @@ class PerfectEngine(RollingEngine):
         self.evidence=evidence or {}
         self.budget_manifest=budget_manifest or {}
         self.capacity_award_sensitivity=bool(capacity_award_sensitivity)
+        if daily_efc_limit is not None and (not isfinite(daily_efc_limit) or daily_efc_limit < 0):
+            raise ValueError('daily_efc_limit must be finite and nonnegative')
+        self.daily_efc_limit=daily_efc_limit
+        self.enforce_annual_efc=daily_efc_limit is None
         if kwargs.get("planning_days",2)!=2:
             raise ValueError("perfect_history_v1 requires two local days")
         qhs=inp.qhs
@@ -54,6 +59,9 @@ class PerfectEngine(RollingEngine):
             budgets=self.budget_manifest,assumptions=["full_fill_gct_headroom","gap_idle_zero_self_discharge"])
         if self.capacity_award_sensitivity:
             config['capacity_award_sensitivity']=True
+        if daily_efc_limit is not None:
+            config['cycle_policy']=dict(daily_limit=daily_efc_limit,timezone='Europe/Madrid',
+                carry_forward=False,enforce_annual_efc=False)
         self.configuration_hash=_hash(config)
         self._budget_audit={}
         self._last_result=None
@@ -87,6 +95,11 @@ class PerfectEngine(RollingEngine):
             if start<=c.gate_close_utc<boundary and c.delivery_end_utc>start and c.contract_id not in modeled:
                 raise ValueError("future_commitment_outside_window:"+c.contract_id)
         terminal_year=(self.execution_end-timedelta(microseconds=1)).astimezone(_required_madrid_timezone()).year
+        if not self.enforce_annual_efc:
+            # Legacy input budgets remain serialization metadata only. No annual
+            # constraint or terminal-year quota withholding applies in daily mode.
+            self._budget_audit={}
+            return win,frozen,fr,remaining
         reserve=(self.inp.e_max_mwh-self.inp.e_terminal_mwh)/(self.inp.eta_discharge*self.inp.cycle_denominator_mwh)
         self._budget_audit={}
         for y in remaining:
@@ -99,7 +112,10 @@ class PerfectEngine(RollingEngine):
 
     def _p0_solver_options(self,win):
         targets={q.qh_id:self.inp.e_terminal_mwh for q in win.qhs if q.end_utc==self.execution_end}
-        return dict(reserve_headroom_from_gct=True,terminal_soc_at=targets)
+        options=dict(reserve_headroom_from_gct=True,terminal_soc_at=targets)
+        if self.daily_efc_limit is not None:
+            options.update(daily_efc_limit=self.daily_efc_limit,enforce_annual_efc=False)
+        return options
 
     def _solve_window(self,win,order_mode,**options):
         from . import rolling
@@ -145,6 +161,24 @@ class PerfectEngine(RollingEngine):
 
     def _audit_candidate(self,win,result,window,orders,reserves,frozen,fr,remaining):
         """Independent public-output audit, before the transactional commit."""
+        daily_used={}
+        if self.daily_efc_limit is not None:
+            tz=_required_madrid_timezone()
+            # Each execution window is one entire local day, including DST.
+            first=win.qhs[0].start_utc
+            if first!=_midnight(first).astimezone(UTC):
+                raise AssertionError('daily EFC execution must start at local midnight')
+            if self._windows and self._windows[-1].execute_end_utc!=window.start_utc:
+                raise AssertionError('daily EFC execution windows must be contiguous')
+            qmap=win.qh_by_id
+            for op in window.operation:
+                day=qmap[op['qh_id']].start_utc.astimezone(tz).date().isoformat()
+                # Rebuild from physical AC power, not the reported EFC field.
+                p=op['power_mw'];h=op['hours']
+                value=(max(-p,0)*win.eta_charge+max(p,0)/win.eta_discharge)*h/win.cycle_denominator_mwh
+                daily_used[day]=daily_used.get(day,0.)+value
+            if len(daily_used)!=1 or max(daily_used.values())>self.daily_efc_limit+TOL:
+                raise AssertionError('independent executed daily EFC audit failed')
         trades={t['contract_id']:t for t in result.contract_trades}
         events=[];restored=[];gross=0.;variable_cash=0.;constant_cash=0.
         for c in win.contracts:
@@ -221,6 +255,7 @@ class PerfectEngine(RollingEngine):
             frozen_before_hash=prior,frozen_after_hash=window.order_snapshot_hash,
             checkpoint_id=_hash(dict(input=self.input_hash,config=self.configuration_hash,window=window.start_utc,orders=window.order_snapshot_hash,ledger=window.ledger_digest)),
             frozen_reserves={k:list(v) for k,v in fr.items()},budget=dict(self._budget_audit),
+            daily_efc_used=daily_used,
             model=dict(result.residuals),gross_reconstructed=gross,variable_cash=variable_cash,constant_cash=constant_cash,
             lookahead_complete=not any(q.qh_id in self.inactive for q in win.qhs),
             headroom_assumption="stage1_full_fill_from_gct",salvage_coefficient=coeff)
@@ -274,11 +309,21 @@ class PerfectEngine(RollingEngine):
             disabled_contract_count=sum(bool({k for k,v in c.qh_weights.items() if v>0}&self.inactive) for c in self.inp.contracts),
             disabled_contract_count_scope='entire_input_including_lookahead',
             incomplete_lookahead_windows=sum(not w.audit['lookahead_complete'] for w in self._windows))
+        daily_used={}
+        for row in rows:
+            day=qmap[row['qh_id']].start_utc.astimezone(_required_madrid_timezone()).date().isoformat()
+            if row['efc'] is not None:
+                daily_used[day]=daily_used.get(day,0.)+row['efc']
+        if self.daily_efc_limit is not None and max(daily_used.values(),default=0.)>self.daily_efc_limit+TOL:
+            raise AssertionError('reported daily EFC exceeds limit')
         return dict(mode='perfect_history_v1',success=self.failure is None,failure=self.failure,
             formal_end=self.execution_end.isoformat(),input_hash=self.input_hash,configuration_hash=self.configuration_hash,
             assumptions=['perfect_prices_alpha_full_fill','reserve_headroom_from_gct','gap_idle_zero_self_discharge']
                         + (['capacity_award_rate_proxy_revenue_only'] if self.capacity_award_sensitivity else []),
-            budgets=self.budget_manifest,annual_budget=self._budget,annual_used=self._used,
+            budgets=self.budget_manifest,annual_budget=self._budget if self.enforce_annual_efc else {y:None for y in self._budget},annual_used=self._used,
+            cycle_policy=dict(mode='annual' if self.enforce_annual_efc else 'daily_only',
+                daily_efc_limit=self.daily_efc_limit,timezone='Europe/Madrid',carry_forward=False,
+                annual_efc_enforced=self.enforce_annual_efc),daily_efc_used=daily_used,
             rows=rows,months=months,quality=quality,coverage=quality['settlement_coverage'],
             solver_seconds=sum(w.audit['model']['solver_seconds'] for w in self._windows),
             windows=[w.as_dict() for w in self._windows],gaps=self.evidence)

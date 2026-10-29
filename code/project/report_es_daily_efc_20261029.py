@@ -1,0 +1,207 @@
+"""Independently audit daily execution and report the three Jan-Aug 2026 runs."""
+import argparse
+from collections import defaultdict
+import csv
+from datetime import datetime, timedelta
+import hashlib
+import json
+import mmap
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+from build_es_result_presentation import _read_rows, _top_level_scalars
+from compare_es_asymmetric_20261029 import FIELDS
+from run_es_daily_efc_20261029 import SCENARIOS
+
+TZ=ZoneInfo('Europe/Madrid')
+KEYS=('DA','ID','cap_up','cap_down','act_up','act_down')
+LABELS=('日前DA','日内ID','aFRR容量上调','aFRR容量下调','aFRR激活上调','aFRR激活下调')
+NAMES={'baseline_100_100':'充100／放100 MW；aFRR上／下调各100 MW',
+       'asymmetric_cap100':'充50／放100 MW；aFRR上／下调各100 MW',
+       'asymmetric_cap150':'充50／放100 MW；aFRR上／下调各150 MW（理论）'}
+
+
+def read_array(path,key):
+    """Stream one known top-level array without loading the large whole JSON."""
+    marker=('"'+key+'": [').encode()
+    with path.open('rb') as f,mmap.mmap(f.fileno(),0,access=mmap.ACCESS_READ) as data:
+        at=data.find(marker)
+        if at<0:raise ValueError(f'missing {key}')
+    with path.open('r',encoding='utf-8') as f:
+        # Seek using byte offset; the ASCII array marker ends on a UTF-8 boundary.
+        f.seek(at+len(marker))
+        decoder=json.JSONDecoder();buffer=''
+        while True:
+            buffer=buffer.lstrip(' \n\r\t,')
+            if buffer.startswith(']'):return
+            try:
+                obj,end=decoder.raw_decode(buffer)
+            except json.JSONDecodeError:
+                chunk=f.read(1024*1024)
+                if not chunk:raise
+                buffer+=chunk
+                continue
+            yield obj
+            buffer=buffer[end:]
+
+
+def digest(path):
+    with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument('--input',type=Path,required=True)
+    p.add_argument('--output',type=Path,required=True)
+    args=p.parse_args();out=args.output
+    if out.exists():raise FileExistsError(out)
+    stats={};daily={};monthly={};evidence={};valid_sets={}
+    expected_dates=[(datetime(2026,1,1)+timedelta(days=i)).date().isoformat() for i in range(243)]
+    for name,(charge,reserve) in SCENARIOS.items():
+        folder=args.input/name
+        s=json.loads((folder/'summary.json').read_text(encoding='utf-8'))
+        m=json.loads((folder/'manifest.json').read_text(encoding='utf-8'))
+        cfg=_top_level_scalars(folder/'solver_input.json',FIELDS)
+        assert s['success'] and not s['failure'] and s['quality']['blocked_qh']==0
+        assert s['cycle_policy']['mode']=='daily_only' and s['cycle_policy']['daily_efc_limit']==2
+        assert not s['cycle_policy']['annual_efc_enforced'] and all(v is None for v in s['annual_budget'].values())
+        assert m['capacity_award_mode']=='optimize'
+        assert datetime.fromisoformat(m['formal_start']).astimezone(TZ)==datetime(2026,1,1,tzinfo=TZ)
+        assert datetime.fromisoformat(m['formal_end']).astimezone(TZ)==datetime(2026,9,1,tzinfo=TZ)
+        assert (cfg['charge_mw'],cfg['grid_import_mw'],cfg['discharge_mw'],cfg['grid_export_mw'])==(charge,charge,100,100)
+        assert (cfg['reserve_limit_up_mw'],cfg['reserve_limit_down_mw'])==(reserve,reserve)
+        assert (cfg['e_min_mwh'],cfg['e_max_mwh'],cfg['e_initial_mwh'],cfg['e_terminal_mwh'])==(10,190,10,10)
+        assert (cfg['eta_charge'],cfg['eta_discharge'])==(.92,.92)
+        rows=_read_rows(folder/'result.json')
+        assert len(rows)==23324 and len({r['qh_id'] for r in rows})==23324
+        d=defaultdict(lambda:dict(efc=0.,cash_eur=0.,valid_qh=0,total_qh=0))
+        mon=defaultdict(lambda:dict(efc=0.,cash={k:0. for k in KEYS},valid_qh=0))
+        valid_sets[name]={r['qh_id'] for r in rows if r['cash'] is not None}
+        for r in rows:
+            date=datetime.fromisoformat(r['time']).astimezone(TZ).date().isoformat()
+            x=d[date];mth=mon[date[:7]]
+            assert r['efc'] is not None
+            x['efc']+=r['efc'];mth['efc']+=r['efc'];x['total_qh']+=1
+            if r['cash'] is not None:
+                x['valid_qh']+=1;mth['valid_qh']+=1
+                x['cash_eur']+=sum(r['cash'].values())
+                for k in KEYS:mth['cash'][k]+=r['cash'][k]
+        assert sorted(d)==expected_dates
+        assert max(v['efc'] for v in d.values())<=2+1e-5
+        assert d['2026-03-29']['total_qh']==92
+        assert abs(sum(v['efc'] for v in d.values())-s['annual_used']['2026'])<1e-5
+        for date,v in d.items():assert abs(v['efc']-s['daily_efc_used'][date])<1e-5
+        for month,v in mon.items():
+            assert v['valid_qh']==s['months'][month]['valid_qh']
+            for k in KEYS:assert abs(v['cash'][k]-s['months'][month]['cash_eur'][k])<1e-5
+        windows=0;optimal=0;prior_soc=10.;physical_daily=defaultdict(float);max_efc_error=0.;max_soc_error=0.
+        for w in read_array(folder/'result.json','windows'):
+            date=datetime.fromisoformat(w['start_utc']).astimezone(TZ).date().isoformat()
+            assert date==expected_dates[windows]
+            assert abs(w['start_soc_mwh']-prior_soc)<1e-5
+            assert abs(w['execution_cash_eur']-d[date]['cash_eur'])<1e-4
+            e=w['start_soc_mwh']
+            for op in w['operation']:
+                assert datetime.fromisoformat(op['qh_id']).astimezone(TZ).date().isoformat()==date
+                power=op['power_mw'];h=op['hours']
+                assert -charge-1e-5<=power<=100+1e-5
+                dc_ch=max(-power,0)*.92*h;dc_dis=max(power,0)*h/.92
+                efc=(dc_ch+dc_dis)/360
+                physical_daily[date]+=efc
+                max_efc_error=max(max_efc_error,abs(efc-op['efc']))
+                max_soc_error=max(max_soc_error,abs(e-op['start_soc_mwh']))
+                e+=dc_ch-dc_dis
+                max_soc_error=max(max_soc_error,abs(e-op['end_soc_mwh']))
+                assert 10-1e-5<=e<=190+1e-5
+            assert abs(e-w['end_execution_soc_mwh'])<1e-5
+            assert w['audit']['model'].get('daily_efc_violation_max',0)<=1e-5
+            assert abs(physical_daily[date]-d[date]['efc'])<1e-5
+            assert abs(physical_daily[date]-w['audit']['daily_efc_used'][date])<1e-5
+            windows+=1;optimal+=int(w['proven_optimal']);prior_soc=e
+        assert windows==243 and abs(prior_soc-10)<1e-5
+        assert max_efc_error<1e-5 and max_soc_error<1e-5
+        total=sum(v['cash_eur'] for v in d.values())
+        stats[name]=dict(total_cash_eur=total,total_keur_per_mw=total/100000,
+            efc=sum(v['efc'] for v in d.values()),max_daily_efc=max(v['efc'] for v in d.values()),
+            days_at_limit=sum(v['efc']>=2-1e-5 for v in d.values()),days_with_activity=sum(v['efc']>1e-5 for v in d.values()),
+            valid_qh=len(valid_sets[name]),total_qh=len(rows),windows=windows,proven_optimal=optimal,
+            retries=s['retry_count'],final_soc_mwh=prior_soc,physical_efc_error_max=max_efc_error,
+            physical_soc_error_max=max_soc_error)
+        daily[name]=d;monthly[name]=mon
+        evidence[name]=dict(configuration=cfg,input_evidence_sha256=digest(folder/'input_evidence.json'),
+            solver_input_sha256=digest(folder/'solver_input.json'),summary_sha256=digest(folder/'summary.json'),
+            result_sha256=digest(folder/'result.json'),award_source=m['award_rate_source'],
+            source_code_hashes=m['code_hashes'],run_directory=str(folder.resolve()),stats=stats[name])
+    assert len({v['input_evidence_sha256'] for v in evidence.values()})==1
+    assert len({v['award_source']['sha256'] for v in evidence.values()})==1
+    common=set.intersection(*valid_sets.values())
+    assert all(v==common for v in valid_sets.values())
+    out.mkdir(parents=True)
+    with (out/'daily_efc.csv').open('x',encoding='utf-8-sig',newline='') as f:
+        writer=csv.writer(f);writer.writerow(['date_Europe_Madrid','scenario','efc_cycles','daily_limit_cycles','valid_qh_count','total_qh_count','cash_eur'])
+        for date in expected_dates:
+            for n in SCENARIOS:
+                v=daily[n][date];writer.writerow([date,n,v['efc'],2,v['valid_qh'],v['total_qh'],v['cash_eur']])
+    with (out/'monthly_results.csv').open('x',encoding='utf-8-sig',newline='') as f:
+        writer=csv.writer(f);writer.writerow(['month','scenario','valid_qh_count','efc_cycles',*(k+'_keur_per_mw' for k in KEYS),'total_keur_per_mw','total_cash_eur'])
+        for month in sorted(monthly['baseline_100_100']):
+            for n in SCENARIOS:
+                v=monthly[n][month];values=[v['cash'][k]/100000 for k in KEYS]
+                writer.writerow([month,n,v['valid_qh'],v['efc'],*values,sum(values),sum(v['cash'].values())])
+    (out/'validation_evidence.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2),encoding='utf-8')
+    report=['# 西班牙储能每日最多2次EFC：2026年1—8月测算对比','',
+        '## 统计口径与单位','',
+        f'正式区间为马德里当地2026-01-01至2026-08-31，共243个自然日、23,324个15分钟时段；三个场景共同有效{len(common):,}个时段，覆盖率{len(common)/23324:.2%}。缺失数据未补算。',
+        '收益为这8个月有效时段累计市场现金毛收益，未年化；千欧元／MW统一按100 MW放电额定功率折算。1千欧元／MW对应整站10万欧元；负现金流表示该市场项净支出。',
+        'EFC单位为等效完整循环次数；每日最多2次，相当于电池侧充入与放出电量合计不超过720 MWh。MW是功率，MWh是电量或容量。','',
+        '## 三场景结果','',
+        '| 场景 | 8个月收益（千欧元／MW） | 整站收益（万欧元） | 较100／100 MW场景（%） | 累计EFC（次） | 日上限用满天数（天） |',
+        '|---|---:|---:|---:|---:|---:|']
+    reference=stats['baseline_100_100']['total_cash_eur']
+    for n,v in stats.items():
+        report.append(f"| {NAMES[n]} | {v['total_keur_per_mw']:.2f} | {v['total_cash_eur']/10000:,.2f} | {(v['total_cash_eur']/reference-1)*100:+.2f}% | {v['efc']:.3f} | {v['days_at_limit']} |")
+    report+=['','日上限用满天数按当日EFC≥2−0.00001次统计。243天的逐日上限合计为486次，但未用额度不能跨日转移，不要求每天用满。','',
+        '## 六项市场现金流','',
+        '单位：千欧元／MW，均为2026年1—8月共同有效时段累计。容量项已累计为金额，不是容量报价。','',
+        '| 市场 | 充100／放100、申报100 MW（千欧元／MW） | 充50／放100、申报100 MW（千欧元／MW） | 充50／放100、申报150 MW（千欧元／MW） |',
+        '|---|---:|---:|---:|']
+    for k,label in zip(KEYS,LABELS):
+        values=[sum(v['cash'][k] for v in monthly[n].values())/100000 for n in SCENARIOS]
+        report.append('| '+label+' | '+' | '.join(f'{v:.2f}' for v in values)+' |')
+    report+=['','## 月度收益与循环使用','',
+        '收益列单位：千欧元／MW，当月累计、未年化；EFC列单位：次。月份按Europe/Madrid划分。','',
+        '| 月份 | 有效15分钟时段（个） | 100／100收益（千欧元／MW） | 100／100 EFC（次） | 50／100申报100收益（千欧元／MW） | 50／100申报100 EFC（次） | 50／100申报150收益（千欧元／MW） | 50／100申报150 EFC（次） |',
+        '|---|---:|---:|---:|---:|---:|---:|---:|']
+    for month in sorted(monthly['baseline_100_100']):
+        values=[]
+        for n in SCENARIOS:
+            v=monthly[n][month];values += [f"{sum(v['cash'].values())/100000:.2f}",f"{v['efc']:.3f}"]
+        report.append(f"| {month} | {monthly['baseline_100_100'][month]['valid_qh']} | "+' | '.join(values)+' |')
+    report+=['','## 已确认假设与模型解释','',
+        '- 新约束来自用户确认的情景假设：每日最多2次EFC，取代旧年度总额度；每日未用额度不结转，也不向其他日期借额度。夏令时23小时日及部分缺失日仍使用2次上限。',
+        '- 三场景电池总容量200 MWh，SOC边界10–190 MWh（5%–95%），初始和正式期末均为10 MWh；充放效率各92%。EFC=电池侧充放电吞吐量÷360 MWh。',
+        '- aFRR采用“容量收入引入代理系数后重新优化”；代理系数仅折减容量收入，完整申报的物理承诺及激活口径沿用既有模型。150 MW是理论敏感性申报上限，并非可同时满额上下调或已通过项目资格认证。',
+        '- 事后已知价格和激活、两天规划逐日执行。每日约束同时施加于规划窗口的两天，并独立审计当日执行；它消除了旧年度额度提前耗尽的机制，但不能证明全期全局最优或真实可执行收益。',
+        '- 本次从2026年1月独立起算，无2025年遗留订单或SOC；初始时点之前已关闭的交易按现有规则置零。2026年9月1日只用于前瞻，不计入收益和EFC；正式8月31日期末SOC单独限制为10 MWh。',
+        '- 原20个月运行中的2026年结果含跨年状态和订单，与本次起点不同，不可将两者差额全部归因于额度变化。',
+        '- 原始输入文件保留旧annual_efc_budget字段用于兼容，但本场景不使用它作为约束；结果annual_budget为null，cycle_policy为daily_only，annual_used仅是累计使用量。',
+        '- 不含退化现金、交易费、税费、投资或运维费用；缺失数据沿用零功率/SOC衔接、收益空值处理。','',
+        '## 验证结果','',
+        '| 场景 | 完成日窗口（个） | 达求解gap标准窗口（个） | 数值重试（次） | 最大日EFC（次） | 正式期末SOC（MWh） |',
+        '|---|---:|---:|---:|---:|---:|']
+    for n,v in stats.items():
+        report.append(f"| {NAMES[n]} | {v['windows']} | {v['proven_optimal']} | {v['retries']} | {v['max_daily_efc']:.6f} | {v['final_soc_mwh']:.6f} |")
+    report+=['','逐日从物理功率及持续时间独立重算EFC，核对报告、每日上限、月度与全期汇总；复核SOC递推、功率边界、窗口连续性、期初期末SOC、现金汇总和三场景输入证据一致，均通过。',
+        '代码验收记录：58项每日额度及旧核心相关测试通过；补充激活吞吐量测试后，每日额度专项7项全部通过。三个场景四天试算成功。求解gap默认1e-4；窗口最优标记仅指该窗口达到求解标准。',
+        '','## 官方来源、未解决问题与文件','',
+        '规则事实和官方数据沿用REE/eSIOS及OMIE既有归档，详见[已确认研究及官方来源记录](../../research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。本次没有新增官方规则；每日2次EFC为用户指定建模假设。访问及获取日期沿用原归档，未重新下载原始数据。',
+        '仍待确认：150 MW跨零调节资格与设备能力、历史容量机制切换日期、报价与分配容量地域匹配、连续满额激活履约能力。上述限制不因本次循环额度修改而消失。',
+        '- [逐日EFC与现金明细](daily_efc.csv)：日期、场景、EFC次数、2次日上限、有效时段数及欧元现金。',
+        '- [月度六项收益和EFC](monthly_results.csv)：收益列单位已写入字段名keur_per_mw，整站金额为cash_eur。',
+        '- [输入哈希与验证证据](validation_evidence.json)：场景配置、数据及代码哈希、原始结果目录和核验统计。',
+        '- [已确认测算边界及数学约束](../../code/project/每日EFC额度边界_20261029.md)。','']
+    (out/'测算对比报告.md').write_text('\n'.join(report),encoding='utf-8')
+    print(json.dumps(stats,ensure_ascii=False,indent=2))
+
+
+if __name__=='__main__':main()

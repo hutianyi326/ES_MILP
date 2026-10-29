@@ -39,6 +39,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--time-limit', type=float, default=30.0)
     parser.add_argument('--checkpoint-every', type=int, default=30)
+    parser.add_argument('--fresh',action='store_true',help='start from a preflight directory without a checkpoint')
     args = parser.parse_args()
     if args.checkpoint_every < 1:
         parser.error('--checkpoint-every must be positive')
@@ -65,19 +66,24 @@ def main():
         raise ValueError('source is not a capacity award-rate sensitivity run')
     award_mode,run_id,capacity_award_sensitivity=resume_settings(manifest)
     cp_path = source / 'final_checkpoint.json'
-    if not cp_path.exists():
+    if not args.fresh and not cp_path.exists():
         checkpoints = sorted(source.glob('checkpoint_*.json'))
         if not checkpoints:
             raise FileNotFoundError('no resumable checkpoint')
         cp_path = checkpoints[-1]
-    cp = json.loads(cp_path.read_text(encoding='utf-8'))
-    engine = PerfectEngine.restore(inp, cp, execution_end=datetime.fromisoformat(manifest['formal_end']),
+    settings=dict(execution_end=datetime.fromisoformat(manifest['formal_end']),
         inactive=[row['qh_id'] for row in evidence['rows'] if not row['valid']],
         evidence=evidence, budget_manifest=manifest['budgets'], capacity_award_sensitivity=capacity_award_sensitivity,
         run_id=run_id, history_mode='delta',
-        time_limit_seconds=args.time_limit)
-    save('resume_provenance.json', dict(source=str(source), checkpoint=str(cp_path),
-        checkpoint_hash=cp['state_hash'], committed_windows=len(engine._windows),
+        time_limit_seconds=args.time_limit,daily_efc_limit=manifest.get('daily_efc_limit'))
+    if args.fresh:
+        cp=None
+        engine=PerfectEngine(inp,**settings)
+    else:
+        cp=json.loads(cp_path.read_text(encoding='utf-8'))
+        engine=PerfectEngine.restore(inp,cp,**settings)
+    save('resume_provenance.json', dict(source=str(source), checkpoint=None if args.fresh else str(cp_path),
+        checkpoint_hash=cp['state_hash'] if cp else None, committed_windows=len(engine._windows),
         capacity_award_mode=award_mode,run_id=run_id,
         original_failure=engine.failure,
         retry_policy='on status 2 or independent numerical audit assertion, same input and constraints, presolve=True'))
@@ -159,6 +165,8 @@ def main():
         'coverage', 'quality', 'solver_seconds', 'execution_wall_seconds', 'total_wall_seconds', 'months')}
     summary['retry_count'] = len(retries)
     summary['capacity_award_mode']=award_mode
+    summary['cycle_policy']=report['cycle_policy']
+    summary['daily_efc_used']=report['daily_efc_used']
     summary['cash_basis']=report['cash_basis']
     save('summary.json', summary)
     save('solver_calls_resumed.json', calls)

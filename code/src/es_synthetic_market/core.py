@@ -1441,6 +1441,8 @@ def solve_joint(
     experimental_a1_a3: bool = False,
     reserve_headroom_from_gct: bool = False,
     terminal_soc_at: Mapping[str, float] | None = None,
+    daily_efc_limit: float | None = None,
+    enforce_annual_efc: bool = True,
 ) -> SyntheticMarketResult:
     """Solve the joint model, with A1--A3 available as an opt-in experiment.
 
@@ -1465,7 +1467,7 @@ def solve_joint(
         fixed_reserve_mw=fixed_reserve_mw,
         remaining_annual_efc=remaining_annual_efc,
     )
-    if experimental_a1_a3 and (reserve_headroom_from_gct or terminal_soc_at):
+    if experimental_a1_a3 and (reserve_headroom_from_gct or terminal_soc_at or daily_efc_limit is not None or not enforce_annual_efc):
         raise ValueError("P0 requires baseline net-contract core")
     if experimental_a1_a3:
         return _solve_joint_experimental(inp, order_mode, **options)
@@ -1473,7 +1475,8 @@ def solve_joint(
     from . import _baseline_core
 
     baseline_result = _baseline_core.solve_joint(inp, order_mode, **options,
-        reserve_headroom_from_gct=reserve_headroom_from_gct, terminal_soc_at=terminal_soc_at)
+        reserve_headroom_from_gct=reserve_headroom_from_gct, terminal_soc_at=terminal_soc_at,
+        daily_efc_limit=daily_efc_limit, enforce_annual_efc=enforce_annual_efc)
     payload = {
         name: getattr(baseline_result, name)
         for name in SyntheticMarketResult.__dataclass_fields__

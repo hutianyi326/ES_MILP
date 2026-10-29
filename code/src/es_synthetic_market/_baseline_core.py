@@ -496,6 +496,8 @@ def solve_joint(
     remaining_annual_efc: Mapping[int, float] | None = None,
     reserve_headroom_from_gct: bool = False,
     terminal_soc_at: Mapping[str, float] | None = None,
+    daily_efc_limit: float | None = None,
+    enforce_annual_efc: bool = True,
 ) -> SyntheticMarketResult:
     """Solve one full-joint synthetic order path with SciPy/HiGHS.
 
@@ -523,6 +525,12 @@ def solve_joint(
     if any(not isfinite(v) or not inp.e_min_mwh <= v <= inp.e_max_mwh for v in terminal_soc_at.values()):
         raise ValueError("invalid terminal boundary SOC")
     steps = _build_steps(inp, order_mode)
+    if not isinstance(enforce_annual_efc, bool):
+        raise ValueError("enforce_annual_efc must be boolean")
+    if daily_efc_limit is not None and (not isfinite(daily_efc_limit) or daily_efc_limit < 0):
+        raise ValueError("daily_efc_limit must be finite and nonnegative")
+    if not enforce_annual_efc and daily_efc_limit is None:
+        raise ValueError("disabling annual EFC requires a daily limit")
     qhs = inp.qhs
     contracts = inp.contracts
     # Local indexes keep the public immutable input free of mutable caches.
@@ -812,7 +820,7 @@ def solve_joint(
     # Annual DC-throughput budget shared across all segments in a year.  The
     # effective limit is additionally capped by the fraction of the local
     # Madrid year actually covered by the synthetic input.
-    for year, budget in budget_limits.items():
+    for year, budget in (budget_limits.items() if enforce_annual_efc else ()):
         row: dict[int, float] = {}
         for s, step in enumerate(steps):
             if inp.qhs[step.qh_index].madrid_year == year:
@@ -821,6 +829,18 @@ def solve_joint(
                 if discharge_index[s] >= 0:
                     row[int(discharge_index[s])] = row.get(int(discharge_index[s]), 0.0) + step.duration_hours / inp.eta_discharge / inp.cycle_denominator_mwh
         add(row, -np.inf, float(budget))
+
+    # User-defined daily throughput cap, independent for every Madrid date.
+    # DST days retain the same EFC limit; unused capacity cannot carry forward.
+    if daily_efc_limit is not None:
+        daily_rows = {}
+        for s, step in enumerate(steps):
+            day = qhs[step.qh_index].start_utc.astimezone(_required_madrid_timezone()).date()
+            row = daily_rows.setdefault(day, {})
+            row[int(charge_index[s])] = inp.eta_charge * step.duration_hours / inp.cycle_denominator_mwh
+            row[int(discharge_index[s])] = step.duration_hours / inp.eta_discharge / inp.cycle_denominator_mwh
+        for row in daily_rows.values():
+            add(row, -np.inf, daily_efc_limit)
 
     matrix = lil_matrix((len(rows), nvar), dtype=float)
     row_lb = np.empty(len(rows)); row_ub = np.empty(len(rows))
@@ -947,7 +967,7 @@ def solve_joint(
         for j, coefficient in terms:
             audit_qh_market_terms[qh_id].append((int(sell[j]), coefficient))
             audit_qh_market_terms[qh_id].append((int(buy[j]), -coefficient))
-    residuals = _audit_solution(inp, order_mode, audit_x, steps, audit_qh_market_terms, sell, buy, contract_mode, reserve_up, reserve_down, charge, discharge, operation_mode, soc, baseline_out, up_out, down_out, gross, float(result.fun), terminal_hard=terminal_hard, objective_value=objective_value, objective_constant=(0.0 if terminal_hard else float(salvage_price_eur_per_mwh) * terminal_reference * len(terminal_steps)), frozen_spot=frozen_spot, frozen_reserve=frozen_reserve, budget_limits=budget_limits)
+    residuals = _audit_solution(inp, order_mode, audit_x, steps, audit_qh_market_terms, sell, buy, contract_mode, reserve_up, reserve_down, charge, discharge, operation_mode, soc, baseline_out, up_out, down_out, gross, float(result.fun), terminal_hard=terminal_hard, objective_value=objective_value, objective_constant=(0.0 if terminal_hard else float(salvage_price_eur_per_mwh) * terminal_reference * len(terminal_steps)), frozen_spot=frozen_spot, frozen_reserve=frozen_reserve, budget_limits=budget_limits, daily_efc_limit=daily_efc_limit, enforce_annual_efc=enforce_annual_efc)
     ax = matrix.tocsr() @ x
     residuals["all_variable_bounds_max"] = float(max(0.0, np.max(lower-x), np.max(x-upper)))
     residuals["all_linear_rows_max"] = float(max(0.0, np.max(row_lb-ax), np.max(ax-row_ub)))
@@ -1085,6 +1105,8 @@ def _audit_solution(
     frozen_spot: Mapping[str, tuple[float, float]] | None = None,
     frozen_reserve: Mapping[str, tuple[float, float]] | None = None,
     budget_limits: Mapping[int, float] | None = None,
+    daily_efc_limit: float | None = None,
+    enforce_annual_efc: bool = True,
 ) -> dict[str, float]:
     if not np.all(np.isfinite(x)):
         raise AssertionError("solver vector contains non-finite values")
@@ -1172,6 +1194,7 @@ def _audit_solution(
     previous_by_segment: dict[str, float] = {}
     soc_violation = 0.0
     throughput_by_year: dict[int, float] = {}
+    throughput_by_day: dict[str, float] = {}
     for idx, step in enumerate(steps):
         qh = qh_map[step.qh_id]
         mode_value = float(x[operation_mode[idx]])
@@ -1191,6 +1214,8 @@ def _audit_solution(
         expected = previous + inp.eta_charge * charge_value * step.duration_hours - discharge_value * step.duration_hours / inp.eta_discharge
         soc_violation = max(soc_violation, abs(current - expected), inp.e_min_mwh - current, current - inp.e_max_mwh)
         throughput_by_year[qh.madrid_year] = throughput_by_year.get(qh.madrid_year, 0.0) + (inp.eta_charge * float(x[charge[idx]]) * step.duration_hours + float(x[discharge[idx]]) * step.duration_hours / inp.eta_discharge) / inp.cycle_denominator_mwh
+        day = qh.start_utc.astimezone(_required_madrid_timezone()).date().isoformat()
+        throughput_by_day[day] = throughput_by_day.get(day, 0.0) + (inp.eta_charge * charge_value + discharge_value / inp.eta_discharge) * step.duration_hours / inp.cycle_denominator_mwh
         previous_by_segment[qh.segment_id] = current
     terminal_violation = 0.0
     if terminal_hard:
@@ -1225,7 +1250,7 @@ def _audit_solution(
         integrality = max(integrality, abs(float(x[idx]) - round(float(x[idx]))))
     budget_violation = 0.0
     effective_budget = inp.effective_annual_efc_budget if budget_limits is None else budget_limits
-    for year, used in throughput_by_year.items():
+    for year, used in (throughput_by_year.items() if enforce_annual_efc else ()):
         budget_violation = max(budget_violation, used - float(effective_budget[year]))
     residuals = {
         "soc_recursion_abs_max": float(max(soc_violation, 0.0)),
@@ -1249,7 +1274,10 @@ def _audit_solution(
     }
     for year, used in throughput_by_year.items():
         residuals[f"annual_efc_used_{year}"] = float(used)
-        residuals[f"annual_efc_budget_effective_{year}"] = float(effective_budget[year])
+        if enforce_annual_efc:
+            residuals[f"annual_efc_budget_effective_{year}"] = float(effective_budget[year])
+    if daily_efc_limit is not None:
+        residuals['daily_efc_violation_max'] = max(0., max(throughput_by_day.values(), default=0.) - daily_efc_limit)
     check_values = [
         value
         for key, value in residuals.items()
