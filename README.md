@@ -4,6 +4,21 @@
 
 ## 版本记录
 
+### 每日 EFC 额度调整（2026-10-29，分支 `额度调整`）
+
+- 用户确认每日最多2次EFC，按Europe/Madrid自然日重置，不结转，替代原年度额度。每日电池侧充放吞吐量合计上限720 MWh；仍为200 MWh电池、SOC 10–190 MWh、充放效率各92%。
+- 本轮仅计算2026年1–8月，统一采用容量收入代理系数重新优化，重算100／100 MW、50／100 MW且aFRR上限各100 MW、50／100 MW且上限各150 MW三个场景。
+- [边界及数学约束](code/project/每日EFC额度边界_20261029.md)。原年度额度入口默认行为保留；新情景必须使用 `--daily-efc-limit 2` 或以下三场景专用入口。
+
+```powershell
+$esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
+& $esPython code/project/run_es_daily_efc_20261029.py --output output/my_daily_efc2_runs
+```
+
+若遇数值不可行，可使用独立输出目录恢复。显式 `--numerical-retry-tolerance 0.00001` 只在常规和presolve重试仍不可行时启用；不改变约束、冻结订单或既有独立审计阈值。恢复来源及每次重试均存档。
+
+以下版本记录与默认模型描述保留其历史口径。
+
 ### V1.1 — aFRR 容量收益敏感性（2026-09-24）
 
 - 新增逐 QH、分方向 aFRR 容量系数整理流程，以及 `full_fill`、`optimize`、`posthoc` 三种运行模式；默认 `full_fill` 保持原 V1 口径。

@@ -53,14 +53,27 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--input',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--baseline-run',type=Path,help='audited continuation directory for the symmetric baseline')
     args=p.parse_args();out=args.output
     if out.exists():raise FileExistsError(out)
     stats={};daily={};monthly={};evidence={};valid_sets={}
     expected_dates=[(datetime(2026,1,1)+timedelta(days=i)).date().isoformat() for i in range(243)]
     for name,(charge,reserve) in SCENARIOS.items():
-        folder=args.input/name
+        folder=args.baseline_run if name=='baseline_100_100' and args.baseline_run else args.input/name
         s=json.loads((folder/'summary.json').read_text(encoding='utf-8'))
         m=json.loads((folder/'manifest.json').read_text(encoding='utf-8'))
+        retry_history=[];provenance=[];visited=set();ancestor=folder.resolve()
+        while ancestor not in visited:
+            visited.add(ancestor)
+            retry_file=ancestor/'retry_events.jsonl'
+            if retry_file.exists():
+                retry_history += [dict(run_directory=str(ancestor),**json.loads(line)) for line in retry_file.read_text(encoding='utf-8').splitlines() if line]
+            prov_file=ancestor/'resume_provenance.json'
+            if not prov_file.exists():break
+            prov=json.loads(prov_file.read_text(encoding='utf-8'));provenance.append(prov)
+            ancestor=Path(prov['source'])
+            if not ancestor.is_absolute():ancestor=Path(__file__).resolve().parents[2]/ancestor
+            ancestor=ancestor.resolve()
         cfg=_top_level_scalars(folder/'solver_input.json',FIELDS)
         assert s['success'] and not s['failure'] and s['quality']['blocked_qh']==0
         assert s['cycle_policy']['mode']=='daily_only' and s['cycle_policy']['daily_efc_limit']==2
@@ -125,12 +138,13 @@ def main():
             efc=sum(v['efc'] for v in d.values()),max_daily_efc=max(v['efc'] for v in d.values()),
             days_at_limit=sum(v['efc']>=2-1e-5 for v in d.values()),days_with_activity=sum(v['efc']>1e-5 for v in d.values()),
             valid_qh=len(valid_sets[name]),total_qh=len(rows),windows=windows,proven_optimal=optimal,
-            retries=s['retry_count'],final_soc_mwh=prior_soc,physical_efc_error_max=max_efc_error,
+            retries=len(retry_history),final_soc_mwh=prior_soc,physical_efc_error_max=max_efc_error,
             physical_soc_error_max=max_soc_error)
         daily[name]=d;monthly[name]=mon
         evidence[name]=dict(configuration=cfg,input_evidence_sha256=digest(folder/'input_evidence.json'),
             solver_input_sha256=digest(folder/'solver_input.json'),summary_sha256=digest(folder/'summary.json'),
             result_sha256=digest(folder/'result.json'),award_source=m['award_rate_source'],
+            retry_history=retry_history,resume_provenance=provenance,
             source_code_hashes=m['code_hashes'],run_directory=str(folder.resolve()),stats=stats[name])
     assert len({v['input_evidence_sha256'] for v in evidence.values()})==1
     assert len({v['award_source']['sha256'] for v in evidence.values()})==1
@@ -160,7 +174,9 @@ def main():
     reference=stats['baseline_100_100']['total_cash_eur']
     for n,v in stats.items():
         report.append(f"| {NAMES[n]} | {v['total_keur_per_mw']:.2f} | {v['total_cash_eur']/10000:,.2f} | {(v['total_cash_eur']/reference-1)*100:+.2f}% | {v['efc']:.3f} | {v['days_at_limit']} |")
-    report+=['','日上限用满天数按当日EFC≥2−0.00001次统计。243天的逐日上限合计为486次，但未用额度不能跨日转移，不要求每天用满。','',
+    sensitivity_delta=stats['asymmetric_cap150']['total_keur_per_mw']-stats['asymmetric_cap100']['total_keur_per_mw']
+    report+=['',f"在同一50／100 MW配置下，aFRR上／下调申报上限各150 MW相对各100 MW，8个月累计收益差额为{sensitivity_delta:+.2f}千欧元／MW（整站{sensitivity_delta*10:+.2f}万欧元）。这仍是两日滚动策略结果，不能保证所有情景放宽约束后全期收益都单调提高。",
+        '', '日上限用满天数按当日EFC≥2−0.00001次统计。243天的逐日上限合计为486次，但未用额度不能跨日转移，不要求每天用满。原方案2026年统计期总额度约345.992次；本次同时改变额度总量上限与使用节奏，不能视为只把原额度平均分摊。','',
         '## 六项市场现金流','',
         '单位：千欧元／MW，均为2026年1—8月共同有效时段累计。容量项已累计为金额，不是容量报价。','',
         '| 市场 | 充100／放100、申报100 MW（千欧元／MW） | 充50／放100、申报100 MW（千欧元／MW） | 充50／放100、申报150 MW（千欧元／MW） |',
@@ -192,6 +208,7 @@ def main():
     for n,v in stats.items():
         report.append(f"| {NAMES[n]} | {v['windows']} | {v['proven_optimal']} | {v['retries']} | {v['max_daily_efc']:.6f} | {v['final_soc_mwh']:.6f} |")
     report+=['','逐日从物理功率及持续时间独立重算EFC，核对报告、每日上限、月度与全期汇总；复核SOC递推、功率边界、窗口连续性、期初期末SOC、现金汇总和三场景输入证据一致，均通过。',
+        '100／100 MW场景在4月21日冻结订单边界遇到数值不可行；保留原失败结果后恢复。重试仅将HiGHS的可行性容差设为既有独立验收容差1e-5；未改约束值、订单、日额度或独立验收阈值。该日物理执行EFC约1.826次，恢复后再次逐日验收。表中重试次数包含原运行和恢复运行的记录，完整信息见验证证据。',
         '代码验收记录：58项每日额度及旧核心相关测试通过；补充激活吞吐量测试后，每日额度专项7项全部通过。三个场景四天试算成功。求解gap默认1e-4；窗口最优标记仅指该窗口达到求解标准。',
         '','## 官方来源、未解决问题与文件','',
         '规则事实和官方数据沿用REE/eSIOS及OMIE既有归档，详见[已确认研究及官方来源记录](../../research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。本次没有新增官方规则；每日2次EFC为用户指定建模假设。访问及获取日期沿用原归档，未重新下载原始数据。',

@@ -2,6 +2,8 @@
 import argparse
 import gc
 import json
+import math
+import hashlib
 import shutil
 import sys
 from dataclasses import replace
@@ -40,9 +42,13 @@ def main():
     parser.add_argument('--time-limit', type=float, default=30.0)
     parser.add_argument('--checkpoint-every', type=int, default=30)
     parser.add_argument('--fresh',action='store_true',help='start from a preflight directory without a checkpoint')
+    parser.add_argument('--numerical-retry-tolerance',type=float,
+        help='optional HiGHS feasibility tolerance retry, at most the unchanged 1e-5 independent audit tolerance')
     args = parser.parse_args()
     if args.checkpoint_every < 1:
         parser.error('--checkpoint-every must be positive')
+    if args.numerical_retry_tolerance is not None and (not math.isfinite(args.numerical_retry_tolerance) or not 0<args.numerical_retry_tolerance<=1e-5):
+        parser.error('numerical retry tolerance must be finite in (0,1e-5]')
     source, output = args.source, args.output
     if output.exists():
         raise FileExistsError(output)
@@ -86,18 +92,26 @@ def main():
         checkpoint_hash=cp['state_hash'] if cp else None, committed_windows=len(engine._windows),
         capacity_award_mode=award_mode,run_id=run_id,
         original_failure=engine.failure,
-        retry_policy='on status 2 or independent numerical audit assertion, same input and constraints, presolve=True'))
+        numerical_retry_tolerance=args.numerical_retry_tolerance,
+        independent_audit_tolerance=1e-5,
+        resume_runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        retry_policy='on status 2 or independent numerical audit assertion: presolve=True; optional feasibility tolerance retry after status 2; unchanged constraints and independent audits'))
     del cp
     gc.collect()
     engine.failure = None
     calls = []
     original_milp = scipy.optimize.milp
+    numerical_tolerance = None
 
     def timed(*positional, **keywords):
+        if numerical_tolerance is not None:
+            keywords['options']={**keywords['options'],
+                'mip_feasibility_tolerance':numerical_tolerance,
+                'primal_feasibility_tolerance':numerical_tolerance}
         begin = perf_counter()
         result = original_milp(*positional, **keywords)
         calls.append(dict(seconds=perf_counter() - begin, status=int(result.status),
-                          presolve=keywords['options']['presolve']))
+                          presolve=keywords['options']['presolve'],feasibility_tolerance=numerical_tolerance))
         return result
 
     scipy.optimize.milp = timed
@@ -105,6 +119,7 @@ def main():
     retries = []
 
     def checked(win, order_mode, **options):
+        nonlocal numerical_tolerance
         first = len(calls)
         try:
             result = original_solve(win, order_mode, **options)
@@ -127,10 +142,25 @@ def main():
             retries.append(event)
             with (output / 'retry_events.jsonl').open('a', encoding='utf-8') as stream:
                 stream.write(json.dumps(event) + '\n')
+        if not result.feasible and result.status==2 and args.numerical_retry_tolerance is not None:
+            initial_message=result.message
+            numerical_tolerance=args.numerical_retry_tolerance
+            try:
+                result=original_solve(win,order_mode,**{**options,'presolve':False})
+            finally:
+                numerical_tolerance=None
+            event=dict(window_start=win.qhs[0].start_utc.isoformat(),
+                retry_kind='solver_feasibility_tolerance_only',tolerance=args.numerical_retry_tolerance,
+                independent_audit_tolerance=1e-5,initial_message=initial_message,
+                retry_feasible=result.feasible,retry_message=result.message,calls=calls[first:])
+            retries.append(event)
+            with (output/'retry_events.jsonl').open('a',encoding='utf-8') as stream:
+                stream.write(json.dumps(event)+'\n')
         if result.feasible:
             result = replace(result, residuals={**result.residuals,
                 'solver_seconds': sum(call['seconds'] for call in calls[first:]),
-                'presolve_retry': int(len(calls) - first > 1)})
+                'presolve_retry': int(any(call['presolve'] for call in calls[first:]) and len(calls)-first>1),
+                'feasibility_tolerance_retry':int(any(call['feasibility_tolerance'] is not None for call in calls[first:]))})
         return result
 
     engine._solve_window = checked
