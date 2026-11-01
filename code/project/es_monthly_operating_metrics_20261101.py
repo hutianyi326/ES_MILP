@@ -175,6 +175,23 @@ def render(metrics):
         '表中的“中标率”仍是历史系统比例代理，并非本站真实投标成功率。另列代理后有效容量均价＝容量收入÷Σ(R×0.25小时)，便于与报告收入核对；由于价格与p共同变化，不能用“市场均价×平均代理中标率”替代逐时段计算。','']
     lines+=table(['月份','Up容量市场均价（欧元/(MW·h)）','Down容量市场均价（欧元/(MW·h)）','Up中标率代理（%）','Down中标率代理（%）','Up代理后有效均价（欧元/(MW·h)）','Down代理后有效均价（欧元/(MW·h)）'],
         ['up_capacity_market_price_eur_per_mw_h','down_capacity_market_price_eur_per_mw_h','up_award_rate_proxy_pct','down_award_rate_proxy_pct','up_capacity_effective_price_eur_per_mw_h','down_capacity_effective_price_eur_per_mw_h'])
+    capacity_averages={}
+    for month,v in metrics.items():
+        hours=v['valid_qh_count']*.25
+        capacity_averages[month]={
+            'up_reserved':ratio(v['up_reserve_mw_h'],hours),
+            'down_reserved':ratio(v['down_reserve_mw_h'],hours),
+            'up_awarded_proxy':ratio(v['up_award_proxy_mw_h'],hours),
+            'down_awarded_proxy':ratio(v['down_award_proxy_mw_h'],hours)}
+    lines+=['**月均申报容量及代理折算中标容量**','',
+        'MILP实际求得的是逐时段申报／预留容量R，模型没有独立模拟本站实际中标量。因此同时列示两组结果：申报／预留均值＝Σ(R×0.25小时)÷当月有效测算小时；代理折算平均中标容量＝Σ(R×p×0.25小时)÷当月有效测算小时。平均分母包含有效时段中的零申报时段，排除缺失时段；不是只对已申报时段求平均，也不是按整月全部日历小时平均。单位均为MW。代理折算容量只用于统计说明，不改变模型按完整R承担备用与激活的原有假设，不代表可核实的本站真实中标结果。','',
+        '| 月份 | 有效测算时长（h） | MILP平均Up申报／预留容量（MW） | MILP平均Down申报／预留容量（MW） | 代理折算平均Up中标容量（MW） | 代理折算平均Down中标容量（MW） |',
+        '|---|---:|---:|---:|---:|---:|']
+    for month,v in metrics.items():
+        label='全期加权平均' if month=='TOTAL' else month
+        a=capacity_averages[month]
+        lines.append('| '+label+' | '+f(v['valid_qh_count']*.25)+' | '+' | '.join(f(a[k]) for k in ('up_reserved','down_reserved','up_awarded_proxy','down_awarded_proxy'))+' |')
+    lines+=['']
     lines+=['#### 3. aFRR激活电量、时长和价格','',
         '激活电量按Σ(R×α×0.25小时)累计，是相对于基准出力的调节电量，并不等同于电池实际放电量或充电量。模型激活时长按有申报容量时Σ(α×0.25小时)累计，是简化激活路径的小时数，不是实测AGC持续时间；同时列示按100 MW折算的等效满功率小时数＝激活电量÷100 MW。所有时长均为当月累计，不是单次激活平均持续时间。',
         '激活价格按激活MWh加权，表中恢复原市场报价符号（Down价格为账本带符号现金单价的相反数）：上调现金流＝上调电量×Up价格；下调现金流＝−下调电量×Down价格。因此Down价格为负时，下调激活形成正收入。两方向激活电量和现金流均未再乘容量中标率代理p。','',
