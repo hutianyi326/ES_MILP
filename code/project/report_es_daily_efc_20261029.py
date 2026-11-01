@@ -202,6 +202,7 @@ def main():
     reference=stats['baseline_100_100']['total_cash_eur']
     for n,v in stats.items():
         report.append(f"| {NAMES[n]} | {v['total_keur_per_mw']:.2f} | {v['total_cash_eur']/10000:,.2f} | {(v['total_cash_eur']/reference-1)*100:+.2f}% | {v['efc']:.3f} | {v['days_at_limit']} |")
+    report += ['', '**为什么区分各100 MW和各150 MW申报上限？** 两个非对称场景的设备均为充电50 MW、放电100 MW。各100 MW是已确认的主场景申报封顶，用作基础比较，并非已证实的统一法规上限；各150 MW用于检验完整跨零调节范围的理论收益。净出力从−50 MW（充电）到＋100 MW（放电）的跨度为150 MW，因此150 MW表示相对基准的调节量，不代表设备可以放电150 MW。同一时段，上调容量≤100−基准净出力，下调容量≤50＋基准净出力，两者之和≤150 MW，所以不能同时上下调各申报150 MW。实际申报还受SOC、EFC等约束；跨零响应性能和市场资格仍待验证。']
     sensitivity_delta=stats['asymmetric_cap150']['total_keur_per_mw']-stats['asymmetric_cap100']['total_keur_per_mw']
     report+=['',f"在同一50／100 MW配置下，aFRR上／下调申报上限各150 MW相对各100 MW，8个月累计收益差额为{sensitivity_delta:+.2f}千欧元／MW（整站{sensitivity_delta*10:+.2f}万欧元）。这仍是两日滚动策略结果，不能保证所有情景放宽约束后全期收益都单调提高。",
         '', '日上限用满天数按当日EFC≥2−0.00001次统计。243天的逐日上限合计为486次，但未用额度不能跨日转移，不要求每天用满。原方案2026年统计期总额度约345.992次；本次同时改变额度总量上限与使用节奏，不能视为只把原额度平均分摊。','',
