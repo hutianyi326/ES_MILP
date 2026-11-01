@@ -250,6 +250,9 @@ def main():
         '- 验证与文档：[每日EFC测试](../../code/tests/test_es_daily_efc.py)、[独立验证和报告生成](../../code/project/report_es_daily_efc_20261029.py)、[项目说明](../../README.md)、上述边界文件、本报告及三份数据/证据附件。',
         '- 原始输入未修改；大体量运行明细保留在本地output目录，不纳入Git。各场景精确目录及哈希见validation_evidence.json；原失败输出未覆盖。','']
     report+=brief_description(monthly['asymmetric_cap100'])
+    from es_monthly_operating_metrics_20261101 import export as export_operating_metrics
+    operating_lines,_=export_operating_metrics(args.input/'asymmetric_cap100',out)
+    report+=operating_lines
     (out/'测算对比报告.md').write_text('\n'.join(report),encoding='utf-8')
     print(json.dumps(stats,ensure_ascii=False,indent=2))
 
