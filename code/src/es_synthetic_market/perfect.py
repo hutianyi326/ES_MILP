@@ -16,10 +16,13 @@ from .core import _required_madrid_timezone
 class PerfectEngine(RollingEngine):
     def __init__(self, inp, *, execution_end, inactive=(), evidence=None, budget_manifest=None,
                  capacity_award_sensitivity=False,
-                 daily_efc_limit=None,
+                 daily_efc_limit=None, activation_capacity_basis="full_bid",
                  run_id="ES_SYNTHETIC_PERFECT_V1", order_mode="D", **kwargs):
         if execution_end.tzinfo is None:
             raise ValueError("aware execution_end required")
+        if activation_capacity_basis not in ("full_bid", "proxy_awarded"):
+            raise ValueError("invalid activation_capacity_basis")
+        self.activation_capacity_basis=activation_capacity_basis
         self.execution_end=execution_end.astimezone(UTC)
         self.inactive=frozenset(inactive)
         self.evidence=evidence or {}
@@ -45,7 +48,7 @@ class PerfectEngine(RollingEngine):
             raise ValueError("unknown inactive QH")
         # Gap coefficients are harmless finite sentinels, only behind zero bounds.
         # Original nulls remain in evidence; never overwrite raw files.
-        qhs=tuple(replace(q,segment_id="continuous",**(dict(alpha_up=0.,alpha_down=0.,
+        qhs=tuple(replace(q,segment_id="continuous",activation_capacity_basis=activation_capacity_basis,**(dict(alpha_up=0.,alpha_down=0.,
             afrr_capacity_price_up_eur_per_mw_qh=0.,afrr_capacity_price_down_eur_per_mw_qh=0.,
             afrr_activation_price_up_eur_per_mwh=0.,afrr_activation_price_down_eur_per_mwh=0.)
             if q.qh_id in self.inactive else {})) for q in qhs)
@@ -62,6 +65,8 @@ class PerfectEngine(RollingEngine):
         if daily_efc_limit is not None:
             config['cycle_policy']=dict(daily_limit=daily_efc_limit,timezone='Europe/Madrid',
                 carry_forward=False,enforce_annual_efc=False)
+        if activation_capacity_basis != "full_bid":
+            config["activation_capacity_basis"]=activation_capacity_basis
         self.configuration_hash=_hash(config)
         self._budget_audit={}
         self._last_result=None
@@ -196,8 +201,8 @@ class PerfectEngine(RollingEngine):
             up=result.reserve_up_mw[q.qh_id];down=result.reserve_down_mw[q.qh_id]
             if q.qh_id in fr and max(abs(up-fr[q.qh_id][0]),abs(down-fr[q.qh_id][1]))>TOL:
                 raise AssertionError("eliminated reserve restoration failed")
-            cash=up*(q.effective_capacity_price_up_eur_per_mw_qh+q.alpha_up*.25*q.afrr_activation_price_up_eur_per_mwh)
-            cash+=down*(q.effective_capacity_price_down_eur_per_mw_qh+q.alpha_down*.25*q.afrr_activation_price_down_eur_per_mwh)
+            cash=up*(q.effective_capacity_price_up_eur_per_mw_qh+q.activation_factor_up*q.alpha_up*.25*q.afrr_activation_price_up_eur_per_mwh)
+            cash+=down*(q.effective_capacity_price_down_eur_per_mw_qh+q.activation_factor_down*q.alpha_down*.25*q.afrr_activation_price_down_eur_per_mwh)
             gross+=cash
             if q.qh_id in fr or q.afrr_gate_close_utc<win.qhs[0].start_utc: constant_cash+=cash
             else: variable_cash+=cash
@@ -318,8 +323,10 @@ class PerfectEngine(RollingEngine):
             raise AssertionError('reported daily EFC exceeds limit')
         return dict(mode='perfect_history_v1',success=self.failure is None,failure=self.failure,
             formal_end=self.execution_end.isoformat(),input_hash=self.input_hash,configuration_hash=self.configuration_hash,
-            assumptions=['perfect_prices_alpha_full_fill','reserve_headroom_from_gct','gap_idle_zero_self_discharge']
-                        + (['capacity_award_rate_proxy_revenue_only'] if self.capacity_award_sensitivity else []),
+            activation_capacity_basis=self.activation_capacity_basis,
+            assumptions=['perfect_prices_alpha','full_bid_reserve_headroom_from_gct','gap_idle_zero_self_discharge',
+                         'activation_'+self.activation_capacity_basis]
+                        + (['capacity_award_rate_proxy_capacity_revenue'] if self.capacity_award_sensitivity else []),
             budgets=self.budget_manifest,annual_budget=self._budget if self.enforce_annual_efc else {y:None for y in self._budget},annual_used=self._used,
             cycle_policy=dict(mode='annual' if self.enforce_annual_efc else 'daily_only',
                 daily_efc_limit=self.daily_efc_limit,timezone='Europe/Madrid',carry_forward=False,

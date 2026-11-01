@@ -153,6 +153,9 @@ class RollingEngine:
         self.time_limit_seconds=time_limit_seconds;self.mip_rel_gap=mip_rel_gap
         self.presolve=presolve
         input_payload=asdict(inp)
+        for row in input_payload["qhs"]:
+            if row["activation_capacity_basis"] == "full_bid":
+                row.pop("activation_capacity_basis")
         if inp.data_scope == 'historical_conditional' and all(q.afrr_award_rate_up == 1.0 and q.afrr_award_rate_down == 1.0 for q in inp.qhs):
             for row in input_payload['qhs']:
                 row.pop('afrr_award_rate_up',None)
@@ -305,9 +308,10 @@ class RollingEngine:
             for direction,mw,alpha,cap,act in (("up",r.up_mw,q.alpha_up,q.effective_capacity_price_up_eur_per_mw_qh,q.afrr_activation_price_up_eur_per_mwh),("down",r.down_mw,q.alpha_down,q.effective_capacity_price_down_eur_per_mw_qh,q.afrr_activation_price_down_eur_per_mwh)):
                 common=dict(run_id=self.run_id,path=self.path,qh_id=q.qh_id,direction=direction,execution_day=day,fixed=q.qh_id in frozen_reserve)
                 ledger.settle_capacity(**common,capacity_mw=mw,price_eur_per_mw_period=cap)
-                ledger.settle_activation(**common,activation_mwh=mw*q.duration_hours*alpha,price_eur_per_mwh=act)
-                expected_cash+=mw*cap+mw*q.duration_hours*alpha*act
-            phases=[("up",q.alpha_up,baseline+r.up_mw),("down",q.alpha_down,baseline-r.down_mw)]
+                factor=getattr(q,"activation_factor_"+direction)
+                ledger.settle_activation(**common,activation_mwh=mw*factor*q.duration_hours*alpha,price_eur_per_mwh=act)
+                expected_cash+=mw*cap+mw*factor*q.duration_hours*alpha*act
+            phases=[("up",q.alpha_up,baseline+q.activation_factor_up*r.up_mw),("down",q.alpha_down,baseline-q.activation_factor_down*r.down_mw)]
             if self.order_mode=="D": phases.reverse()
             phases.append(("idle",1-(q.alpha_up+q.alpha_down),baseline))
             for phase,fraction,power in phases:

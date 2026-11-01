@@ -42,6 +42,10 @@ def compute(run):
     from report_es_daily_efc_20261029 import read_array
     summary=json.loads((run/'summary.json').read_text(encoding='utf-8'))
     assert summary['success'] and summary['cycle_policy']['daily_efc_limit']==2
+    manifest=json.loads((run/'manifest.json').read_text(encoding='utf-8'))
+    basis=manifest.get('activation_capacity_basis','full_bid')
+    assert basis in ('full_bid','proxy_awarded')
+    def factor(q,d): return (q['afrr_award_rate_'+d] or 0) if basis=='proxy_awarded' else 1.
     inp=json.loads((run/'solver_input.json').read_text(encoding='utf-8'))
     assert (inp['charge_mw'],inp['discharge_mw'],inp['reserve_limit_up_mw'],inp['reserve_limit_down_mw'])==(50,100,100,100)
     qmap={q['qh_id']:q for q in inp['qhs']}
@@ -83,6 +87,8 @@ def compute(run):
             assert error<1e-5,(qid,k,error)
             v[k+'_cash_eur']+=a[k]
         net=a['spot_net_mwh'];cash=a['spot_cash_eur']
+        assert net/.25+a['up_reserve_mw']<=100+1e-5
+        assert net/.25-a['down_reserve_mw']>=-50-1e-5
         # Sign classification uses the final QH position, not gross trade volume.
         if net < -1e-7:
             v['net_charge_mwh']-=net;v['net_charge_cost_eur']-=cash
@@ -92,11 +98,11 @@ def compute(run):
             v['zero_net_spot_cash_eur']+=cash;v['zero_net_spot_qh_count']+=1
         for d in ('up','down'):
             r=a[d+'_reserve_mw'];rate=q['afrr_award_rate_'+d]
-            assert -1e-7<=r<=100+1e-7
+            assert -1e-7<=r<=100+1e-7 and abs(r-round(r))<1e-7
             raw=q['afrr_capacity_price_'+d+'_eur_per_mw_qh']
             assert r<1e-7 or rate is not None
             assert abs(a['cap_'+d]-r*raw*(rate or 0))<1e-5
-            expected=r*q['alpha_'+d]*.25
+            expected=r*factor(q,d)*q['alpha_'+d]*.25
             activation_error=max(activation_error,abs(expected-a[d+'_activation_mwh']))
             assert activation_error<1e-5
             assert abs(a['act_'+d]-expected*q['afrr_activation_price_'+d+'_eur_per_mwh'])<1e-5
@@ -117,15 +123,18 @@ def compute(run):
                 assert abs(op['power_mw'])<1e-5
                 continue
             a=pos[qid];phase=op['phase'];b=a['spot_net_mwh']/.25
-            expected=b+(a['up_reserve_mw'] if phase=='up' else -a['down_reserve_mw'] if phase=='down' else 0)
+            expected=b+(a['up_reserve_mw']*factor(qmap[qid],'up') if phase=='up' else -a['down_reserve_mw']*factor(qmap[qid],'down') if phase=='down' else 0)
             power_error=max(power_error,abs(expected-op['power_mw']))
             assert power_error<1e-5
             v=phase_totals[datetime.fromisoformat(qid).astimezone(TZ).strftime('%Y-%m')]
             p=op['power_mw'];h=op['hours']
+            q=qmap[qid]
+            expected_h=.25*(q['alpha_'+phase] if phase in ('up','down') else 1-q['alpha_up']-q['alpha_down'])
+            assert abs(h-expected_h)<1e-7
             v['actual_charge_mwh']+=max(-p,0)*h;v['actual_discharge_mwh']+=max(p,0)*h
             if phase in ('up','down') and a[phase+'_reserve_mw']>1e-7:
                 v[phase+'_activation_hours']+=h
-                v[phase+'_activation_mwh']+=a[phase+'_reserve_mw']*h
+                v[phase+'_activation_mwh']+=a[phase+'_reserve_mw']*factor(qmap[qid],phase)*h
     assert windows==243 and len(valid)==20263 and len(monthly)==8
     for month,v in monthly.items():
         for d in ('up','down'):
@@ -142,7 +151,7 @@ def compute(run):
         for k,value in v.items():total[k]+=value
     metrics={m:derive(v) for m,v in sorted(monthly.items())}
     metrics['TOTAL']=derive(total)
-    evidence=dict(scenario='asymmetric_cap100',run_directory=str(run.resolve()),
+    evidence=dict(scenario='asymmetric_cap100',activation_capacity_basis=basis,run_directory=str(run.resolve()),
         charge_discharge_price_policy='DA_ID_final_QH_net_position_excluding_aFRR',
         capacity_weighting='submitted_MW_times_0.25h; award_rate_is_proxy_not_actual_station_award',
         activation_price_weighting='activation_MWh; down_market_price_is_negative_of_ledger_cash_price',
@@ -228,8 +237,10 @@ def main():
     path=args.report_dir/'测算对比报告.md'
     original=path.read_text(encoding='utf-8')
     assert original.count(MARKER)<=1
+    suffix='\n\n## 代理折算中标容量激活对照场景'
+    tail=suffix+original.split(suffix,1)[1] if suffix in original else ''
     prefix=original.split(MARKER)[0].rstrip()
-    path.write_text(prefix+'\n\n'+'\n'.join(lines),encoding='utf-8')
+    path.write_text(prefix+'\n\n'+'\n'.join(lines)+tail,encoding='utf-8')
     print(json.dumps({k:v for k,v in evidence.items() if k not in ('metrics','source_sha256')},ensure_ascii=True,indent=2))
     print(json.dumps(evidence['metrics']['TOTAL'],ensure_ascii=True,indent=2))
 

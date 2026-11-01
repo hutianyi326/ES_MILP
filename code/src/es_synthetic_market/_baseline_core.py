@@ -97,6 +97,7 @@ class QHInput:
     afrr_result_release_utc: datetime | None = None
     afrr_award_rate_up: float | None = 1.0
     afrr_award_rate_down: float | None = 1.0
+    activation_capacity_basis: str = "full_bid"
 
     def __post_init__(self) -> None:
         if not self.qh_id or not self.segment_id:
@@ -109,6 +110,8 @@ class QHInput:
             raise ValueError("QH must start on the UTC quarter-hour grid")
         if not isinstance(self.madrid_year, int) or self.madrid_year < 2000:
             raise ValueError("madrid_year must be an integer year")
+        if self.activation_capacity_basis not in ("full_bid", "proxy_awarded"):
+            raise ValueError("invalid activation_capacity_basis")
         a_up = _finite(self.alpha_up, "alpha_up")
         a_down = _finite(self.alpha_down, "alpha_down")
         if a_up < 0 or a_down < 0 or a_up > 1 or a_down > 1 or a_up + a_down > 1:
@@ -142,6 +145,14 @@ class QHInput:
     @property
     def duration_hours(self) -> float:
         return 0.25
+
+    @property
+    def activation_factor_up(self) -> float:
+        return (self.afrr_award_rate_up or 0.0) if self.activation_capacity_basis == "proxy_awarded" else 1.0
+
+    @property
+    def activation_factor_down(self) -> float:
+        return (self.afrr_award_rate_down or 0.0) if self.activation_capacity_basis == "proxy_awarded" else 1.0
 
     @property
     def effective_capacity_price_up_eur_per_mw_qh(self) -> float:
@@ -476,8 +487,8 @@ def _fixed_cash_total(inp: SyntheticMarketInput) -> float:
             continue
         total += qh.effective_capacity_price_up_eur_per_mw_qh * commitment.reserve_up_mw
         total += qh.effective_capacity_price_down_eur_per_mw_qh * commitment.reserve_down_mw
-        total += qh.afrr_activation_price_up_eur_per_mwh * commitment.reserve_up_mw * 0.25 * qh.alpha_up
-        total += qh.afrr_activation_price_down_eur_per_mwh * commitment.reserve_down_mw * 0.25 * qh.alpha_down
+        total += qh.afrr_activation_price_up_eur_per_mwh * qh.activation_factor_up * commitment.reserve_up_mw * 0.25 * qh.alpha_up
+        total += qh.afrr_activation_price_down_eur_per_mwh * qh.activation_factor_down * commitment.reserve_down_mw * 0.25 * qh.alpha_down
     return float(total)
 
 
@@ -618,11 +629,11 @@ def solve_joint(
             net_index[j] = allocate(-100.0, 100.0, -contract_cash_coeff[j])
 
     reserve_up_coeff = np.array([
-        -(qh.effective_capacity_price_up_eur_per_mw_qh + qh.afrr_activation_price_up_eur_per_mwh * 0.25 * qh.alpha_up)
+        -(qh.effective_capacity_price_up_eur_per_mw_qh + qh.afrr_activation_price_up_eur_per_mwh * qh.activation_factor_up * 0.25 * qh.alpha_up)
         for qh in qhs
     ])
     reserve_down_coeff = np.array([
-        -(qh.effective_capacity_price_down_eur_per_mw_qh + qh.afrr_activation_price_down_eur_per_mwh * 0.25 * qh.alpha_down)
+        -(qh.effective_capacity_price_down_eur_per_mw_qh + qh.afrr_activation_price_down_eur_per_mwh * qh.activation_factor_down * 0.25 * qh.alpha_down)
         for qh in qhs
     ])
     reserve_up_index = np.full(n_qh, -1, dtype=int)
@@ -784,11 +795,11 @@ def solve_joint(
             for j, coefficient in qh_market_terms[qh.qh_id]
         ]
         if step.phase == "up":
-            power_terms.append((int(reserve_up_index[step.qh_index]), float(reserve_up_fixed[step.qh_index]), -1.0))
-            rhs = fc.baseline_mw + fc.reserve_up_mw
+            power_terms.append((int(reserve_up_index[step.qh_index]), float(reserve_up_fixed[step.qh_index]), -qh.activation_factor_up))
+            rhs = fc.baseline_mw + qh.activation_factor_up * fc.reserve_up_mw
         elif step.phase == "down":
-            power_terms.append((int(reserve_down_index[step.qh_index]), float(reserve_down_fixed[step.qh_index]), 1.0))
-            rhs = fc.baseline_mw - fc.reserve_down_mw
+            power_terms.append((int(reserve_down_index[step.qh_index]), float(reserve_down_fixed[step.qh_index]), qh.activation_factor_down))
+            rhs = fc.baseline_mw - qh.activation_factor_down * fc.reserve_down_mw
         else:
             rhs = fc.baseline_mw
         add_logical(power_terms, rhs, rhs)
@@ -924,8 +935,8 @@ def solve_joint(
         down_out[qh.qh_id] = float(fixed_for_qh[qh.qh_id].reserve_down_mw + reserve_down_values[qh_i])
     cap_cash = sum(qh.effective_capacity_price_up_eur_per_mw_qh * up_out[qh.qh_id] + qh.effective_capacity_price_down_eur_per_mw_qh * down_out[qh.qh_id] for qh in qhs)
     act_cash = sum(
-        qh.afrr_activation_price_up_eur_per_mwh * up_out[qh.qh_id] * 0.25 * qh.alpha_up
-        + qh.afrr_activation_price_down_eur_per_mwh * down_out[qh.qh_id] * 0.25 * qh.alpha_down
+        qh.afrr_activation_price_up_eur_per_mwh * qh.activation_factor_up * up_out[qh.qh_id] * 0.25 * qh.alpha_up
+        + qh.afrr_activation_price_down_eur_per_mwh * qh.activation_factor_down * down_out[qh.qh_id] * 0.25 * qh.alpha_down
         for qh in qhs
     )
     gross = cash_energy + cap_cash + act_cash + sum(f.fixed_energy_cash_eur for f in inp.fixed_commitments)
@@ -1018,8 +1029,8 @@ def solve_joint(
         for qh in qhs
     )
     act_new_cash = act_cash - sum(
-        qh.afrr_activation_price_up_eur_per_mwh * fixed_for_qh[qh.qh_id].reserve_up_mw * 0.25 * qh.alpha_up
-        + qh.afrr_activation_price_down_eur_per_mwh * fixed_for_qh[qh.qh_id].reserve_down_mw * 0.25 * qh.alpha_down
+        qh.afrr_activation_price_up_eur_per_mwh * qh.activation_factor_up * fixed_for_qh[qh.qh_id].reserve_up_mw * 0.25 * qh.alpha_up
+        + qh.afrr_activation_price_down_eur_per_mwh * qh.activation_factor_down * fixed_for_qh[qh.qh_id].reserve_down_mw * 0.25 * qh.alpha_down
         for qh in qhs
     )
     return SyntheticMarketResult(
@@ -1203,9 +1214,9 @@ def _audit_solution(
         charge_violation = max(charge_violation, -charge_value, charge_value - inp.charge_mw * (1.0 - mode_value))
         discharge_violation = max(discharge_violation, -discharge_value, discharge_value - inp.discharge_mw * mode_value)
         if step.phase == "up":
-            expected_power = baseline_out[step.qh_id] + up_out[step.qh_id]
+            expected_power = baseline_out[step.qh_id] + qh.activation_factor_up * up_out[step.qh_id]
         elif step.phase == "down":
-            expected_power = baseline_out[step.qh_id] - down_out[step.qh_id]
+            expected_power = baseline_out[step.qh_id] - qh.activation_factor_down * down_out[step.qh_id]
         else:
             expected_power = baseline_out[step.qh_id]
         power_equation_violation = max(power_equation_violation, abs(discharge_value - charge_value - expected_power))
@@ -1233,15 +1244,15 @@ def _audit_solution(
         for qh in inp.qhs
     )
     independent_activation = sum(
-        qh.afrr_activation_price_up_eur_per_mwh * up_out[qh.qh_id] * 0.25 * qh.alpha_up
-        + qh.afrr_activation_price_down_eur_per_mwh * down_out[qh.qh_id] * 0.25 * qh.alpha_down
+        qh.afrr_activation_price_up_eur_per_mwh * qh.activation_factor_up * up_out[qh.qh_id] * 0.25 * qh.alpha_up
+        + qh.afrr_activation_price_down_eur_per_mwh * qh.activation_factor_down * down_out[qh.qh_id] * 0.25 * qh.alpha_down
         for qh in inp.qhs
     )
     independent_cash = independent_energy + independent_capacity + independent_activation + _fixed_cash_total(inp) - sum(
         qh.effective_capacity_price_up_eur_per_mw_qh * fc.reserve_up_mw
         + qh.effective_capacity_price_down_eur_per_mw_qh * fc.reserve_down_mw
-        + qh.afrr_activation_price_up_eur_per_mwh * fc.reserve_up_mw * 0.25 * qh.alpha_up
-        + qh.afrr_activation_price_down_eur_per_mwh * fc.reserve_down_mw * 0.25 * qh.alpha_down
+        + qh.afrr_activation_price_up_eur_per_mwh * qh.activation_factor_up * fc.reserve_up_mw * 0.25 * qh.alpha_up
+        + qh.afrr_activation_price_down_eur_per_mwh * qh.activation_factor_down * fc.reserve_down_mw * 0.25 * qh.alpha_down
         for qh in inp.qhs
         for fc in [fixed_for_qh[qh.qh_id]]
     )

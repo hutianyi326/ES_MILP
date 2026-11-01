@@ -81,7 +81,8 @@ def main():
         inactive=[row['qh_id'] for row in evidence['rows'] if not row['valid']],
         evidence=evidence, budget_manifest=manifest['budgets'], capacity_award_sensitivity=capacity_award_sensitivity,
         run_id=run_id, history_mode='delta',
-        time_limit_seconds=args.time_limit,daily_efc_limit=manifest.get('daily_efc_limit'))
+        time_limit_seconds=args.time_limit,daily_efc_limit=manifest.get('daily_efc_limit'),
+        activation_capacity_basis=manifest.get('activation_capacity_basis','full_bid'))
     if args.fresh:
         cp=None
         engine=PerfectEngine(inp,**settings)
@@ -197,6 +198,7 @@ def main():
     summary['capacity_award_mode']=award_mode
     summary['cycle_policy']=report['cycle_policy']
     summary['daily_efc_used']=report['daily_efc_used']
+    summary['activation_capacity_basis']=report['activation_capacity_basis']
     summary['cash_basis']=report['cash_basis']
     save('summary.json', summary)
     save('solver_calls_resumed.json', calls)

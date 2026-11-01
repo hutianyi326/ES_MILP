@@ -4,6 +4,22 @@
 
 ## 版本记录
 
+### 代理折算中标容量激活对照（2026-11-01，分支 `额度调整`）
+
+- 用户确认充50／放100 MW、200 MWh、SOC10—190 MWh、上下调各100 MW申报上限，仍按完整R预留功率；新增 `--activation-capacity-basis proxy_awarded`，按pR激活，容量收入口径保持不变。
+- 激活幅度乘p，时长不变；激活现金、SOC、损耗和每日2 EFC统一按实际路径计算。默认 `full_bid` 保留旧模式；输入与配置哈希兼容旧默认模式，新模式不能混用旧检查点。
+- [已确认边界](code/project/代理中标容量激活边界_20261101.md)；[测算对比报告](reports/daily_efc2_202601_202608_20261029/测算对比报告.md)保留原三场景，文末新增本次对照。p为系统分配比例代理，非本站实际中标概率。
+- 已完成243个日窗口，全部在设置容差内报告最优、零数值重试；65项测试、真实4日验证及新旧全期独立复核通过。新场景收入18,317,011.62欧元（183.17 K欧元/MW），较原基础场景下降7.40%；累计EFC由391.37降至331.18次，期末SOC10 MWh。
+- 新结果目录：`output/proxy_activation_20261101/asymmetric_cap100_proxy`；原基础结果：`output/daily_efc2_202601_202608_20261029/asymmetric_cap100`。原始数据与旧结果不覆盖。
+
+```powershell
+$esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
+& $esPython code/project/run_es_perfect_v1.py --start 2026-01-01 --end 2026-09-01 --output output/my_proxy_preflight --charge-mw 50 --discharge-mw 100 --grid-import-mw 50 --grid-export-mw 100 --reserve-limit-up-mw 100 --reserve-limit-down-mw 100 --e-max-mwh 190 --daily-efc-limit 2 --capacity-award-mode optimize --award-rate-file input/processed/ES/afrr_capacity_award_rate_202501_202608.csv.gz --activation-capacity-basis proxy_awarded --preflight-only
+& $esPython code/project/resume_es_capacity_award_rate.py --source output/my_proxy_preflight --output output/my_proxy_run --fresh --checkpoint-every 30 --numerical-retry-tolerance 0.00001
+```
+
+本次对照由 `code/project/compare_es_proxy_activation_20261101.py` 独立核验并更新报告，月度运营统计同时支持两种激活口径。旧三场景报告生成器仍要求原模型源码哈希，不应用新模型源码冒充原运行版本；补充报告使用各自运行清单和已归档结果哈希。
+
 ### 每日 EFC 额度调整（2026-10-29，分支 `额度调整`）
 
 - 用户确认每日最多2次EFC，按Europe/Madrid自然日重置，不结转，替代原年度额度。每日电池侧充放吞吐量合计上限720 MWh；仍为200 MWh电池、SOC 10–190 MWh、充放效率各92%。

@@ -150,6 +150,7 @@ class QHInput:
     afrr_result_release_utc: datetime | None = None
     afrr_award_rate_up: float | None = 1.0
     afrr_award_rate_down: float | None = 1.0
+    activation_capacity_basis: str = "full_bid"
 
     def __post_init__(self) -> None:
         if not self.qh_id or not self.segment_id:
@@ -162,6 +163,8 @@ class QHInput:
             raise ValueError("QH must start on the UTC quarter-hour grid")
         if not isinstance(self.madrid_year, int) or self.madrid_year < 2000:
             raise ValueError("madrid_year must be an integer year")
+        if self.activation_capacity_basis not in ("full_bid", "proxy_awarded"):
+            raise ValueError("invalid activation_capacity_basis")
         a_up = _finite(self.alpha_up, "alpha_up")
         a_down = _finite(self.alpha_down, "alpha_down")
         if a_up < 0 or a_down < 0 or a_up > 1 or a_down > 1 or a_up + a_down > 1:
@@ -195,6 +198,14 @@ class QHInput:
     @property
     def duration_hours(self) -> float:
         return 0.25
+
+    @property
+    def activation_factor_up(self) -> float:
+        return (self.afrr_award_rate_up or 0.0) if self.activation_capacity_basis == "proxy_awarded" else 1.0
+
+    @property
+    def activation_factor_down(self) -> float:
+        return (self.afrr_award_rate_down or 0.0) if self.activation_capacity_basis == "proxy_awarded" else 1.0
 
     @property
     def effective_capacity_price_up_eur_per_mw_qh(self) -> float:
@@ -1469,6 +1480,8 @@ def solve_joint(
     )
     if experimental_a1_a3 and (reserve_headroom_from_gct or terminal_soc_at or daily_efc_limit is not None or not enforce_annual_efc):
         raise ValueError("P0 requires baseline net-contract core")
+    if experimental_a1_a3 and any(q.activation_capacity_basis != "full_bid" for q in inp.qhs):
+        raise ValueError("proxy activation requires baseline core")
     if experimental_a1_a3:
         return _solve_joint_experimental(inp, order_mode, **options)
 

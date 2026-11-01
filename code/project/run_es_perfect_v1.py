@@ -94,7 +94,10 @@ def main():
     p.add_argument('--capacity-award-mode',choices=('full_fill','optimize','posthoc'),default='full_fill',
         help='full_fill: ignore award rates; optimize: include rates in MILP objective; posthoc: haircut capacity cash after V1 decisions')
     p.add_argument('--award-rate-file',type=Path,help='required for optimize/posthoc; QH/direction CSV.GZ')
+    p.add_argument('--activation-capacity-basis',choices=('full_bid','proxy_awarded'),default='full_bid')
     args=p.parse_args()
+    if args.activation_capacity_basis=='proxy_awarded' and args.capacity_award_mode!='optimize':
+        p.error('proxy activation requires capacity-award-mode optimize')
     if args.daily_efc_limit is not None:
         if not math.isfinite(args.daily_efc_limit) or args.daily_efc_limit<0:
             p.error('daily EFC limit must be finite and nonnegative')
@@ -155,8 +158,10 @@ def main():
     save('solver_input.json',asdict(inp))
     if save_award_evidence is not None:
         save('award_rate_evidence.json',save_award_evidence)
+    if args.activation_capacity_basis!='full_bid':
+        run_id+='_ACT_PROXY_AWARDED'
     save('manifest.json',dict(mode='perfect_history_v1',scenario='ts_start/cap_old/D'+('/capacity_award_rate_proxy_'+args.capacity_award_mode if award_rates is not None else ''),
-        capacity_award_mode=args.capacity_award_mode,run_id=run_id,
+        capacity_award_mode=args.capacity_award_mode,run_id=run_id,activation_capacity_basis=args.activation_capacity_basis,
         checkpoint_cash_basis='full_fill_solver_state_before_posthoc' if args.capacity_award_mode=='posthoc' else 'solver_settlement',
         formal_start=start,formal_end=end,input_end=end+timedelta(days=1),budgets=budgets,
         award_rate_source=dict(path=str(args.award_rate_file),sha256=__import__('hashlib').sha256(args.award_rate_file.read_bytes()).hexdigest()) if args.award_rate_file else None,
@@ -173,6 +178,7 @@ def main():
         print(json.dumps(dict(status='preflight_complete',qh=len(inp.qhs),gaps=len(mask),budgets=budgets),default=str))
         return
     engine=PerfectEngine(inp,execution_end=end,inactive=mask,evidence=evidence,budget_manifest=budgets,
+        activation_capacity_basis=args.activation_capacity_basis,
         capacity_award_sensitivity=args.capacity_award_mode=='optimize',
         daily_efc_limit=args.daily_efc_limit,
         run_id=run_id,
@@ -203,6 +209,7 @@ def main():
     summary['capacity_award_mode']=args.capacity_award_mode
     summary['cycle_policy']=report['cycle_policy']
     summary['daily_efc_used']=report['daily_efc_used']
+    summary['activation_capacity_basis']=report['activation_capacity_basis']
     summary['cash_basis']=report['cash_basis']
     save('summary.json',summary)
     print(json.dumps(summary,ensure_ascii=False))
