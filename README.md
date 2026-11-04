@@ -6,6 +6,7 @@
 
 ## 直接查看当前成果
 
+- [最新三表Excel样本](reports/simple_model_release_20261104/artifacts/monthly_market_presentation.xlsx) 包含月度收益与电量、容量价格、激活电价三张工作表。月度收益表的 B4 可切换堆积图场景。
 - [月度收益Excel：三种DA比例＋充50/放100 MW场景](reports/simple_model_release_20261104/artifacts/monthly_strategies_with_asymmetric.xlsx)：17个月汇总、参数、逐日公式、价格覆盖率，以及独立的80% DA月度表。
 - [2026-01-01单日4秒公式Excel](reports/simple_model_release_20261104/artifacts/sample_20260101_4s.xlsx)：21,600个4秒时段的五类价格、参数和逐项收益公式。当前文件保存为80% DA，含估值41,392.91 EUR；最初50%基准为91,414.93 EUR，可在参数表恢复50%核对。
 - [三种DA策略的月度CSV](reports/simple_model_release_20261104/monthly_three_strategies.csv)、[充50/放100 MW月度CSV](reports/simple_model_release_20261104/monthly_asymmetric_80pct.csv)、[月度充放电均价及循环统计](reports/simple_model_release_20261104/monthly_asymmetric_da_metrics.csv)。

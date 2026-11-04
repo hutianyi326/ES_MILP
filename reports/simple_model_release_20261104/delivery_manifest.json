@@ -28,5 +28,10 @@
     "path": "reports/simple_model_release_20261104/asymmetric_workbook_validation.json",
     "bytes": 449,
     "sha256": "c262e9d3e4075b0d7b16e798a618fb8c766eba43784bb4b06d98289b1b2179b3"
+  },
+  {
+    "path": "reports/simple_model_release_20261104/artifacts/monthly_market_presentation.xlsx",
+    "bytes": 173703,
+    "sha256": "eaaa24f9eaff96a7ac8c4258555756be57d479c92275772ea8b888281cae9e4a"
   }
 ]
