@@ -167,6 +167,22 @@ if (!(Test-Path 'code/project/node_modules')) {
 
 ## 产出清单
 
+### 三张表的月度展示
+
+完成上面的三策略与不对称场景计算后，从仓库根目录执行以下命令。使用已有的 Python 和 Node 环境，Excel 导出另需 XlsxWriter 和 openpyxl，依赖见 `code/requirements-simple.txt`。
+
+```powershell
+$out = 'output/simple_presentation_20261104'
+& $py code/project/simple_presentation_data.py --out $out
+& $node code/project/build_simple_presentation.mjs $out $py
+```
+
+本入口适配上述四个场景及17个月数据。新运行的路径可用 `--dataset`、`--base`、`--asym` 指定。计算输出中的 `presentation.json` 是展示汇总，`YYYY-MM.json.gz` 是可用 gzip 解压的标准 JSON，每个文件覆盖一个当地交付月。每个当地日包含 UTC 起点、当天点数、五类价格和价格状态，以及各场景的中标 MW 和逐4秒电量、分项收益与合计。价格和结果数组按同一索引对齐，第 i 行对应起点加 4×i 秒，关联的中标记录索引为 i 整除 225。字段顺序和场景顺序保存在文件头，金额单位 EUR，电量为交流侧 MWh。
+
+工作簿 `西班牙储能_月度收益与价格统计.xlsx` 的“月度收益与电量”列出68个场景月及四类电量。滚动图展示四个场景连续12个月含估值收益除以项目最大功率的结果，前11个月留空。B4 切换收益堆积图场景，默认充50/放100 MW的80% DA方案。黑色标记为含估值净总额，容量与激活收支分方向列示。
+
+“容量价格”按当地月和小时对15分钟价格等权求均值，P25、P50、P75取全月原始样本。“激活电价”分别按Up和Dn有价4秒点配对同时段DA，柱为激活均价，右轴折线为配对DA均价。图下均值及百分位取全月逐点价差，Up为激活价减DA，Dn为DA减激活价。所有月度图均采用相应方向的有效市场价格样本。
+
 | 入口 | 主要文件 | 内容 |
 |---|---|---|
 | 单日计算 | `summary.json` | 配置、DA窗口、分方向容量/激活/估值、总收益、来源哈希 |

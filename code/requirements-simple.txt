@@ -3,3 +3,6 @@
 tzdata>=2024.1
 numpy>=1.26
 pandas>=2.2
+# Native Excel combination charts and final workbook checks.
+XlsxWriter>=3.2
+openpyxl>=3.1
