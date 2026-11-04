@@ -1,0 +1,23 @@
+{
+  "result": "PASS",
+  "manifest_files_verified": 6,
+  "monthly_financial_comparisons": 56,
+  "monthly_csv_rows": 68,
+  "monthly_workbook_sheets": [
+    "月度收益",
+    "参数与口径",
+    "逐日计算",
+    "每日计算依据",
+    "Sheet1",
+    "80%现货月度收益",
+    "充50放100_80%现货",
+    "Sheet3",
+    "Sheet2"
+  ],
+  "monthly_workbook_formulas": 62671,
+  "sample_workbook_formulas": 864025,
+  "workbook_errors": 0,
+  "da_metrics_months": 17,
+  "sample_saved_da_share": 0.8,
+  "sample_saved_total_eur": 41392.90761159608
+}

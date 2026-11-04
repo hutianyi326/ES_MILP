@@ -1,0 +1,15 @@
+{
+  "staged_files_reviewed": 39,
+  "staged_bytes": 11152418,
+  "largest_file_bytes": 9638976,
+  "readme_local_links_verified": 11,
+  "staged_delivery_hashes_verified": 6,
+  "credentials_in_staged_content": 0,
+  "raw_data_and_output_directories_excluded": true,
+  "node_modules_excluded": true,
+  "unit_tests_passed": 24,
+  "python_syntax_files": 13,
+  "javascript_syntax_files": 5,
+  "javascript_cli_help_checks": 4,
+  "result": "PASS"
+}

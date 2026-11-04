@@ -1,169 +1,204 @@
-# 西班牙储能 MILP
+# ES_MILP：储能简易收益测算（Simple_MILP）
 
-本目录是独立整理副本；原项目和桌面文件保留。整理日期：2026-09-22。
+本分支保存西班牙储能的**非MILP简易模型**：DA每日一次先充后放窗口搜索，aFRR按容量中标和4秒价格阈值模拟激活，再计算Dn后续售电价值、Up潜在补能成本。当前归档截至2026-11-04。
 
-## 版本记录
+本模型使用事后已知价格；aFRR没有SOC、方向互斥或后续交易时序约束。输出是约定简化口径的毛收益和潜在电量估值，不能直接视为实际可执行或实际结算利润。原MILP模型、历史运行方式和版本说明保存在[README_MILP.md](README_MILP.md)。
 
-### 代理折算中标容量激活对照（2026-11-01，分支 `额度调整`）
+## 直接查看当前成果
 
-- 用户确认充50／放100 MW、200 MWh、SOC10—190 MWh、上下调各100 MW申报上限，仍按完整R预留功率；新增 `--activation-capacity-basis proxy_awarded`，按pR激活，容量收入口径保持不变。
-- 激活幅度乘p，时长不变；激活现金、SOC、损耗和每日2 EFC统一按实际路径计算。默认 `full_bid` 保留旧模式；输入与配置哈希兼容旧默认模式，新模式不能混用旧检查点。
-- [已确认边界](code/project/代理中标容量激活边界_20261101.md)；[测算对比报告](reports/daily_efc2_202601_202608_20261029/测算对比报告.md)保留原三场景，文末新增本次对照。p为系统分配比例代理，非本站实际中标概率。
-- 已完成243个日窗口，全部在设置容差内报告最优、零数值重试；65项测试、真实4日验证及新旧全期独立复核通过。新场景收入18,317,011.62欧元（183.17 K欧元/MW），较原基础场景下降7.40%；累计EFC由391.37降至331.18次，期末SOC10 MWh。
-- 新结果目录：`output/proxy_activation_20261101/asymmetric_cap100_proxy`；原基础结果：`output/daily_efc2_202601_202608_20261029/asymmetric_cap100`。原始数据与旧结果不覆盖。
+- [月度收益Excel：三种DA比例＋充50/放100 MW场景](reports/simple_model_release_20261104/artifacts/monthly_strategies_with_asymmetric.xlsx)：17个月汇总、参数、逐日公式、价格覆盖率，以及独立的80% DA月度表。
+- [2026-01-01单日4秒公式Excel](reports/simple_model_release_20261104/artifacts/sample_20260101_4s.xlsx)：21,600个4秒时段的五类价格、参数和逐项收益公式。当前文件保存为80% DA，含估值41,392.91 EUR；最初50%基准为91,414.93 EUR，可在参数表恢复50%核对。
+- [三种DA策略的月度CSV](reports/simple_model_release_20261104/monthly_three_strategies.csv)、[充50/放100 MW月度CSV](reports/simple_model_release_20261104/monthly_asymmetric_80pct.csv)、[月度充放电均价及循环统计](reports/simple_model_release_20261104/monthly_asymmetric_da_metrics.csv)。
+- [配置及累计结果快照](reports/simple_model_release_20261104/benchmark_results.json)、[交付文件SHA256](reports/simple_model_release_20261104/delivery_manifest.json)。
 
-```powershell
-$esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
-& $esPython code/project/run_es_perfect_v1.py --start 2026-01-01 --end 2026-09-01 --output output/my_proxy_preflight --charge-mw 50 --discharge-mw 100 --grid-import-mw 50 --grid-export-mw 100 --reserve-limit-up-mw 100 --reserve-limit-down-mw 100 --e-max-mwh 190 --daily-efc-limit 2 --capacity-award-mode optimize --award-rate-file input/processed/ES/afrr_capacity_award_rate_202501_202608.csv.gz --activation-capacity-basis proxy_awarded --preflight-only
-& $esPython code/project/resume_es_capacity_award_rate.py --source output/my_proxy_preflight --output output/my_proxy_run --fresh --checkpoint-every 30 --numerical-retry-tolerance 0.00001
+本次Git归档包括代码、测试、计算报告、轻量CSV/JSON和以上最终Excel样本。大型原始行情、逐4秒合并数据和完整中间运行文件位于本地`input/`、`output/`，由`.gitignore`排除；API凭据不入库。只查看结果不需要API或本地行情文件，重新计算需要准备下述输入。
+
+## 必要参数
+
+| 参数 | 单位/取值 | 当前采用值 | 对计算的作用 |
+|---|---|---|---|
+| 交付日期与时区 | 当地日期；Europe/Madrid | 2025-06-01至2026-10-31；另有2026-01-01单日样本 | 决定当地日、月份及23/25小时夏令时边界 |
+| AC充电功率 | MW | 对称100；不对称50 | 约束DA充电；剩余部分用于Dn申报 |
+| AC放电功率 | MW | 100 | 约束DA放电；剩余部分用于Up申报 |
+| DC额定电量 | MWh | 200 | 按DA比例分配可用直流电量 |
+| DA参与比例`s` | 小数0—1 | 对称场景1.0、0.5、0.8；不对称场景0.8 | DA功率、电量均按`s`分配；aFRR按`1−s`分配 |
+| 充、放电单向效率 | 小数 | 各0.92 | DA能量转换及aFRR补能/售电估值；往返效率0.8464 |
+| Up/Dn容量报价 | EUR/MW/15分钟 | 各1 | 市场容量价严格高于报价才全额中标 |
+| Up激活价差阈值 | EUR/MWh | 200 | Up价−同15分钟DA价严格大于阈值才激活 |
+| Dn激活价差阈值 | EUR/MWh | 0 | 同15分钟DA价−Dn价严格大于阈值才激活 |
+| 激活后电量估值方式 | `cash` / `same_qh_da_efficiency` / `daily_da_quantiles_efficiency` | 当前采用最后一种 | 单日CLI支持三种历史口径；全区间采用P25/P75口径 |
+| Up补能、Dn售电参考价 | EUR/MWh | 当日DA P25、P75 | 由当日数据自动计算，无需手工输入价格 |
+
+80% DA的两种配置如下，aFRR的Up、Dn分别申报并独立筛选：
+
+| 项目配置 | DA充/放功率 | DA电量 | aFRR Up | aFRR Dn |
+|---|---|---:|---:|---:|
+| 充100/放100 MW、200 MWh | 80/80 MW | 160 MWh | 20 MW | 20 MW |
+| 充50/放100 MW、200 MWh | 40/80 MW | 160 MWh | 20 MW | 10 MW |
+
+**当前脚本是已验算的固定历史样例，并非通用配置界面。**
+
+- 单日入口支持命令行修改日期、DA比例、四个报价/阈值及估值方式；项目功率、电量、效率当前固定100/100 MW、200 MWh、92%。单日CLI的DA比例要求`0<s<1`。
+- 全区间入口固定518天、100/100 MW、200 MWh、三种DA比例及上述报价/阈值；检查中明确要求49,732个15分钟和11,189,700个4秒时段。它支持纯DA场景`s=1`。
+- 不对称入口固定50/100 MW、200 MWh、80% DA，并重新搜索每天的40/80 MW、160 MWh DA计划。
+- `da_search(prices, charge_power, energy, eta, discharge_power=...)`支持单独的充、放电功率。更换历史区间、功率、电量或报价需更新相应入口及其边界检查，不能只改Excel标题。
+- 改报价/激活阈值后必须重新筛选原生4秒价格；不能复用旧的每MW激活积分。不对称场景复用旧积分的前提是报价、阈值、DA价格和效率一致，程序会核对相应配置与价格文件哈希。
+
+## 必要行情数据
+
+货币均为EUR。时间列是区间左端，终点不包含；UTC为唯一时间键，本地ISO时间必须带`+01:00`/`+02:00`偏移。负价和有效零价保留原值。
+
+| 数据 | 必要原生频率 | 单位 | 使用方式 |
+|---|---|---|---|
+| DA日前电价 | 15分钟；早期历史源为小时 | EUR/MWh | DA窗口搜索、激活价差基准、每日P25/P75 |
+| aFRR Up容量价格 | 15分钟 | EUR/MW/15分钟 | 中标筛选及容量收入 |
+| aFRR Dn容量价格 | 15分钟 | EUR/MW/15分钟 | 中标筛选及容量收入 |
+| aFRR Up激活价格 | **原生4秒** | EUR/MWh | Up触发及售电收支 |
+| aFRR Dn激活价格 | **原生4秒** | EUR/MWh | Dn触发及购电收支 |
+
+早期小时DA只在原交付小时内重复映射，保留`da_native_resolution=PT60M`；原生15分钟为`PT15M`。15分钟激活均价只能用于观察，不能替代4秒阈值回测。
+
+### 全区间输入目录
+
+本机已整理的数据包：`input/datasets/ES/market_20250601_20261031_20261103/`。
+
+```text
+processed/
+  market_prices_15min.csv
+  prices_4s/2025-06.csv.gz ... 2026-10.csv.gz
+  daily_coverage.csv
+  remaining_price_gaps.csv.gz
+sources.json                  # 来源ID、不可变原始快照及SHA256
+summary.json                  # 覆盖统计，计算入口会使用
+validation.json               # 数据验证记录
+raw/reused/                   # 复用官方快照
+raw/fetched/                  # 本次API响应
 ```
 
-本次对照由 `code/project/compare_es_proxy_activation_20261101.py` 独立核验并更新报告，月度运营统计同时支持两种激活口径。旧三场景报告生成器仍要求原模型源码哈希，不应用新模型源码冒充原运行版本；补充报告使用各自运行清单和已归档结果哈希。
+`market_prices_15min.csv`的主要列：`start_utc`、`start_europe_madrid`、`da_eur_mwh`、`capacity_up_eur_mw_qh`、`capacity_down_eur_mw_qh`、`da_native_resolution`、三个DA/容量`source_id`、`activation_up/down_valid_seconds`、`activation_up/down_mean_eur_mwh`、`activation_up/down_reported_seconds`、`activation_source_id`。其中DA、双向容量要求完整；有价秒数用于逐4秒回读对账。
 
-### 每日 EFC 额度调整（2026-10-29，分支 `额度调整`）
+每月4秒CSV主要列：`start_utc`、`start_europe_madrid`、重复对齐的DA及双向容量价格、`da_native_resolution`、`activation_up_eur_mwh`、`activation_down_eur_mwh`、`up_price_status`、`down_price_status`、`activation_source_id`。上下调状态区分`valid`、`source_explicit_null`、`source_unreported`和`api_no_matching_data`。
 
-- 用户确认每日最多2次EFC，按Europe/Madrid自然日重置，不结转，替代原年度额度。每日电池侧充放吞吐量合计上限720 MWh；仍为200 MWh电池、SOC 10–190 MWh、充放效率各92%。
-- 本轮仅计算2026年1–8月，统一采用容量收入代理系数重新优化，重算100／100 MW、50／100 MW且aFRR上限各100 MW、50／100 MW且上限各150 MW三个场景。
-- 三场景均完成243个日窗口并通过独立核验；8个月条件毛收益依次为225.94、197.80、215.71千欧元／MW。详见[测算对比报告及逐日/月度明细](reports/daily_efc2_202601_202608_20261029/测算对比报告.md)。
-- [边界及数学约束](code/project/每日EFC额度边界_20261029.md)。原年度额度入口默认行为保留；新情景必须使用 `--daily-efc-limit 2` 或以下三场景专用入口。
+所有官方空值保留，不补零、不插值、不跨显式空块延续价格。当前全区间Up激活有价率55.15%、Dn为58.20%，DA和双向容量均100%；空激活价不能据此判定本站未被调用。
 
-```powershell
-$esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
-& $esPython code/project/run_es_daily_efc_20261029.py --output output/my_daily_efc2_runs
-```
+### 单日输入与官方来源
 
-专用入口默认准备 `--numerical-retry-tolerance 0.00001` 后备重试，只在常规和presolve重试仍不可行时启用；不改变约束、冻结订单或既有独立审计阈值。若需从保存状态恢复，使用独立输出目录及 `resume_es_capacity_award_rate.py` 的同名选项。恢复来源及每次重试均存档。
+单日抓取保存`DA.json`、`capacity_A01.json`、`activation_A67.json`及原始XML/ZIP、请求记录、哈希；计算读取这些JSON中的原生有效区间。另保存的`activation_A16.json`是查询证据，不替代A67输入。
 
-以下版本记录与默认模型描述保留其历史口径。
+- [ENTSO-E生产API](https://web-api.tp.entsoe.eu/api)，西班牙区域`10YES-REE------0`。DA为A44并筛选A01日前序列；容量为A81/B95/A51、日合同A01、方向A01/A02；激活为A84/A67/A96、标准产品A01、原生PT4S、A08价格。
+- 前期DA来自[OMIE官方文件](https://www.omie.es/en/file-download)，容量来自[REE/eSIOS](https://api.esios.ree.es/)的2130/634指标；缺失月份由ENTSO-E补抓。
+- A03有效区间与空值展开遵循[ENTSO-E曲线说明](https://transparencyplatform.zendesk.com/hc/en-us/articles/30262342482961-CurveType-A01-vs-CurveType-A03)。源字段与版本记录见[数据整理报告](reports/simple_market_data_20250601_20261031_20261103/数据整理与验收.md)。
 
-### V1.1 — aFRR 容量收益敏感性（2026-09-24）
+上述是数据来源和语义；以下分配、触发及估值方法是本次模型假设，不等同于完整BSP市场结算规则。
 
-- 新增逐 QH、分方向 aFRR 容量系数整理流程，以及 `full_fill`、`optimize`、`posthoc` 三种运行模式；默认 `full_fill` 保持原 V1 口径。
-- 增加 posthoc 容量现金折减、可恢复检查点的模式识别与结果口径标记、重复折减保护，以及收益比较脚本和对应测试。
-- 36 项相关回归测试通过；真实两日输入下三种模式均成功，optimize 和 posthoc 的中途检查点恢复结果已核对。
-- 系数是系统分配容量与报价量之比形成的事后敏感性代理，不代表单站真实中标率；REE 报价曲线的地域匹配仍待确认。完整范围、假设和限制见[敏感性方案及验收记录](research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。
+## 收益计算
 
-## P0 完美预测模型 V1
+1. **DA**：在每日15分钟时间轴上搜索一次连续充电、随后一次连续放电，深度1%—100%，允许末段部分功率，也可不交易。初末可用直流电量为0。交流购电量×充电效率＝直流充入量；交流放电量÷放电效率＝直流取出量。净收益＝售电收入−购电成本。
+2. **容量**：市场容量价严格大于报价，中标MW取对应申报MW，否则取0；不考虑部分中标。每15分钟收益＝中标MW×原生容量价，**不再乘0.25**。展开成4秒账本时按`4/900`分摊，避免重复计费。
+3. **激活**：每4秒同时满足对应容量中标及价差条件时，以中标MW计量。Up收入＝Up交流售电MWh×Up价；Dn收支＝−Dn交流购电MWh×Dn价。负价购电可能产生正收支。
+4. **后续电量估值**：Dn售电价值＝Dn交流购电MWh×`0.92²`×当日DA P75；Up补能收支＝−Up交流售电MWh÷`0.92²`×当日DA P25。触发条件仍使用同15分钟DA，P25/P75只用于估值。分位数采用当地日全部15分钟价格等权、含重复值、索引`(n−1)×p`的线性插值。
+5. **合计**：当期收支＝DA净收益＋双向容量＋双向激活收支；含估值总收益再加Dn售电价值、Up补能收支。后续估值计入激活发生日/月，没有安排实际后续交易或检查其时序、功率及成交量。
 
-P0实现使用独立入口，原v5入口保留供复现。新增GCT备用检查、正式终点SOC、空值时间轴/空闲桥接、显式预算和冻结审计；这些包含可行域变化，不承诺收益或耗时不变。
-
-```powershell
-$esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
-# 正式交付日1月1日至8日，额外加载1月9日；--end为排除的当地日期。
-& $esPython code/project/run_es_perfect_v1.py --start 2025-01-01 --end 2025-01-09 --output output/my_perfect_run
-```
-
-输出目录必须为新目录。输入默认读取`input/raw/ES`归档，不访问API；缺失数据留空并输出质量摘要。`--preflight-only`仅预检；`--budget-json`接受正式年份到EFC额度的JSON映射。全量v5相同日期默认读取归档的两年预算；归档不在时须显式提供，不能悄悄改用单场景预算。跨年观察额度独立按有效日生成。
-
-输出包含输入证据、正式/规划区间、配置和源码哈希、逐窗消元映射和独立验收、冻结与现金账本、检查点、六项月度收益及数据质量。Python接口`PerfectEngine.restore`可用相同输入及配置恢复检查点，校验失败不得继续复用状态。
-
-验证及边界见[本次实施与验收记录](reports/完美预测模型优化V1_实施与验收.md)，[review记录](reports/完美预测模型优化V1_review.md)。原全量结果和下列旧入口仍对应v5。
-
-2026-09-22已完成当前P0模型2025-01-01至2026-08-31全量测算：100 MW / 200 MWh，608个逐日窗口，条件毛收益782.296071 k€/MW；原模型成功归档（v5执行版，比较中称V0）为796.611354 k€/MW，相差−1.797%。详见[全量V1与V0对比](reports/perfect_v1_vs_v0/结果对比.md)，含月度总额、六项市场收益、图表、共同结算QH对比和用时口径。
-
-本次仅对2025-11-22窗口的数值不可行报告以presolve=True重试一次，预算与模型约束不变；正式续跑使用`code/project/resume_es_perfect_full.py`，未改核心模型。完整成果位于`output/perfect_v1_full_completed_retry/`，原始失败现场位于`output/perfect_v1_full_20260922/`。额外观察日2026-09-01全部缺失，不提供有效价格前瞻。本次没有调用agent审核。
-
-## aFRR 容量收入敏感性
-
-此情景用每个QH、每个方向的“系统实际分配容量/总报价容量”作为容量收入系数，并以1封顶。它是事后系统比例代理，并非单个储能站的真实中标概率；本轮仅折减容量收入，激活收益及完整容量的物理承诺沿用V1。方案、缺失处理和数据来源见[容量收益中标率敏感性方案](research/西班牙aFRR容量收益中标率敏感性方案_20260923.md)。
-
-主入口`code/project/run_es_perfect_v1.py`现有`--capacity-award-mode`开关，分为`full_fill`、`optimize`和`posthoc`。`full_fill`是默认模式，保持V1的100%容量中标计价；`optimize`要求`--award-rate-file`，把QH/方向比例放入容量收入目标后重新优化；`posthoc`也要求系数文件，先按V1全额中标口径优化，再只折减容量现金流，交易决策保持不变。举例：
-
-```powershell
-# 中标率进入优化函数
-& $esPython code/project/run_es_perfect_v1.py --start 2025-01-01 --end 2025-01-09 --output output/cap_opt --capacity-award-mode optimize --award-rate-file input/processed/ES/afrr_capacity_award_rate_202501_202608.csv.gz
-
-# 对V1决策作事后容量收益折减
-& $esPython code/project/run_es_perfect_v1.py --start 2025-01-01 --end 2025-01-09 --output output/cap_posthoc --capacity-award-mode posthoc --award-rate-file input/processed/ES/afrr_capacity_award_rate_202501_202608.csv.gz
-```
-
-今后只需把REE archive 234的**原始月度ZIP**逐月放入`C:\Users\Tianyi\Desktop\西班牙数据\容量报价曲线`，保留原始文件名，一个月一个ZIP，不必解压或手工汇总。用`code/project/prepare_es_afrr_award_rates.py`形成QH压缩表与来源清单；报价ZIP的读取需要`xlrd==2.0.2`。632/633分配容量仍来自eSIOS原始数据。
-
-如 REE 对旧月份发布修订包，保留旧文件并将新 ZIP 原样放在上述目录的`revisions`子目录；清洗时以重复的`--offer-zip`参数显式指定各修订月份。每次清洗会保存实际使用的文件路径、SHA-256和逐日/QH完整性检查；不能直接覆盖既有系数表或历史运行结果。
-
-2025-01 至 2026-08 的 [容量收入敏感性结果对比](reports/capacity_award_rate_sensitivity_20260923/结果对比.md) 包含 V1、固定调度折减和重新求解的总/月度收益，以及六项市场分解、EFC 用量与求解时间。原始月度 ZIP、处理后的系数表及大型结果保存在本机，不随 Git 上传。
-
-## MILP 结果展示
-
-结果展示按[已确认开发基线v1.0](research/西班牙MILP结果展示开发基线_v1.0.md)生成：假设概览、结果概览、月度分析、小时分析和输出溯源。每情景生成结果MD、9张SVG、7份CSV和来源清单，包含月度六市场占比、求解器及总运行时间、统计期与全年覆盖、带覆盖率的滚动12个月收益。
-
-```powershell
-& $esPython code/project/build_es_result_presentation.py `
-  --run-dir output/capacity_4h_award_rate_20260929 `
-  --baseline-run-dir output/capacity_4h_fullfill_20260929 `
-  --output-dir reports/my_new_4h_report
-```
-
-省略`--baseline-run-dir`仅展示当前情景。比较基线必须是同配置、同正式区间、同主要假设及年度EFC预算的100%中标运行；参数从归档读取。旧`--v1-monthly-csv`单独输入无法证明配置一致，入口会提示改用完整基线运行目录。新输出目录必须尚不存在，历史报告保留。
-
-报告按实际`full_fill`、`optimize`、`posthoc`生成文案。滚动年收益累计12个日历范围完整、每月至少有有效结算记录的自然月，另报QH覆盖率；不按缺失比例补算。全缺失月份和无样本小时保持空值，真实零收益保留0.00。所有金额显示两位小数，图表计算保留原始精度。月度图使用全部有效QH；小时图要求四个QH完整再求小时合计及同一钟点均值，夏令时重复小时分开计入。季度图合并跨年同季度，列样本月份并共用纵轴尺度。
-
-DA／ID按全期正式QH求有符号净功率均值，另列合并现货净功率；空闲桥接按0计，存在未知执行状态时全期平均功率显示空值。aFRR上下容量仍是计划申报／预留MW，中标系数只作用于容量收入；各市场功率不能相加解释为电站容量分配比例。EFC汇总模型已执行记录，不用QH起末净SOC差替代相位吞吐。
-
-最新试运行见[两小时含系数](reports/result_baseline_v1_20260930/2h_optimize/结果展示.md)、[四小时100%中标](reports/result_baseline_v1_20260930/4h_full_fill/结果展示.md)、[四小时含系数](reports/result_baseline_v1_20260930/4h_optimize/结果展示.md)。测试、与原结果的对账及审核结论见[开发验收记录](reports/result_baseline_v1_20260930/开发验收记录.md)。
-
-## 文件分类
-
-| 目录 | 内容 |
-|---|---|
-| `code/` | 桌面 pkg_patched 源码、全量v5执行入口、数据适配、测试与依赖 |
-| `input/` | 官方原始文件，以及全量共同输入和来源清单 |
-| `output/` | full_range最终v5结果、two_day两日结果、two_day_timing计时结果、benchmarks紧凑性能证据 |
-| `reports/` | 最新中文报告、SVG图表、月度及小时CSV、整理校验记录 |
-| `research/` | 市场研究、官方来源索引、数学模型、假设及历史验证说明 |
-
-代码内的 `src/`、`project/`、`countries/ES/` 和 `model/` 是Python导入或依赖指纹所需结构。`code/model`中的适配说明保留供指纹计算，阅读材料集中于research。
-
-## 默认模型和结果
-
-- 100 MW充放电功率，SOC 10–190 MWh，充放电效率各92%。
-- 两日滚动，ts_start / cap_old / D（先下后上），gap=1e-4，presolve=False，30秒/窗口，A1–A3关闭。
-- 测算交付日：马德里当地2025-01-01至2026-08-31。
-- 全量结果：52,247个有效QH，覆盖89.52%，636个窗口；条件毛收益796.61 k€/MW。
-- 完美信息条件测算；未包含费用与退化现金。cap_old历史时表适用日期仍待核实。缺失数据未补齐。
-
-成功v5除了pkg_patched源码，还使用执行入口中的EFC终端预留、1e-6 EFC数值余量，以及容差内SOC/备用边界归一。**复现v5应使用以下全量入口；直接调用src中的普通CLI不包含这些运行修复。**
+aFRR方向独立筛选，没有SOC、互斥、持续能量或补能功率限制；系统价格不是本站实际指令。无价方向的逐日激活项目留空，汇总只包含可计算部分。模型未扣税费、网络费、交易费、退化、投资及运营成本。
 
 ## 环境与运行
 
-使用Python 3.12；版本见[requirements.txt](code/requirements.txt)。本副本不包含虚拟环境、缓存和凭据。当前机器可继续使用原项目的`.venv-es-milp`。
+Python建议3.12及以上。抓取和收益核心使用标准库；Windows时区数据以及独立校验所需NumPy/Pandas列于`code/requirements-simple.txt`，不需要MILP求解器。
 
-在本目录（countries/ES/MILP）中打开PowerShell：
+在仓库根目录打开PowerShell：
 
 ```powershell
-$esPython = '..\..\..\.venv-es-milp\Scripts\python.exe'
-& $esPython code/project/run_es_full_ts_start_cap_old_d_20260921.py --help
-
-# 从本目录官方原始数据重新构造输入，仅预检
-& $esPython code/project/run_es_full_ts_start_cap_old_d_20260921.py --output output/preflight_new --preflight-only
-
-# 正式运行；输出必须为不存在的新目录
-& $esPython code/project/run_es_full_ts_start_cap_old_d_20260921.py --output output/full_range_new
-
-# 可选：重用已保存的精确输入配置；此方式会读取大型结果，内存开销较高
-& $esPython code/project/run_es_full_ts_start_cap_old_d_20260921.py --output output/full_range_reuse_new --reuse-input-result output/full_range/ES_HISTORICAL_CONDITIONAL_ts_start__cap_old__rolling2__D.json
-
-# 根据已归档v5结果更新中文分析报告和图表
-& $esPython code/project/build_es_full_result_analysis_20260921.py
+py -3.12 -m venv .venv-simple
+$py = '.\.venv-simple\Scripts\python.exe'
+& $py -m pip install -r code/requirements-simple.txt
+$env:PYTHONPATH = "$PWD\code"
 ```
 
-新运行会在自身输出目录保存输入证据，因此output中保留与历史结果配套的输入副本；input中另提供集中查阅副本。完整结果未重复复制。历史JSON中的原始来源路径和代码哈希不改写，新运行生成新指纹。
+已有本地行情时可以完全离线计算。运行目录须为新目录，以下示例使用此前归档目录名；本机已存在时请换名，并在后续命令传入对应路径。
 
-## 常用成果
+### 单日抓取和测算
 
-- [MILP数学规格：第一版保留＋第二版完整公式](research/spain_milp_mathematical_spec_2026-09-16.md#milp-v2)：v2.0对应当前P0实现，变更带颜色标识。
-- [完美预测模型优化V1：方案评估与P0数学实施细则](research/完美预测模型优化V1_方案评估与P0数学实施细则_20260922.md)：批准的设计、验收规格及实施状态索引。
-- [中文结果汇总](reports/西班牙储能MILP全量测算结果汇总.md)：k€/MW、六项方向收益、收益占比和容量图表。
-- [完整结果与计时](output/full_range/)：完整JSON约1.32 GB，建议日常先看final_report.json、summary.json、solver_timing.json。
-- [市场来源索引](research/sources.md)、[模型适配与假设](research/es_conditional_adapter_spec_20260920.md)。
-- [文件来源与SHA256](reports/file_manifest.json)：每项复制源、目标、原哈希及整理后的哈希；仅少量路径适配文件会不同。
+`ENTSOE_SECURITY_TOKEN`从进程环境读取；也可用抓取入口的`--credential-file`读取本地`.env`。这里只填写占位符，真实Token不要写入Git。
 
-## 整理范围及验证
+```powershell
+$env:ENTSOE_SECURITY_TOKEN = 'YOUR_ENTSOE_TOKEN'
+& $py -m project.fetch_simple_entsoe_day --date 2026-01-01 --output output/simple_20260101_entsoe_20261103
+& $py -m project.calculate_simple_entsoe_day --date 2026-01-01 --source output/simple_20260101_entsoe_20261103 --output output/simple_20260101_p75_p25_20261103 --da-share .5 --capacity-up-bid 1 --capacity-down-bid 1 --up-spread 200 --down-spread 0 --activation-value-basis daily_da_quantiles_efficiency
+```
 
-Git仓库纳入代码、报告、研究资料及说明；`input/`、`output/`仅保留本地，不上传GitHub。从远程克隆后需另行准备这些数据方可运行历史测算或重建报告。
+25小时日的A84分段抓取由全区间适配器处理；单日抓取入口主要用于本次普通24小时样本，秋季时钟切换日应使用分段归档。单日计算器可按完整输入的实际当地日长度计算，但单日Excel模板仍固定为本次24小时样本。
 
-原始数据来自现有本地REE/eSIOS、OMIE等ES归档，本次未下载新数据、未重跑经济求解。研究文件保留原状态，归档不代表新增规则批准。
+### 全区间三策略及充50/放100 MW场景
 
-纳入最终v5与已选两日成果和紧凑性能证据；失败v1–v4、庞大中间快照、虚拟环境及缓存留在原目录。部分历史快照对比测试依赖这些未纳入的旧outputs，不能在整理副本中直接全量运行。
+先准备完整数据包，再执行：
 
-整理检查包括逐文件SHA256复制核对、Python语法解析、运行入口帮助和依赖导入、报告图片引用检查；见reports/organization_checks.json。路径调整仅用于本目录布局，未修改求解公式、参数及历史结果。
+```powershell
+$dataset = 'input/datasets/ES/market_20250601_20261031_20261103'
+& $py -m project.calculate_simple_market_period --source $dataset --output output/simple_period_20250601_20261031_20261103
+& $py -m project.calculate_simple_asymmetric_period --source $dataset --basis output/simple_period_20250601_20261031_20261103 --output output/simple_asymmetric_50_100_200_80pct_20261104
+```
+
+历史补抓适配器`consolidate_simple_market_data`目前依赖完整父项目`Counry_Investigation`：其`src/data_ingestion/es/omie.py`、`data/raw/ES/omie`、`data/raw/ES/esios`和`project/es_afrr_cbmp_20261101`。单独克隆本仓库不会自动获得这些目录；可以直接恢复上面的完整已整理数据包来运行测算。
+
+完整父项目布局下，可依次运行`python -m project.consolidate_simple_market_data inventory`、`fetch`、`merge`，再运行`python -m project.validate_simple_market_dataset`及`python -m project.report_simple_market_dataset`。默认目标及日期定义在适配器顶部，`inventory`要求目标尚不存在，`fetch`支持有效回执续用。抓取优先读环境Token，再兼容父目录`Country Dashboard/.env`，请求记录不保存凭据。
+
+### Excel导出
+
+Excel由Node.js＋`@oai/artifact-tool`生成，使用Codex桌面捆绑运行库；这是可选导出依赖，Python的CSV/JSON测算不依赖它。普通克隆若未提供该运行库，仍可计算并读取CSV/JSON以及仓库中的最终Excel样本。
+
+将`code/project/node_modules`连接到已提供的捆绑`node_modules`目录（本机可用目录为`$env:USERPROFILE\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules`；以实际加载器路径为准），用同一捆绑Node依次运行：
+
+```powershell
+$runtime = Join-Path $env:USERPROFILE '.cache/codex-runtimes/codex-primary-runtime/dependencies'
+$node = Join-Path $runtime 'node/bin/node.exe'
+if (!(Test-Path 'code/project/node_modules')) {
+    New-Item -ItemType Junction -Path 'code/project/node_modules' -Target (Join-Path $runtime 'node/node_modules') | Out-Null
+}
+# 每个入口均支持--help及自定义路径。
+& $node code/project/build_simple_day_excel.mjs
+& $node code/project/build_simple_monthly_excel.mjs
+& $node code/project/add_simple_80pct_excel_sheet.mjs
+& $node code/project/add_simple_asymmetric_excel_sheet.mjs
+```
+
+前两者的参数是`--source`结果目录、`--output`输出目录、`--qa`检查目录；后两者使用`--input`原Excel、`--output`新Excel文件、`--source`对应计算结果目录、`--qa`检查目录，另支持`--inspect-only`。默认Excel落在`output/excel_sample/outputs/simple_model`、`output/excel_monthly/outputs/simple_model`，QA图像和检查JSON在`output/simple_excel_qa`。默认计算目录与上面示例一致。
+
+这些导出入口保留当前固定样例的日期、行数和表结构；单日4秒Excel固定为2026-01-01的50% DA样本，月度固定为当前17个月。修改基础场景或频率后需同步更新导出模板及核对值。Excel编辑DA比例可重算已登记的线性分配；改变功率、电量或效率后，不能依赖旧DA窗口直接得到重新搜索结果。
+
+## 产出清单
+
+| 入口 | 主要文件 | 内容 |
+|---|---|---|
+| 单日计算 | `summary.json` | 配置、DA窗口、分方向容量/激活/估值、总收益、来源哈希 |
+| 单日计算 | `qh_detail.json`、`normalized_prices.json` | 15分钟账本、原生4秒价格及空值 |
+| 单日计算 | `matrices.json` | 容量报价0—100步长1；激活绝对价及价差0—1000步长20的超阈值比例；按样本月-小时分组 |
+| 全区间计算 | `daily_inputs.csv`、`daily_scenarios.csv`、`monthly_scenarios.csv` | 日度每MW筛选积分、三策略逐日及月度收益 |
+| 全区间计算 | `quarter_hour_calculation_basis.csv`、`results.json` | DA计划与每QH筛选依据、配置、总/月/日结果和哈希 |
+| 不对称场景 | `da_schedule_15min.csv`、`daily_results.csv`、`monthly_results.csv`、`results.json` | 新功率下重搜的DA计划、SOC轨迹、逐日和月度结果 |
+| 独立验证 | `validation.json`、`workbook_validation.json` | 数据覆盖、现金/能量误差、Excel核对与保留记录；后者为本次归档记录 |
+| Excel | 单日4秒样本、月度收益工作簿 | 价格、参数、逐项公式、三策略汇总及两个独立80% DA月度视图 |
+
+单日矩阵只是该日样本的统计；当前全区间入口没有额外的交互式月-小时选价界面。运营指标CSV中的充放电均价按DA成交电量加权，价差为两者相减；等效循环＝交流放电量÷0.92÷160 MWh或200 MWh，不包含aFRR循环。
+
+## 已归档结果与验证
+
+2025-06-01至2026-10-31，单位EUR：
+
+| 配置 | DA净收益 | 容量收益 | 电量净收益（含估值） | 含估值总收益 |
+|---|---:|---:|---:|---:|
+| 100/100 MW、200 MWh，100% DA | 10,402,104.34 | 0.00 | 0.00 | 10,402,104.34 |
+| 100/100 MW、200 MWh，50% DA | 5,201,052.17 | 26,295,257.00 | 10,640,968.76 | 42,137,277.94 |
+| 100/100 MW、200 MWh，80% DA | 8,321,683.47 | 10,518,102.80 | 4,256,387.51 | 23,096,173.78 |
+| 50/100 MW、200 MWh，80% DA | 8,144,494.13 | 8,801,938.20 | 2,391,405.09 | 19,337,837.43 |
+
+2026-01-01、100/100 MW、200 MWh、50% DA的单日含估值基准为91,414.92750724638 EUR。归档Excel当前参数已保存为80% DA，对应41,392.90761159608 EUR；代码默认重新导出的仍是50%基准，两个值按各自参数核验。大部分aFRR容量按本模型门槛全额中标，激活又无SOC限制，这些假设会使比较结果较乐观；50%比例最高不代表实际可执行最优策略。
+
+```powershell
+& $py -m unittest discover -s code/tests -p 'test_simple*.py'
+# 无须大型行情即可核对本次已提交的Excel/CSV、参数、哈希及缓存金额：
+& $py -m project.validate_simple_release
+# 有全区间数据及原三策略工作簿时进行独立全量复核：
+& $py -m project.validate_simple_market_period --source $dataset --results output/simple_period_20250601_20261031_20261103 --workbook 'output/excel_monthly/outputs/simple_model/西班牙_100MW200MWh_三策略月度收益_20250601_20261031.xlsx'
+```
+
+当前24项简化模型测试通过，覆盖严格阈值、空值/零价、负价现金、A03、夏令时、充放顺序、效率、电量平衡及不对称功率。此前独立重读全部11,189,700行4秒数据、核验1,531份原始快照；不对称DA的518天/49,732个15分钟功率及SOC检查通过。完整记录见[月度测算报告](reports/simple_period_20250601_20261031_20261103/月度收益测算与验证.md)、[不对称场景报告](reports/simple_asymmetric_50_100_200_80pct_20261104/测算说明与验证.md)。历史报告中的“未提交”描述为生成时点状态，版本归档状态以Git历史为准。

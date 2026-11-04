@@ -1,0 +1,24 @@
+{
+  "native_4s_rows": 11189700,
+  "days": 518,
+  "quarter_hours": 49732,
+  "max_daily_exposure_errors": {
+    "up_valid_points": 0.0,
+    "up_active_points": 0.0,
+    "up_cash_per_mw": 5.684341886080802e-14,
+    "up_energy_per_mw": 1.1102230246251565e-16,
+    "down_valid_points": 0.0,
+    "down_active_points": 0.0,
+    "down_cash_per_mw": 2.2737367544323206e-13,
+    "down_energy_per_mw": 1.7763568394002505e-15
+  },
+  "max_da_checks_error": 7.275957614183426e-12,
+  "excel_formulas": 53080,
+  "excel_error_cells": [],
+  "excel_financial_comparisons": 540,
+  "excel_max_difference": 1.4901161193847656e-08,
+  "chart_count": 1,
+  "chart_colors_verified": true,
+  "january_sample_reproduced": 91414.92750724638,
+  "result": "PASS"
+}

@@ -1,0 +1,15 @@
+{
+  "original_sheets_preserved": 6,
+  "original_cells_preserved": 67255,
+  "maximum_original_numeric_difference": 1.4551915228366852e-11,
+  "original_tables_preserved": 3,
+  "original_chart_preserved": true,
+  "original_freeze_and_validations_preserved": true,
+  "new_months": 17,
+  "monthly_comparisons": 238,
+  "excel_error_cells": [],
+  "new_sheet_formulas": 9063,
+  "total_eur": 19337837.425653394,
+  "output_bytes": 900764,
+  "result": "PASS"
+}

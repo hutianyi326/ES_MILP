@@ -1,0 +1,210 @@
+{
+  "as_of": "2026-11-04",
+  "period": {
+    "start": "2025-06-01",
+    "end_inclusive": "2026-10-31",
+    "timezone": "Europe/Madrid",
+    "days": 518,
+    "qh_rows": 49732,
+    "rows_4s": 11189700
+  },
+  "symmetric_configuration": {
+    "ac_power_mw": 100.0,
+    "dc_energy_mwh": 200.0,
+    "efficiency_one_way": 0.92,
+    "capacity_bid_up": 1,
+    "capacity_bid_down": 1,
+    "activation_up_spread": 200,
+    "activation_down_spread": 0,
+    "scenarios": [
+      {
+        "label": "100% DA",
+        "da_share": 1.0
+      },
+      {
+        "label": "50% DA",
+        "da_share": 0.5
+      },
+      {
+        "label": "80% DA",
+        "da_share": 0.8
+      }
+    ]
+  },
+  "symmetric_totals": [
+    {
+      "scenario": "100% DA",
+      "da_share": 1.0,
+      "days": 518,
+      "da_sales_eur": 12912679.19,
+      "da_purchases_eur": -2510574.847826087,
+      "da_net_eur": 10402104.342173913,
+      "capacity_up_eur": 0.0,
+      "capacity_down_eur": 0.0,
+      "capacity_total_eur": 0.0,
+      "activation_up_cash_eur": 0.0,
+      "activation_down_cash_eur": 0.0,
+      "activation_cash_eur": 0.0,
+      "down_resale_value_eur": 0.0,
+      "up_replenishment_cost_eur": 0.0,
+      "activation_net_with_value_eur": 0.0,
+      "total_cash_eur": 10402104.342173913,
+      "total_with_value_eur": 10402104.342173913
+    },
+    {
+      "scenario": "50% DA",
+      "da_share": 0.5,
+      "days": 518,
+      "da_sales_eur": 6456339.595,
+      "da_purchases_eur": -1255287.4239130435,
+      "da_net_eur": 5201052.171086957,
+      "capacity_up_eur": 17714434.0,
+      "capacity_down_eur": 8580823.0,
+      "capacity_total_eur": 26295257.0,
+      "activation_up_cash_eur": 1469271.798888889,
+      "activation_down_cash_eur": -12666672.677777778,
+      "activation_cash_eur": -11197400.878888888,
+      "down_resale_value_eur": 21991584.732778445,
+      "up_replenishment_cost_eur": -153215.08989051668,
+      "activation_net_with_value_eur": 10640968.76399904,
+      "total_cash_eur": 20298908.29219807,
+      "total_with_value_eur": 42137277.935086
+    },
+    {
+      "scenario": "80% DA",
+      "da_share": 0.8,
+      "days": 518,
+      "da_sales_eur": 10330143.352,
+      "da_purchases_eur": -2008459.8782608695,
+      "da_net_eur": 8321683.473739131,
+      "capacity_up_eur": 7085773.599999999,
+      "capacity_down_eur": 3432329.1999999993,
+      "capacity_total_eur": 10518102.799999999,
+      "activation_up_cash_eur": 587708.7195555555,
+      "activation_down_cash_eur": -5066669.07111111,
+      "activation_cash_eur": -4478960.351555555,
+      "down_resale_value_eur": 8796633.893111376,
+      "up_replenishment_cost_eur": -61286.035956206666,
+      "activation_net_with_value_eur": 4256387.505599615,
+      "total_cash_eur": 14360825.922183575,
+      "total_with_value_eur": 23096173.779338744
+    }
+  ],
+  "asymmetric_configuration": {
+    "charge_power_mw": 50,
+    "discharge_power_mw": 100,
+    "dc_energy_mwh": 200,
+    "da_share": 0.8,
+    "da_charge_power_mw": 40,
+    "da_discharge_power_mw": 80,
+    "da_energy_mwh": 160,
+    "afrr_up_power_mw": 20,
+    "afrr_down_power_mw": 10,
+    "efficiency_one_way": 0.92,
+    "capacity_bid_up": 1,
+    "capacity_bid_down": 1,
+    "activation_up_spread": 200,
+    "activation_down_spread": 0
+  },
+  "asymmetric_totals": {
+    "da_sales_eur": 10329104.17888,
+    "da_purchases_eur": -2184610.047826087,
+    "da_net_eur": 8144494.131053914,
+    "capacity_up_eur": 7085773.6,
+    "capacity_down_eur": 1716164.6,
+    "capacity_total_eur": 8801938.2,
+    "activation_up_cash_eur": 587708.7195555556,
+    "activation_down_cash_eur": -2533334.5355555555,
+    "activation_cash_eur": -1945625.816,
+    "down_resale_value_eur": 4398316.946555689,
+    "up_replenishment_cost_eur": -61286.03595620668,
+    "activation_net_with_value_eur": 2391405.0945994826,
+    "total_cash_eur": 15000806.515053915,
+    "total_with_value_eur": 19337837.425653398
+  },
+  "assumptions": [
+    "Historical perfect-information DA search: at most one contiguous charge then discharge per local day; depth grid 1%; initial/final usable DC energy zero.",
+    "DA power and energy scale together; schedule and depth invariant to DA allocation. 100% DA computes zero aFRR without invoking a zero-power DA search.",
+    "Capacity >1 EUR/MW/QH: full remaining power awarded independently Up/Dn; no partial award; raw capacity EUR/MW/QH is not multiplied by .25 again.",
+    "Native 4s: Up price minus same-quarter DA >200; same-quarter DA minus Dn price >0; trigger power equals awarded MW.",
+    "Missing activation prices excluded from known-part sums, never zero-filled or inferred to be dispatch-off; coverage retained.",
+    "aFRR has no SOC/exclusivity/restoration chronology limits. Up/Dn screened independently; no actual dispatch commands used.",
+    "Dn resale uses daily DA P75 times acquired AC MWh times .92 squared; Up replenishment is minus daily P25 times sold AC MWh divided by .92 squared.",
+    "Percentiles use all local-day QH slots and inclusive linear interpolation. Future values are hypothetical marks, no actual subsequent trade.",
+    "Early hourly DA repeated only within the original delivery hour, marked PT60M in quarter-hour calculation basis.",
+    "No taxes, network/market fees, degradation, investment or operating costs. Totals are gross simulated revenue with hypothetical valuation, not audited profit.",
+    "Charge/discharge AC powers are independent physical limits. 80% allocated directionally: DA 40/80 MW, 160 MWh; aFRR Up 20 MW, Dn 10 MW.",
+    "New DA windows and 1%-grid depth are searched afresh per day using asymmetric powers, not scaled from the previous symmetric schedule.",
+    "Verified native-4s per-MW aFRR price exposures are reused because bids, thresholds, same-quarter DA prices and efficiency are unchanged."
+  ],
+  "asymmetric_da_validation": {
+    "days": 518,
+    "slots": 49732,
+    "max_energy_balance_error": 6.550315845288424e-14,
+    "max_da_cash_error": 0.0
+  },
+  "source_hashes": {
+    "market_prices_15min.csv": "8eb516bee39cb1f81dd72f5e74e57602a25c4854c2c0495119f18ad37ac1a14b",
+    "2025-06.csv.gz": "14919b8db4ef5e0f3e5fdd32a26bf3e152bdce668314733f026ecd39aebc81a7",
+    "2025-07.csv.gz": "883001f763caf7df50d5c7534e9c3892f312bdb7edf888f4b86b3daf2ae4e7e0",
+    "2025-08.csv.gz": "eeb01557453f068c6c362cd441faac0e8984dea9247eb1235987ffaaeae55b1c",
+    "2025-09.csv.gz": "f73eaedef11d6ee8ddcaa68137c16b42a6b100ee3dc74a26b5dba0f581c37ce9",
+    "2025-10.csv.gz": "060022cc6fb5cc7386f04d5a45c531e2e4f12dabdcb8114235dba56861e88103",
+    "2025-11.csv.gz": "1128c3c5570e8d6d97ed63c0d595d593fc3c7800c60fbcdbfccc575361bae59f",
+    "2025-12.csv.gz": "4cd3e3262469df15d48881f91249aa1fb390bc9683997cbeea3e434c42f83091",
+    "2026-01.csv.gz": "97cef1f389244e5af90cfc53837feb942541f33ac0f39cd07d3e422bfc787fde",
+    "2026-02.csv.gz": "47e98e45e35cf4435651c4438c32f52305e4f59d97081dde6f7b0e45caeb6969",
+    "2026-03.csv.gz": "e20a8a8f5deb8eaf215ce172d24153c46e0803a0bed34f82f9e03566e984b9e3",
+    "2026-04.csv.gz": "f921e357eb61c7ca81e6c9d23876bdcd08ad4f58eef53a8f2141d41252887399",
+    "2026-05.csv.gz": "b45d80576de05d8a8ecc3a129fdde46fbfc3157243f97e4aecc6c49140b77a42",
+    "2026-06.csv.gz": "5c0888dcb499072e4588f3e05aaad728b38362203a31d707b5622c8d8fc34c42",
+    "2026-07.csv.gz": "1e73785816dbf2d5456349aba47ed7bbedc1baa6886844630b279b3654270e7a",
+    "2026-08.csv.gz": "3ff99329f01bf4ffc48ac7ccdb5f9c036162f0f028304ee03a2a5baaf5a95c3a",
+    "2026-09.csv.gz": "83f7fb06eac164f081d8bbe59e11133941fcb6c295a555a2899d5c3c87bb0e8b",
+    "2026-10.csv.gz": "242890d33fd2ad44e6c7fee19824016d43d7b6109a21f48d05d00ee2c4fd7027"
+  },
+  "single_day_reference": {
+    "date": "2026-01-01",
+    "configuration": {
+      "ac_power_mw": 100,
+      "dc_energy_mwh": 200,
+      "da_share": 0.5,
+      "efficiency_one_way": 0.92,
+      "da_power_mw": 50.0,
+      "da_energy_mwh": 100.0,
+      "afrr_power_each_direction_mw": 50.0,
+      "capacity_bid_up": 1.0,
+      "capacity_bid_down": 1.0,
+      "activation_spread_up": 200.0,
+      "activation_spread_down": 0.0
+    },
+    "da_profit_eur": 4022.447173913044,
+    "afrr": {
+      "up": {
+        "capacity_eur": 37118.5,
+        "awarded_qh": 96,
+        "priced_seconds": 62940,
+        "active_seconds": 0,
+        "energy_mwh": 0.0,
+        "cash_eur": 0.0,
+        "spread_eur": 0.0,
+        "efficiency_adjusted_reference_eur": 0.0,
+        "da_restoration_energy_mwh": 0.0,
+        "da_restoration_cash_eur": 0.0
+      },
+      "down": {
+        "capacity_eur": 40306.0,
+        "awarded_qh": 96,
+        "priced_seconds": 39028,
+        "active_seconds": 28000,
+        "energy_mwh": 388.88888888888795,
+        "cash_eur": -23678.300555555543,
+        "spread_eur": 10033.970555555563,
+        "efficiency_adjusted_reference_eur": 9967.980333333338,
+        "da_restoration_energy_mwh": 329.15555555555534,
+        "da_restoration_cash_eur": 33646.280888888956
+      }
+    },
+    "total_eur": 91414.92750724638
+  }
+}

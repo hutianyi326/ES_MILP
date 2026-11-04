@@ -1,0 +1,5 @@
+# Python >=3.12. Core fetch/calculation uses only the standard library.
+# tzdata supplies Europe/Madrid on Windows; NumPy/Pandas are for independent checks.
+tzdata>=2024.1
+numpy>=1.26
+pandas>=2.2

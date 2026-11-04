@@ -1,0 +1,32 @@
+[
+  {
+    "path": "reports/simple_model_release_20261104/artifacts/sample_20260101_4s.xlsx",
+    "bytes": 9638976,
+    "sha256": "672db50dc248a0dcbbdd7bd14ad873617a3b93c7c3456b5f2350c946b0c428e0"
+  },
+  {
+    "path": "reports/simple_model_release_20261104/artifacts/monthly_strategies_with_asymmetric.xlsx",
+    "bytes": 1245736,
+    "sha256": "6c0926239ce7415669bc54d06144c90adf1c848f44d9332578584d18fdb4d627"
+  },
+  {
+    "path": "reports/simple_model_release_20261104/monthly_three_strategies.csv",
+    "bytes": 14640,
+    "sha256": "0eb6d8b23817046b10bd067ccf867a614a58d20a7291826cf819528791c52788"
+  },
+  {
+    "path": "reports/simple_model_release_20261104/monthly_asymmetric_80pct.csv",
+    "bytes": 5502,
+    "sha256": "132a83d0183262d18f7bf4a718ba79a1f83474766c66a792a5044f60b664c9f6"
+  },
+  {
+    "path": "reports/simple_model_release_20261104/period_validation.json",
+    "bytes": 732,
+    "sha256": "8e764ce08bd082040f3b546f9a2c282608d6475b4097aaab24455e1e73f3457e"
+  },
+  {
+    "path": "reports/simple_model_release_20261104/asymmetric_workbook_validation.json",
+    "bytes": 449,
+    "sha256": "c262e9d3e4075b0d7b16e798a618fb8c766eba43784bb4b06d98289b1b2179b3"
+  }
+]
